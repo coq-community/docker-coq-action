@@ -7,12 +7,15 @@ For more details about these images, see the
 [docker-coq wiki](https://github.com/coq-community/docker-coq/wiki).
 
 Assuming the Git repositiory contains a `foo.opam` file, it will run
-the following commands:
+(by default) the following commands:
 
 ```
+opam config list; opam repo list; opam list
 opam pin add -n -y -k path foo .
 opam update -y
 opam install -y -v -j 2 foo
+opam list
+opam remove foo
 ```
 
 ## Inputs
