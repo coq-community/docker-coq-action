@@ -107,8 +107,9 @@ echo OCAML407="$OCAML407"
 echo COQ_IMAGE="$COQ_IMAGE"
 docker pull "$COQ_IMAGE"
 
-echo "PWD=$PWD"
+echorun pwd
 # should be /github/workspace
+echorun ls -hal
 
 echo PACKAGE="$PACKAGE"
 docker run -i --init --rm --name=COQ -e PACKAGE="$PACKAGE" \
