@@ -3,9 +3,13 @@
 
 set -e
 
-( set -x; cat /proc/cpuinfo || true )
-( set -x; cat /proc/meminfo || true )
-( set -x; cat /etc/os-release || true )
+echorun() {
+    echo "$ $*"
+    "$@"
+}
+echorun cat /proc/cpuinfo || true
+echorun cat /proc/meminfo || true
+echorun cat /etc/os-release || true
 
 ## Initial values
 PACKAGE=""
@@ -15,7 +19,7 @@ _OCAML_VERSION=""
 _SCRIPT=""
 
 usage() {
-    cat >&2 <<EOF
+    cat <<EOF
 Usage:
   $0 -f fil.opam -c 8.11 -m 4.05 -s ''
 
@@ -56,29 +60,29 @@ done
 shift "$((OPTIND-1))" # Shift off the options and optional "--".
 
 if test $# -gt 0; then
-    echo >&2 "Arguments ignored: $*"
+    echo "Warning: Arguments ignored: $*"
 fi
 
 if test -z "$_OPAM_FILE"; then
-    echo >&2 "No opam file specified."
+    echo "ERROR: No opam file specified."
     usage
     exit 1
 fi
 
 if test -z "$_COQ_VERSION"; then
-    echo >&2 "No Coq version specified."
+    echo "ERROR: No Coq version specified."
     usage
     exit 1
 fi
 
 if test -z "$_OCAML_VERSION"; then
-    echo >&2 "No OCaml version specified."
+    echo "ERROR: No OCaml version specified."
     usage
     exit 1
 fi
 
 if test -z "$_SCRIPT"; then
-    echo >&2 "The specified script is empty."
+    echo "ERROR: The specified script is empty."
     usage
     exit 1
 fi
@@ -107,7 +111,7 @@ echo "PWD=$PWD"
 # should be /github/workspace
 
 echo PACKAGE="$PACKAGE"
-docker run -it --init --rm --name=COQ -e PACKAGE="$PACKAGE" \
+docker run -i --init --rm --name=COQ -e PACKAGE="$PACKAGE" \
        -v "$PWD:$PWD" -w "$PWD" \
        "$COQ_IMAGE" /bin/bash --login -c "
 export PS4='+ \e[33;1m(\$0 @ line \$LINENO) \$\e[0m '; set -ex
