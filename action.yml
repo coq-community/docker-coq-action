@@ -9,8 +9,8 @@ inputs:
     description: '"8.X", "latest", or "dev".'
     default: 'latest'
   ocaml-version:
-    description: '4.05, 4.07-flambda, or 4.09-flambda'
-    default: '4.05'
+    description: 'minimal, 4.07-flambda, or 4.09-flambda'
+    default: 'minimal'
   custom-script:
     description: 'The main script run in the container; may be overridden.'
     default: |

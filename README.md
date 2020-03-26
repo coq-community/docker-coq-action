@@ -31,8 +31,8 @@ opam remove foo
 
 ### `ocaml-version`
 
-*Optional* The version of OCaml. Default `"4.05"`. Among
-`"4.05"`, `"4.07-flambda"`, `"4.09-flambda"`.
+*Optional* The version of OCaml. Default `"minimal"`.
+Among `"minimal"`, `"4.07-flambda"`, `"4.09-flambda"`.
 
 ### `custom-script`
 

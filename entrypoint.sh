@@ -106,6 +106,7 @@ if [ "$_OCAML_VERSION" = '4.09-flambda' ]; then
     COQ_IMAGE="${COQ_IMAGE}-ocaml-4.09.0-flambda"
 elif [ "$_OCAML_VERSION" = '4.07-flambda' ]; then
     OCAML407="true"
+# else Assume "$_OCAML_VERSION" = 'minimal'
 fi
 echo OCAML407="$OCAML407"
 
