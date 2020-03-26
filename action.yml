@@ -32,4 +32,4 @@ runs:
     - '-m'
     - ${{ inputs.ocaml-version }}
     - '-s'
-    - ${{ inputs.script }}
+    - ${{ inputs.custom-script }}
