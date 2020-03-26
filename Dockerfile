@@ -1,4 +1,4 @@
-FROM alpine:3.10
+FROM docker:latest
 
 COPY LICENSE README.md /
 

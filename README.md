@@ -31,6 +31,22 @@ opam install -y -v -j 2 foo
 *Optional* The minor version of OCaml. Default `"4.05"`. Among
 `"4.05"`, `"4.07-flambda"`, `"4.09-flambda"`.
 
+### `custom-script`
+
+*Optional* The main script run in the container; may be overridden. Default:
+
+    opam config list; opam repo list; opam list
+    opam pin add -n -y -k path $PACKAGE .
+    opam update -y
+    opam install -y -v -j 2 $PACKAGE
+    opam list
+    opam remove $PACKAGE
+
+*Note: this option is named `custom-script` rather than `script` or
+`run` to discourage changing its recommended, default value, while
+keeping the flexibility to be able to change it. This experimental
+option might be removed, or replaced with other similar options.*
+
 ## Example usage
 
 ```yaml
@@ -45,7 +61,7 @@ with:
 
 * We should document the contents/generation of a Coq `.opam` file
   (e.g., with a link to coq-community templates)
-* We may want to manually specify a command/script in lieu of these
-  `opam` commands
+* We might want to replace the `custom-script` option with `script`,
+  `after_script`, etc.
 * We might want to allow the user to override the name of the
   underlying (docker-coq) image
