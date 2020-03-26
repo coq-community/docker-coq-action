@@ -116,6 +116,7 @@ docker run -i --init --rm --name=COQ -e PACKAGE="$PACKAGE" \
        "$COQ_IMAGE" /bin/bash --login -c "
 export PS4='+ \e[33;1m(\$0 @ line \$LINENO) \$\e[0m '; set -ex
 if [ $OCAML407 = true ]; then opam switch \${COMPILER_EDGE}; eval \$(opam env); fi
+pwd; ls -hal
 $_SCRIPT" script
 
 echo "done"
