@@ -18,23 +18,37 @@ opam list
 opam remove foo
 ```
 
-## Inputs
+## Usage
 
-### `opam_file`
+See [action.yml](./action.yml)
+
+### Example
+
+```yaml
+uses: erikmd/docker-coq-action@alpha
+with:
+  opam_file: 'foo.opam'
+  coq_version: 'dev'
+  ocaml_version: '4.07-flambda'
+```
+
+### Inputs
+
+#### `opam_file`
 
 **Required** the path of the `.opam` file, relative to the repo root.
 
-### `coq_version`
+#### `coq_version`
 
 *Optional* The version of Coq. E.g., `"8.10"`. Default
 `"latest"` (= latest stable version).
 
-### `ocaml_version`
+#### `ocaml_version`
 
 *Optional* The version of OCaml. Default `"minimal"`.
 Among `"minimal"`, `"4.07-flambda"`, `"4.09-flambda"`.
 
-### `custom_script`
+#### `custom_script`
 
 *Optional* The main script run in the container; may be overridden. Default:
 
@@ -49,16 +63,6 @@ Among `"minimal"`, `"4.07-flambda"`, `"4.09-flambda"`.
 `run` to discourage changing its recommended, default value, while
 keeping the flexibility to be able to change it. This experimental
 option might be removed, or replaced with other similar options.*
-
-## Example usage
-
-```yaml
-uses: erikmd/docker-coq-action@alpha
-with:
-  opam_file: 'foo.opam'
-  coq_version: 'dev'
-  ocaml_version: '4.07-flambda'
-```
 
 ## TODO/IFNEEDBE
 
