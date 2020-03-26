@@ -20,21 +20,21 @@ opam remove foo
 
 ## Inputs
 
-### `opam-file`
+### `opam_file`
 
 **Required** the path of the `.opam` file, relative to the repo root.
 
-### `coq-version`
+### `coq_version`
 
 *Optional* The version of Coq. E.g., `"8.10"`. Default
 `"latest"` (= latest stable version).
 
-### `ocaml-version`
+### `ocaml_version`
 
 *Optional* The version of OCaml. Default `"minimal"`.
 Among `"minimal"`, `"4.07-flambda"`, `"4.09-flambda"`.
 
-### `custom-script`
+### `custom_script`
 
 *Optional* The main script run in the container; may be overridden. Default:
 
@@ -55,16 +55,16 @@ option might be removed, or replaced with other similar options.*
 ```yaml
 uses: erikmd/docker-coq-action@alpha
 with:
-  opam-file: 'foo.opam'
-  coq-version: 'dev'
-  ocaml-version: '4.07-flambda'
+  opam_file: 'foo.opam'
+  coq_version: 'dev'
+  ocaml_version: '4.07-flambda'
 ```
 
 ## TODO/IFNEEDBE
 
 * We should document the contents/generation of a Coq `.opam` file
   (e.g., with a link to coq-community templates)
-* We might want to replace the `custom-script` option with `script`,
+* We might want to replace the `custom_script` option with `script`,
   `after_script`, etc.
 * We might want to allow the user to override the name of the
   underlying (docker-coq) image
