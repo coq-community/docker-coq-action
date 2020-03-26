@@ -4,8 +4,6 @@
 set -e
 
 echo "GITHUB_WORKFLOW=$GITHUB_WORKFLOW"
-echo "GITHUB_WORKSPACE=$GITHUB_WORKSPACE"
-echo "GITHUB_ACTION=$GITHUB_ACTION"
 echo "RUNNER_OS=$RUNNER_OS"
 echo "RUNNER_TEMP=$RUNNER_TEMP"
 echo "RUNNER_WORKSPACE=$RUNNER_WORKSPACE"
@@ -114,13 +112,21 @@ echo OCAML407="$OCAML407"
 echo COQ_IMAGE="$COQ_IMAGE"
 docker pull "$COQ_IMAGE"
 
+# Assuming you used https://github.com/actions/checkout,
+# the GITHUB_WORKSPACE variable corresponds to the following host dir:
+# ${RUNNER_WORKSPACE}/${GITHUB_REPOSITORY#*/}, see also
+# https://help.github.com/en/actions/configuring-and-managing-workflows/using-environment-variables
+
+HOST_WORKSPACE_REPO="${RUNNER_WORKSPACE}/${GITHUB_REPOSITORY#*/}"
+echo "HOST_WORKSPACE_REPO=$HOST_WORKSPACE_REPO"
+
 echorun pwd
 # should be /github/workspace
 echorun ls -hal
 
 echo PACKAGE="$PACKAGE"
 docker run -i --init --rm --name=COQ -e PACKAGE="$PACKAGE" \
-       -v "$PWD:$PWD" -w "$PWD" \
+       -v "$HOST_WORKSPACE_REPO:$PWD" -w "$PWD" \
        "$COQ_IMAGE" /bin/bash --login -c "
 export PS4='+ \e[33;1m(\$0 @ line \$LINENO) \$\e[0m '; set -ex
 if [ $OCAML407 = true ]; then opam switch \${COMPILER_EDGE}; eval \$(opam env); fi
