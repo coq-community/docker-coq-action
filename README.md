@@ -26,12 +26,12 @@ opam remove foo
 
 ### `coq-version`
 
-*Optional* The minor version of Coq. E.g., `"8.10"`. Default
+*Optional* The version of Coq. E.g., `"8.10"`. Default
 `"latest"` (= latest stable version).
 
 ### `ocaml-version`
 
-*Optional* The minor version of OCaml. Default `"4.05"`. Among
+*Optional* The version of OCaml. Default `"4.05"`. Among
 `"4.05"`, `"4.07-flambda"`, `"4.09-flambda"`.
 
 ### `custom-script`
