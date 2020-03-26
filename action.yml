@@ -6,8 +6,7 @@ inputs:
     description: 'The path of the .opam file, relative to the repo root.'
     required: true
   coq-version:
-    description: 'The minor version of Coq.'
-    required: true
+    description: '"8.X", "latest", or "dev".'
     default: 'latest'
   ocaml-version:
     description: '4.05, 4.07-flambda, or 4.09-flambda'
