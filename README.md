@@ -52,12 +52,20 @@ Among `"minimal"`, `"4.07-flambda"`, `"4.09-flambda"`.
 
 *Optional* The main script run in the container; may be overridden. Default:
 
-    opam config list; opam repo list; opam list
-    opam pin add -n -y -k path $PACKAGE .
-    opam update -y
-    opam install -y -v -j 2 $PACKAGE
-    opam list
-    opam remove $PACKAGE
+    startGroup Print opam config
+      opam config list; opam repo list; opam list
+    endGroup
+    startGroup Fetch dependencies
+      opam pin add -n -y -k path $PACKAGE .
+      opam update -y
+    endGroup
+    startGroup Build
+      opam install -y -v -j 2 $PACKAGE
+      opam list
+    endGroup
+    startGroup Uninstallation test
+      opam remove $PACKAGE
+    endGroup
 
 *Note: this option is named `custom-script` rather than `script` or
 `run` to discourage changing its recommended, default value, while
