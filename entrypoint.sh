@@ -135,6 +135,12 @@ echo "HOST_WORKSPACE_REPO=$HOST_WORKSPACE_REPO"
 ## should be /github/workspace
 # echorun ls -hal
 
+if [ "$OCAML407" = "true" ]; then
+    _OCAML407_COMMAND='opam switch ${COMPILER_EDGE}; eval $(opam env)'
+else
+    _OCAML407_COMMAND=''
+fi
+
 ## Note to docker-coq-action maintainers: Run ./helper.sh gen & Copy min.sh
 echo PACKAGE="$PACKAGE"
 docker run -i --init --rm --name=COQ -e PACKAGE="$PACKAGE" \
@@ -142,7 +148,7 @@ docker run -i --init --rm --name=COQ -e PACKAGE="$PACKAGE" \
        "$COQ_IMAGE" /bin/bash --login -c "
 endGroup () {  init_opts=\"\$-\"; set +x; if [ -n \"\$startTime\" ]; then endTime=\$(date -u +%s); echo \"::endgroup::\"; printf \"↳ \"; date -u -d \"@\$((endTime - startTime))\" '+%-Hh %-Mm %-Ss'; echo; unset startTime; else echo 'Error: missing startGroup command.'; case \"\$init_opts\" in  *x*) set -x ;; esac; return 1; fi; case \"\$init_opts\" in  *x*) set -x ;; esac; } ; startGroup () {  init_opts=\"\$-\"; set +x; if [ -n \"\$startTime\" ]; then endGroup; fi; if [ \$# -ge 1 ]; then groupTitle=\"\$*\"; else groupTitle=\"Unnamed group\"; fi; echo; echo \"::group::\$groupTitle\"; startTime=\$(date -u +%s); case \"\$init_opts\" in  *x*) set -x ;; esac; } # generated from helper.sh
 export PS4='+ \e[33;1m(\$0 @ line \$LINENO) \$\e[0m '; set -ex
-if [ $OCAML407 = true ]; then opam switch \${COMPILER_EDGE}; eval \$(opam env); fi
+$_OCAML407_COMMAND
 $_SCRIPT" script
 
 echo "done"
