@@ -3,7 +3,9 @@
 
 set -e
 
-. /app/timegroup.sh
+timegroup_file="/app/timegroup.sh"
+# shellcheck source=./timegroup.sh
+. "$timegroup_file"
 
 startGroup Print runner configuration
 
@@ -136,6 +138,7 @@ echo "HOST_WORKSPACE_REPO=$HOST_WORKSPACE_REPO"
 # echorun ls -hal
 
 if [ "$OCAML407" = "true" ]; then
+    # shellcheck disable=SC2016
     _OCAML407_COMMAND='opam switch ${COMPILER_EDGE}; eval $(opam env)'
 else
     _OCAML407_COMMAND=''

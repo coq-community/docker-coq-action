@@ -4,6 +4,7 @@
 
 srcdir=$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null && pwd )
 
+# shellcheck source=./timegroup.sh
 . "$srcdir/timegroup.sh"
 
 run_tests() {
@@ -11,7 +12,7 @@ run_tests() {
     if endGroup; then
         echo "FAILURE: endGroup should raise an error"
     else
-        : OK
+        echo "Error OK."
     fi
     startGroup
     sleep 1s
@@ -19,7 +20,7 @@ run_tests() {
     startGroup This is a test
     sleep 2s
     endGroup
-    echo "Done."
+    echo "DONE."
 }
 
 minimify() {
