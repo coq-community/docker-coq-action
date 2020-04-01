@@ -3,6 +3,12 @@
 
 set -e
 
+timegroup_file="/app/timegroup.sh"
+# shellcheck source=./timegroup.sh
+. "$timegroup_file"
+
+startGroup Print runner configuration
+
 echo "GITHUB_WORKFLOW=$GITHUB_WORKFLOW"
 echo "RUNNER_OS=$RUNNER_OS"
 echo "RUNNER_TEMP=$RUNNER_TEMP"
@@ -15,6 +21,8 @@ echorun() {
 echorun cat /proc/cpuinfo || true
 echorun cat /proc/meminfo || true
 echorun cat /etc/os-release || true
+
+endGroup
 
 ## Initial values
 PACKAGE=""
@@ -110,8 +118,12 @@ elif [ "$_OCAML_VERSION" = '4.07-flambda' ]; then
 fi
 echo OCAML407="$OCAML407"
 
+startGroup Pull docker-coq image
+
 echo COQ_IMAGE="$COQ_IMAGE"
 docker pull "$COQ_IMAGE"
+
+endGroup
 
 # Assuming you used https://github.com/actions/checkout,
 # the GITHUB_WORKSPACE variable corresponds to the following host dir:
@@ -121,17 +133,25 @@ docker pull "$COQ_IMAGE"
 HOST_WORKSPACE_REPO="${RUNNER_WORKSPACE}/${GITHUB_REPOSITORY#*/}"
 echo "HOST_WORKSPACE_REPO=$HOST_WORKSPACE_REPO"
 
-echorun pwd
-# should be /github/workspace
-echorun ls -hal
+# echorun pwd
+## should be /github/workspace
+# echorun ls -hal
 
+if [ "$OCAML407" = "true" ]; then
+    # shellcheck disable=SC2016
+    _OCAML407_COMMAND='startGroup Change opam switch; opam switch ${COMPILER_EDGE}; eval $(opam env); endGroup'
+else
+    _OCAML407_COMMAND=''
+fi
+
+## Note to docker-coq-action maintainers: Run ./helper.sh gen & Copy min.sh
 echo PACKAGE="$PACKAGE"
 docker run -i --init --rm --name=COQ -e PACKAGE="$PACKAGE" \
        -v "$HOST_WORKSPACE_REPO:$PWD" -w "$PWD" \
        "$COQ_IMAGE" /bin/bash --login -c "
+endGroup () {  {  init_opts=\"\$-\"; set +x ; } 2> /dev/null; if [ -n \"\$startTime\" ]; then endTime=\$(date -u +%s); echo \"::endgroup::\"; printf \"↳ \"; date -u -d \"@\$((endTime - startTime))\" '+%-Hh %-Mm %-Ss'; echo; unset startTime; else echo 'Error: missing startGroup command.'; case \"\$init_opts\" in  *x*) set -x ;; esac; return 1; fi; case \"\$init_opts\" in  *x*) set -x ;; esac; } ; startGroup () {  {  init_opts=\"\$-\"; set +x ; } 2> /dev/null; if [ -n \"\$startTime\" ]; then endGroup; fi; if [ \$# -ge 1 ]; then groupTitle=\"\$*\"; else groupTitle=\"Unnamed group\"; fi; echo; echo \"::group::\$groupTitle\"; startTime=\$(date -u +%s); case \"\$init_opts\" in  *x*) set -x ;; esac; } # generated from helper.sh
 export PS4='+ \e[33;1m(\$0 @ line \$LINENO) \$\e[0m '; set -ex
-if [ $OCAML407 = true ]; then opam switch \${COMPILER_EDGE}; eval \$(opam env); fi
-pwd; ls -hal
+$_OCAML407_COMMAND
 $_SCRIPT" script
 
 echo "done"

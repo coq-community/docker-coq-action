@@ -14,12 +14,20 @@ inputs:
   custom_script:
     description: 'The main script run in the container; may be overridden.'
     default: |
-      opam config list; opam repo list; opam list
-      opam pin add -n -y -k path $PACKAGE .
-      opam update -y
-      opam install -y -v -j 2 $PACKAGE
-      opam list
-      opam remove $PACKAGE
+      startGroup Print opam config
+        opam config list; opam repo list; opam list
+      endGroup
+      startGroup Fetch dependencies
+        opam pin add -n -y -k path $PACKAGE .
+        opam update -y
+      endGroup
+      startGroup Build
+        opam install -y -v -j 2 $PACKAGE
+        opam list
+      endGroup
+      startGroup Uninstallation test
+        opam remove $PACKAGE
+      endGroup
 runs:
   using: 'docker'
   image: 'Dockerfile'
