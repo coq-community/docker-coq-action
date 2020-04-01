@@ -3,7 +3,7 @@
 
 endGroup() {
     # This function unsets the env var 'startTime'.
-    init_opts="$-"; set +x
+    { init_opts="$-"; set +x; } 2>/dev/null
     # local endTime
     if [ -n "$startTime" ]; then
         # endTime=$(TZ=UTC+0 printf '%(%s)T\n' '-1')  # not POSIX
@@ -23,7 +23,7 @@ endGroup() {
 
 startGroup() {
     # This function sets the env var 'startTime'.
-    init_opts="$-"; set +x
+    { init_opts="$-"; set +x; } 2>/dev/null
     # Nesting groups is not supported; call 'endGroup' if need be.
     if [ -n "$startTime" ]; then
         endGroup
