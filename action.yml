@@ -31,12 +31,3 @@ inputs:
 runs:
   using: 'docker'
   image: 'Dockerfile'
-  args:
-    - '-f'
-    - ${{ inputs.opam_file }}
-    - '-c'
-    - ${{ inputs.coq_version }}
-    - '-m'
-    - ${{ inputs.ocaml_version }}
-    - '-s'
-    - ${{ inputs.custom_script }}
