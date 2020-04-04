@@ -123,7 +123,6 @@ echo "HOST_WORKSPACE_REPO=$HOST_WORKSPACE_REPO"
 # echorun ls -hal
 
 if [ "$OCAML407" = "true" ]; then
-    # shellcheck disable=SC2016
     _OCAML407_COMMAND='startGroup Change opam switch; opam switch ${COMPILER_EDGE}; eval $(opam env); endGroup'
 else
     _OCAML407_COMMAND=''
