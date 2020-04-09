@@ -7,12 +7,28 @@ timegroup_file="/app/timegroup.sh"
 # shellcheck source=./timegroup.sh
 . "$timegroup_file"
 
+PACKAGE=${INPUT_OPAM_FILE%.opam}
+PACKAGE=${PACKAGE##*/}
+# todo: test pinning when _OPAM_FILE contains a '/'
+
 startGroup Print runner configuration
 
 echo "GITHUB_WORKFLOW=$GITHUB_WORKFLOW"
 echo "RUNNER_OS=$RUNNER_OS"
 echo "RUNNER_TEMP=$RUNNER_TEMP"
 echo "RUNNER_WORKSPACE=$RUNNER_WORKSPACE"
+# Assuming you used https://github.com/actions/checkout,
+# the GITHUB_WORKSPACE variable corresponds to the following host dir:
+# ${RUNNER_WORKSPACE}/${GITHUB_REPOSITORY#*/}, see also
+# https://help.github.com/en/actions/configuring-and-managing-workflows/using-environment-variables
+HOST_WORKSPACE_REPO="${RUNNER_WORKSPACE}/${GITHUB_REPOSITORY#*/}"
+echo "HOST_WORKSPACE_REPO=$HOST_WORKSPACE_REPO"
+echo
+
+echo "INPUT_COQ_VERSION=$INPUT_COQ_VERSION"
+echo "INPUT_OCAML_VERSION=$INPUT_OCAML_VERSION"
+echo "INPUT_OPAM_FILE=$INPUT_OPAM_FILE"
+echo "PACKAGE=$PACKAGE"
 
 echorun() {
     echo "$ $*"
@@ -85,12 +101,7 @@ if test -z "$INPUT_CUSTOM_SCRIPT"; then
     exit 1
 fi
 
-PACKAGE=${INPUT_OPAM_FILE%.opam}
-PACKAGE=${PACKAGE##*/}
-# todo: test pinning when _OPAM_FILE contains a '/'
-
 # TODO: validation of INPUT_COQ_VERSION, INPUT_OCAML_VERSION
-
 COQ_IMAGE="coqorg/coq:$INPUT_COQ_VERSION"
 
 # todo: update this after the one-switch docker-coq migration
@@ -110,18 +121,6 @@ docker pull "$COQ_IMAGE"
 
 endGroup
 
-# Assuming you used https://github.com/actions/checkout,
-# the GITHUB_WORKSPACE variable corresponds to the following host dir:
-# ${RUNNER_WORKSPACE}/${GITHUB_REPOSITORY#*/}, see also
-# https://help.github.com/en/actions/configuring-and-managing-workflows/using-environment-variables
-
-HOST_WORKSPACE_REPO="${RUNNER_WORKSPACE}/${GITHUB_REPOSITORY#*/}"
-echo "HOST_WORKSPACE_REPO=$HOST_WORKSPACE_REPO"
-
-# echorun pwd
-## should be /github/workspace
-# echorun ls -hal
-
 if [ "$OCAML407" = "true" ]; then
     # shellcheck disable=SC2016
     _OCAML407_COMMAND='startGroup Change opam switch; opam switch ${COMPILER_EDGE}; eval $(opam env); endGroup'
@@ -130,7 +129,6 @@ else
 fi
 
 ## Note to docker-coq-action maintainers: Run ./helper.sh gen & Copy min.sh
-echo PACKAGE="$PACKAGE"
 docker run -i --init --rm --name=COQ -e PACKAGE="$PACKAGE" \
        -v "$HOST_WORKSPACE_REPO:$PWD" -w "$PWD" \
        "$COQ_IMAGE" /bin/bash --login -c "
@@ -138,5 +136,3 @@ endGroup () {  {  init_opts=\"\$-\"; set +x ; } 2> /dev/null; if [ -n \"\$startT
 export PS4='+ \e[33;1m(\$0 @ line \$LINENO) \$\e[0m '; set -ex
 $_OCAML407_COMMAND
 $INPUT_CUSTOM_SCRIPT" script
-
-echo "done"
