@@ -42,6 +42,9 @@ with:
 
 **Required** the path of the `.opam` file, relative to the repo root.
 
+*Note:* the basename of this file is exported in variable `PACKAGE`.
+See the [`custom_script` default value](https://github.com/erikmd/docker-coq-action#custom_script).
+
 #### `coq_version`
 
 *Optional* The version of Coq. E.g., `"8.10"`. Default
