@@ -26,10 +26,14 @@ See [action.yml](./action.yml)
 
 ```yaml
 uses: erikmd/docker-coq-action@alpha
+strategy:
+  matrix:
+    coq_version: ['8.11', 'dev']
+    ocaml_version: ['4.07-flambda']
 with:
   opam_file: 'foo.opam'
-  coq_version: 'dev'
-  ocaml_version: '4.07-flambda'
+  coq_version: ${{ matrix.coq_version }}
+  ocaml_version: ${{ matrix.ocaml_version }}
 ```
 
 ### Inputs
