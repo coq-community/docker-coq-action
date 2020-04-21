@@ -28,7 +28,9 @@ See [action.yml](./action.yml)
 uses: erikmd/docker-coq-action@alpha
 strategy:
   matrix:
-    coq_version: ['8.11', 'dev']
+    coq_version:
+      - 8.11
+      - dev
     ocaml_version: ['4.07-flambda']
 with:
   opam_file: 'folder/coq-proj.opam'
