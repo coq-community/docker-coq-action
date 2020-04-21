@@ -33,7 +33,7 @@ strategy:
     ocaml_version: ['4.07-flambda']
 steps:
 - uses: actions/checkout@v2
-- uses: erikmd/docker-coq-action@alpha
+- uses: erikmd/docker-coq-action@master
   with:
     opam_file: 'folder/coq-proj.opam'
     coq_version: ${{ matrix.coq_version }}
@@ -117,7 +117,7 @@ strategy:
       - mathcomp/mathcomp-dev:coq-dev
 steps:
 - uses: actions/checkout@v2
-- uses: erikmd/docker-coq-action@alpha
+- uses: erikmd/docker-coq-action@master
   with:
     opam_file: 'folder/coq-proj.opam'
     custom_image: ${{ matrix.image }}
