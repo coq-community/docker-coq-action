@@ -47,6 +47,7 @@ Usage:
   INPUT_COQ_VERSION=8.11 \\
   INPUT_OCAML_VERSION=minimal \\
   INPUT_CUSTOM_SCRIPT='...' \\
+  INPUT_CUSTOM_IMAGE=''
   $0
 
 Options:
@@ -54,6 +55,7 @@ INPUT_OPAM_FILE: the path of the .opam file, relative to the repo root
 INPUT_COQ_VERSION: the version of Coq (without patch-level)
 INPUT_OCAML_VERSION: the version of OCaml (minimal, 4.07-flambda, 4.09-flambda)
 INPUT_CUSTOM_SCRIPT: the main script run in the container
+INPUT_CUSTOM_IMAGE: the name of the Docker image to pull
 EOF
 }
 
@@ -90,16 +92,23 @@ case "$INPUT_OPAM_FILE" in
         echo "Warning: the opam_file argument should have the '.opam' suffix.";;
 esac
 
-if test -z "$INPUT_COQ_VERSION"; then
-    echo "ERROR: No Coq version specified."
-    usage
-    exit 1
-fi
+if test -z "$INPUT_CUSTOM_IMAGE"; then
+    if test -z "$INPUT_COQ_VERSION"; then
+        echo "ERROR: No Coq version specified."
+        usage
+        exit 1
+    fi
 
-if test -z "$INPUT_OCAML_VERSION"; then
-    echo "ERROR: No OCaml version specified."
-    usage
-    exit 1
+    if test -z "$INPUT_OCAML_VERSION"; then
+        echo "ERROR: No OCaml version specified."
+        usage
+        exit 1
+    fi
+
+    # TODO: validation of INPUT_COQ_VERSION, INPUT_OCAML_VERSION
+    COQ_IMAGE="coqorg/coq:$INPUT_COQ_VERSION"
+else
+    COQ_IMAGE="$INPUT_CUSTOM_IMAGE"
 fi
 
 if test -z "$INPUT_CUSTOM_SCRIPT"; then
@@ -107,9 +116,6 @@ if test -z "$INPUT_CUSTOM_SCRIPT"; then
     usage
     exit 1
 fi
-
-# TODO: validation of INPUT_COQ_VERSION, INPUT_OCAML_VERSION
-COQ_IMAGE="coqorg/coq:$INPUT_COQ_VERSION"
 
 # todo: update this after the one-switch docker-coq migration
 OCAML407="false"

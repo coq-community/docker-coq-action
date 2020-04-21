@@ -28,6 +28,8 @@ inputs:
       startGroup Uninstallation test
         opam remove $PACKAGE
       endGroup
+  custom_image:
+    description: 'The name of the Docker image to pull; unset by default.'
 runs:
   using: 'docker'
   image: 'Dockerfile'

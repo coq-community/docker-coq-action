@@ -1,6 +1,6 @@
 # Docker-Coq action
 
-This GitHub action relies on
+This GitHub action can be used together with
 [coqorg/coq](https://hub.docker.com/r/coqorg/coq/) Docker images.
 
 For more details about these images, see the
@@ -44,7 +44,7 @@ with:
 
 **Required** the path of the `.opam` file, relative to the repo root.
 
-*Note:* relying on the value of this `INPUT_OPAM_FILE` argument, the
+*Note:* relying on the value of this `INPUT_OPAM_FILE` variable, the
 following two variables are exported when running the `custom_script`:
 
 ```
@@ -89,11 +89,39 @@ Among `"minimal"`, `"4.07-flambda"`, `"4.09-flambda"`.
 keeping the flexibility to be able to change it. This experimental
 option might be removed, or replaced with other similar options.*
 
+#### `custom_image`
+
+*Optional* The name of the Docker image to pull; unset by default.
+
+If this variable is unset, its value is computed from the values of
+keywords `coq_version` and `ocaml_version`.
+
+If you use the standard
+[`docker-coq`](https://github.com/coq-community/docker-coq) images, we
+recommend to directly use keywords `coq_version` and `ocaml_version`.
+
+If you use another registry such as that of
+[`docker-mathcomp`](https://github.com/math-comp/docker-mathcomp)
+images, you can benefit from that keyword by writing a configuration
+such as:
+
+```yaml
+uses: erikmd/docker-coq-action@alpha
+strategy:
+  matrix:
+    image:
+      - mathcomp/mathcomp:1.10.0-coq-8.10
+      - mathcomp/mathcomp:1.10.0-coq-8.11
+      - mathcomp/mathcomp:1.11.0-coq-dev
+      - mathcomp/mathcomp-dev:coq-dev
+with:
+  opam_file: 'folder/coq-proj.opam'
+  custom_image: ${{ matrix.image }}
+```
+
 ## TODO/IFNEEDBE
 
 * We should document the contents/generation of a Coq `.opam` file
   (e.g., with a link to coq-community templates)
 * We might want to replace the `custom_script` option with `script`,
   `after_script`, etc.
-* We might want to allow the user to override the name of the
-  underlying (docker-coq) image
