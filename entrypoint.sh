@@ -7,9 +7,8 @@ timegroup_file="/app/timegroup.sh"
 # shellcheck source=./timegroup.sh
 . "$timegroup_file"
 
-PACKAGE=${INPUT_OPAM_FILE%.opam}
-PACKAGE=${PACKAGE##*/}
-# todo: test pinning when _OPAM_FILE contains a '/'
+WORKDIR=$(dirname "$INPUT_OPAM_FILE")
+PACKAGE=$(basename "$INPUT_OPAM_FILE" .opam)
 
 startGroup Print runner configuration
 
@@ -28,6 +27,7 @@ echo
 echo "INPUT_COQ_VERSION=$INPUT_COQ_VERSION"
 echo "INPUT_OCAML_VERSION=$INPUT_OCAML_VERSION"
 echo "INPUT_OPAM_FILE=$INPUT_OPAM_FILE"
+echo "WORKDIR=$WORKDIR"
 echo "PACKAGE=$PACKAGE"
 
 echorun() {
@@ -47,6 +47,7 @@ Usage:
   INPUT_COQ_VERSION=8.11 \\
   INPUT_OCAML_VERSION=minimal \\
   INPUT_CUSTOM_SCRIPT='...' \\
+  INPUT_CUSTOM_IMAGE=''
   $0
 
 Options:
@@ -54,6 +55,7 @@ INPUT_OPAM_FILE: the path of the .opam file, relative to the repo root
 INPUT_COQ_VERSION: the version of Coq (without patch-level)
 INPUT_OCAML_VERSION: the version of OCaml (minimal, 4.07-flambda, 4.09-flambda)
 INPUT_CUSTOM_SCRIPT: the main script run in the container
+INPUT_CUSTOM_IMAGE: the name of the Docker image to pull
 EOF
 }
 
@@ -78,21 +80,35 @@ if test $# -gt 0; then
 fi
 
 if test -z "$INPUT_OPAM_FILE"; then
-    echo "ERROR: No opam file specified."
+    echo "ERROR: No opam_file specified."
     usage
     exit 1
 fi
 
-if test -z "$INPUT_COQ_VERSION"; then
-    echo "ERROR: No Coq version specified."
-    usage
-    exit 1
-fi
+case "$INPUT_OPAM_FILE" in
+    *.opam)
+        :;;
+    *)
+        echo "Warning: the opam_file argument should have the '.opam' suffix.";;
+esac
 
-if test -z "$INPUT_OCAML_VERSION"; then
-    echo "ERROR: No OCaml version specified."
-    usage
-    exit 1
+if test -z "$INPUT_CUSTOM_IMAGE"; then
+    if test -z "$INPUT_COQ_VERSION"; then
+        echo "ERROR: No Coq version specified."
+        usage
+        exit 1
+    fi
+
+    if test -z "$INPUT_OCAML_VERSION"; then
+        echo "ERROR: No OCaml version specified."
+        usage
+        exit 1
+    fi
+
+    # TODO: validation of INPUT_COQ_VERSION, INPUT_OCAML_VERSION
+    COQ_IMAGE="coqorg/coq:$INPUT_COQ_VERSION"
+else
+    COQ_IMAGE="$INPUT_CUSTOM_IMAGE"
 fi
 
 if test -z "$INPUT_CUSTOM_SCRIPT"; then
@@ -100,9 +116,6 @@ if test -z "$INPUT_CUSTOM_SCRIPT"; then
     usage
     exit 1
 fi
-
-# TODO: validation of INPUT_COQ_VERSION, INPUT_OCAML_VERSION
-COQ_IMAGE="coqorg/coq:$INPUT_COQ_VERSION"
 
 # todo: update this after the one-switch docker-coq migration
 OCAML407="false"
@@ -129,7 +142,7 @@ else
 fi
 
 ## Note to docker-coq-action maintainers: Run ./helper.sh gen & Copy min.sh
-docker run -i --init --rm --name=COQ -e PACKAGE="$PACKAGE" \
+docker run -i --init --rm --name=COQ -e WORKDIR="$WORKDIR" -e PACKAGE="$PACKAGE" \
        -v "$HOST_WORKSPACE_REPO:$PWD" -w "$PWD" \
        "$COQ_IMAGE" /bin/bash --login -c "
 endGroup () {  {  init_opts=\"\$-\"; set +x ; } 2> /dev/null; if [ -n \"\$startTime\" ]; then endTime=\$(date -u +%s); echo \"::endgroup::\"; printf \"↳ \"; date -u -d \"@\$((endTime - startTime))\" '+%-Hh %-Mm %-Ss'; echo; unset startTime; else echo 'Error: missing startGroup command.'; case \"\$init_opts\" in  *x*) set -x ;; esac; return 1; fi; case \"\$init_opts\" in  *x*) set -x ;; esac; } ; startGroup () {  {  init_opts=\"\$-\"; set +x ; } 2> /dev/null; if [ -n \"\$startTime\" ]; then endGroup; fi; if [ \$# -ge 1 ]; then groupTitle=\"\$*\"; else groupTitle=\"Unnamed group\"; fi; echo; echo \"::group::\$groupTitle\"; startTime=\$(date -u +%s); case \"\$init_opts\" in  *x*) set -x ;; esac; } # generated from helper.sh

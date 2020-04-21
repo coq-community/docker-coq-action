@@ -18,7 +18,7 @@ inputs:
         opam config list; opam repo list; opam list
       endGroup
       startGroup Fetch dependencies
-        opam pin add -n -y -k path $PACKAGE .
+        opam pin add -n -y -k path $PACKAGE $WORKDIR
         opam update -y
       endGroup
       startGroup Build
@@ -28,6 +28,8 @@ inputs:
       startGroup Uninstallation test
         opam remove $PACKAGE
       endGroup
+  custom_image:
+    description: 'The name of the Docker image to pull; unset by default.'
 runs:
   using: 'docker'
   image: 'Dockerfile'
