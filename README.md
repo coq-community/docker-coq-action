@@ -25,17 +25,18 @@ See [action.yml](./action.yml)
 ### Example
 
 ```yaml
-uses: erikmd/docker-coq-action@alpha
 strategy:
   matrix:
     coq_version:
       - 8.11
       - dev
     ocaml_version: ['4.07-flambda']
-with:
-  opam_file: 'folder/coq-proj.opam'
-  coq_version: ${{ matrix.coq_version }}
-  ocaml_version: ${{ matrix.ocaml_version }}
+steps:
+- uses: erikmd/docker-coq-action@alpha
+  with:
+    opam_file: 'folder/coq-proj.opam'
+    coq_version: ${{ matrix.coq_version }}
+    ocaml_version: ${{ matrix.ocaml_version }}
 ```
 
 ### Inputs
@@ -106,7 +107,6 @@ images, you can benefit from that keyword by writing a configuration
 such as:
 
 ```yaml
-uses: erikmd/docker-coq-action@alpha
 strategy:
   matrix:
     image:
@@ -114,9 +114,11 @@ strategy:
       - mathcomp/mathcomp:1.10.0-coq-8.11
       - mathcomp/mathcomp:1.11.0-coq-dev
       - mathcomp/mathcomp-dev:coq-dev
-with:
-  opam_file: 'folder/coq-proj.opam'
-  custom_image: ${{ matrix.image }}
+steps:
+- uses: erikmd/docker-coq-action@alpha
+  with:
+    opam_file: 'folder/coq-proj.opam'
+    custom_image: ${{ matrix.image }}
 ```
 
 ## TODO/IFNEEDBE
