@@ -1,7 +1,9 @@
-FROM alpine:3.10
+FROM docker:latest
 
-COPY LICENSE README.md /
+WORKDIR /app
 
-COPY entrypoint.sh /entrypoint.sh
+COPY LICENSE README.md ./
 
-ENTRYPOINT ["/entrypoint.sh"]
+COPY entrypoint.sh timegroup.sh ./
+
+ENTRYPOINT ["/app/entrypoint.sh"]
