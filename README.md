@@ -32,6 +32,7 @@ strategy:
       - dev
     ocaml_version: ['4.07-flambda']
 steps:
+- uses: actions/checkout@v2
 - uses: erikmd/docker-coq-action@alpha
   with:
     opam_file: 'folder/coq-proj.opam'
@@ -115,6 +116,7 @@ strategy:
       - mathcomp/mathcomp:1.11.0-coq-dev
       - mathcomp/mathcomp-dev:coq-dev
 steps:
+- uses: actions/checkout@v2
 - uses: erikmd/docker-coq-action@alpha
   with:
     opam_file: 'folder/coq-proj.opam'
