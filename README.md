@@ -6,16 +6,16 @@ This GitHub action relies on
 For more details about these images, see the
 [docker-coq wiki](https://github.com/coq-community/docker-coq/wiki).
 
-Assuming the Git repositiory contains a `foo.opam` file, it will run
-(by default) the following commands:
+Assuming the Git repositiory contains a `folder/coq-proj.opam` file,
+it will run (by default) the following commands:
 
 ```
 opam config list; opam repo list; opam list
-opam pin add -n -y -k path foo .
+opam pin add -n -y -k path coq-proj folder
 opam update -y
-opam install -y -v -j 2 foo
+opam install -y -v -j 2 coq-proj
 opam list
-opam remove foo
+opam remove coq-proj
 ```
 
 ## Usage
@@ -31,7 +31,7 @@ strategy:
     coq_version: ['8.11', 'dev']
     ocaml_version: ['4.07-flambda']
 with:
-  opam_file: 'foo.opam'
+  opam_file: 'folder/coq-proj.opam'
   coq_version: ${{ matrix.coq_version }}
   ocaml_version: ${{ matrix.ocaml_version }}
 ```
@@ -42,8 +42,16 @@ with:
 
 **Required** the path of the `.opam` file, relative to the repo root.
 
-*Note:* the basename of this file is exported in variable `PACKAGE`.
-See the [`custom_script` default value](https://github.com/erikmd/docker-coq-action#custom_script).
+*Note:* relying on the value of this `INPUT_OPAM_FILE` argument, the
+following two variables are exported when running the `custom_script`:
+
+```
+WORKDIR=$(dirname "$INPUT_OPAM_FILE")
+PACKAGE=$(basename "$INPUT_OPAM_FILE" .opam)
+```
+
+See also the
+[`custom_script` default value](https://github.com/erikmd/docker-coq-action#custom_script).
 
 #### `coq_version`
 
@@ -63,7 +71,7 @@ Among `"minimal"`, `"4.07-flambda"`, `"4.09-flambda"`.
       opam config list; opam repo list; opam list
     endGroup
     startGroup Fetch dependencies
-      opam pin add -n -y -k path $PACKAGE .
+      opam pin add -n -y -k path $PACKAGE $WORKDIR
       opam update -y
     endGroup
     startGroup Build

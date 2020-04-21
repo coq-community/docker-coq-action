@@ -7,9 +7,8 @@ timegroup_file="/app/timegroup.sh"
 # shellcheck source=./timegroup.sh
 . "$timegroup_file"
 
-PACKAGE=${INPUT_OPAM_FILE%.opam}
-PACKAGE=${PACKAGE##*/}
-# todo: test pinning when _OPAM_FILE contains a '/'
+WORKDIR=$(dirname "$INPUT_OPAM_FILE")
+PACKAGE=$(basename "$INPUT_OPAM_FILE" .opam)
 
 startGroup Print runner configuration
 
@@ -28,6 +27,7 @@ echo
 echo "INPUT_COQ_VERSION=$INPUT_COQ_VERSION"
 echo "INPUT_OCAML_VERSION=$INPUT_OCAML_VERSION"
 echo "INPUT_OPAM_FILE=$INPUT_OPAM_FILE"
+echo "WORKDIR=$WORKDIR"
 echo "PACKAGE=$PACKAGE"
 
 echorun() {
@@ -78,10 +78,17 @@ if test $# -gt 0; then
 fi
 
 if test -z "$INPUT_OPAM_FILE"; then
-    echo "ERROR: No opam file specified."
+    echo "ERROR: No opam_file specified."
     usage
     exit 1
 fi
+
+case "$INPUT_OPAM_FILE" in
+    *.opam)
+        :;;
+    *)
+        echo "Warning: the opam_file argument should have the '.opam' suffix.";;
+esac
 
 if test -z "$INPUT_COQ_VERSION"; then
     echo "ERROR: No Coq version specified."
@@ -129,7 +136,7 @@ else
 fi
 
 ## Note to docker-coq-action maintainers: Run ./helper.sh gen & Copy min.sh
-docker run -i --init --rm --name=COQ -e PACKAGE="$PACKAGE" \
+docker run -i --init --rm --name=COQ -e WORKDIR="$WORKDIR" -e PACKAGE="$PACKAGE" \
        -v "$HOST_WORKSPACE_REPO:$PWD" -w "$PWD" \
        "$COQ_IMAGE" /bin/bash --login -c "
 endGroup () {  {  init_opts=\"\$-\"; set +x ; } 2> /dev/null; if [ -n \"\$startTime\" ]; then endTime=\$(date -u +%s); echo \"::endgroup::\"; printf \"↳ \"; date -u -d \"@\$((endTime - startTime))\" '+%-Hh %-Mm %-Ss'; echo; unset startTime; else echo 'Error: missing startGroup command.'; case \"\$init_opts\" in  *x*) set -x ;; esac; return 1; fi; case \"\$init_opts\" in  *x*) set -x ;; esac; } ; startGroup () {  {  init_opts=\"\$-\"; set +x ; } 2> /dev/null; if [ -n \"\$startTime\" ]; then endGroup; fi; if [ \$# -ge 1 ]; then groupTitle=\"\$*\"; else groupTitle=\"Unnamed group\"; fi; echo; echo \"::group::\$groupTitle\"; startTime=\$(date -u +%s); case \"\$init_opts\" in  *x*) set -x ;; esac; } # generated from helper.sh
