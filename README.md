@@ -129,3 +129,5 @@ steps:
   (e.g., with a link to coq-community templates)
 * We might want to replace the `custom_script` option with `script`,
   `after_script`, etc.
+* Replace `opam install -y -v -j 2 foo` with
+  `opam install -y -v -j 2 foo --deps-only; opam install -y -v -j 2 foo`?
