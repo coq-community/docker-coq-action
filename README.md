@@ -9,7 +9,7 @@ For more details about these images, see the
 Assuming the Git repositiory contains a `folder/coq-proj.opam` file,
 it will run (by default) the following commands:
 
-```
+```bash
 opam config list; opam repo list; opam list
 opam pin add -n -y -k path coq-proj folder
 opam update -y
@@ -50,7 +50,7 @@ steps:
 *Note:* relying on the value of this `INPUT_OPAM_FILE` variable, the
 following two variables are exported when running the `custom_script`:
 
-```
+```bash
 WORKDIR=$(dirname "$INPUT_OPAM_FILE")
 PACKAGE=$(basename "$INPUT_OPAM_FILE" .opam)
 ```
@@ -72,22 +72,34 @@ Among `"minimal"`, `"4.07-flambda"`, `"4.09-flambda"`.
 
 *Optional* The main script run in the container; may be overridden. Default:
 
-    startGroup Print opam config
-      opam config list; opam repo list; opam list
-    endGroup
-    startGroup Fetch dependencies
-      opam pin add -n -y -k path $PACKAGE $WORKDIR
-      opam update -y
-    endGroup
-    startGroup Build
-      opam install -y -v -j 2 $PACKAGE
-      opam list
-    endGroup
-    startGroup Uninstallation test
-      opam remove $PACKAGE
-    endGroup
+```bash
+startGroup Print opam config
+  opam config list; opam repo list; opam list
+endGroup
+startGroup Fetch dependencies
+  opam pin add -n -y -k path $PACKAGE $WORKDIR
+  opam update -y
+endGroup
+startGroup Build
+  opam install -y -v -j 2 $PACKAGE
+  opam list
+endGroup
+startGroup Uninstallation test
+  opam remove $PACKAGE
+endGroup
+```
 
-*Note: this option is named `custom-script` rather than `script` or
+*Note-1:* if you use the `docker-coq` images, the container user has
+UID=GID=1000 while the GitHub action workdir has (UID=1001, GID=116).
+This is not an issue when relying on `opam` to build the Coq project.
+Otherwise, you may want to use `sudo` in the container to change the
+permissions (or install additional Debian packages).
+
+See also the
+[CI setup / Remarks](https://github.com/coq-community/docker-coq/wiki/CI-setup#remarks)
+section in the `docker-coq` wiki.
+
+*Note-2: this option is named `custom-script` rather than `script` or
 `run` to discourage changing its recommended, default value, while
 keeping the flexibility to be able to change it. This experimental
 option might be removed, or replaced with other similar options.*
