@@ -25,6 +25,7 @@ See [action.yml](./action.yml)
 ### Example
 
 ```yaml
+runs-on: ubuntu-latest  # container actions require GNU/Linux
 strategy:
   matrix:
     coq_version:
@@ -108,6 +109,7 @@ images, you can benefit from that keyword by writing a configuration
 such as:
 
 ```yaml
+runs-on: ubuntu-latest
 strategy:
   matrix:
     image:
