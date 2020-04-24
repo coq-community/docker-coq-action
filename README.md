@@ -1,6 +1,24 @@
 # Docker-Coq action
 
-![reviewdog](https://github.com/coq-community/docker-coq-action/workflows/reviewdog/badge.svg?branch=master)
+![reviewdog][reviewdog-badge]
+[![coqorg][coqorg-shield]][coqorg-link]
+[![mathcomp][mathcomp-shield]][mathcomp-link]
+[![Contributing][contributing-shield]][contributing-link]
+[![Code of Conduct][conduct-shield]][conduct-link]
+
+[reviewdog-badge]: https://github.com/coq-community/docker-coq-action/workflows/reviewdog/badge.svg?branch=master
+
+[coqorg-shield]: https://img.shields.io/badge/depends%20on-coqorg%2Fcoq-blue.svg
+[coqorg-link]: https://hub.docker.com/r/coqorg/coq
+
+[mathcomp-shield]: https://img.shields.io/badge/see%20also-mathcomp%2Fmathcomp-blue.svg
+[mathcomp-link]: https://hub.docker.com/r/mathcomp/mathcomp
+
+[contributing-shield]: https://img.shields.io/badge/contributions-welcome-%23f7931e.svg
+[contributing-link]: https://github.com/coq-community/manifesto/blob/master/CONTRIBUTING.md
+
+[conduct-shield]: https://img.shields.io/badge/%E2%9D%A4-code%20of%20conduct-%23f15a24.svg
+[conduct-link]: https://github.com/coq-community/manifesto/blob/master/CODE_OF_CONDUCT.md
 
 This GitHub action can be used together with
 [coqorg/coq](https://hub.docker.com/r/coqorg/coq/) Docker images.
