@@ -34,7 +34,7 @@ strategy:
     ocaml_version: ['4.07-flambda']
 steps:
 - uses: actions/checkout@v2
-- uses: erikmd/docker-coq-action@master
+- uses: coq-community/docker-coq-action@master
   with:
     opam_file: 'folder/coq-proj.opam'
     coq_version: ${{ matrix.coq_version }}
@@ -56,7 +56,7 @@ PACKAGE=$(basename "$INPUT_OPAM_FILE" .opam)
 ```
 
 See also the
-[`custom_script` default value](https://github.com/erikmd/docker-coq-action#custom_script).
+[`custom_script` default value](#custom_script).
 
 #### `coq_version`
 
@@ -131,7 +131,7 @@ strategy:
       - mathcomp/mathcomp-dev:coq-dev
 steps:
 - uses: actions/checkout@v2
-- uses: erikmd/docker-coq-action@master
+- uses: coq-community/docker-coq-action@master
   with:
     opam_file: 'folder/coq-proj.opam'
     custom_image: ${{ matrix.image }}
