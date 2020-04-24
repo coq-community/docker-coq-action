@@ -1,5 +1,7 @@
 # Docker-Coq action
 
+![reviewdog](https://github.com/coq-community/docker-coq-action/workflows/reviewdog/badge.svg?branch=master)
+
 This GitHub action can be used together with
 [coqorg/coq](https://hub.docker.com/r/coqorg/coq/) Docker images.
 
