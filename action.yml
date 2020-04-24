@@ -1,4 +1,7 @@
 name: 'Docker-Coq Action'
+branding:
+  icon: 'check-circle'
+  color: 'gray-dark'
 description: 'GitHub Action using Docker-Coq'
 author: 'Erik Martin-Dorel'
 inputs:
