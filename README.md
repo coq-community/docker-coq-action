@@ -56,7 +56,7 @@ PACKAGE=$(basename "$INPUT_OPAM_FILE" .opam)
 ```
 
 See also the
-[`custom_script` default value](https://github.com/erikmd/docker-coq-action#custom_script).
+[`custom_script` default value](#custom_script).
 
 #### `coq_version`
 
