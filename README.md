@@ -113,9 +113,9 @@ endGroup
 UID=GID=1000 while the GitHub action workdir has (UID=1001, GID=116).
 This is not an issue when relying on `opam` to build the Coq project.
 Otherwise, you may want to use `sudo` in the container to change the
-permissions (or install additional Debian packages).
+permissions. You may also install additional Debian packages.
 
-See also the
+For more details, see the
 [CI setup / Remarks](https://github.com/coq-community/docker-coq/wiki/CI-setup#remarks)
 section in the `docker-coq` wiki.
 
