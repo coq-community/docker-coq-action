@@ -22,6 +22,7 @@ echo "RUNNER_WORKSPACE=$RUNNER_WORKSPACE"
 # https://help.github.com/en/actions/configuring-and-managing-workflows/using-environment-variables
 HOST_WORKSPACE_REPO="${RUNNER_WORKSPACE}/${GITHUB_REPOSITORY#*/}"
 echo "HOST_WORKSPACE_REPO=$HOST_WORKSPACE_REPO"
+echo "HOME=$HOME"
 echo
 
 echo "INPUT_COQ_VERSION=$INPUT_COQ_VERSION"
@@ -141,6 +142,9 @@ else
     _OCAML407_COMMAND=''
 fi
 
+cp /app/coq.json "$HOME/coq.json"
+echo "::add-matcher::$HOME/coq.json"
+
 ## Note to docker-coq-action maintainers: Run ./helper.sh gen & Copy min.sh
 docker run -i --init --rm --name=COQ -e WORKDIR="$WORKDIR" -e PACKAGE="$PACKAGE" \
        -v "$HOST_WORKSPACE_REPO:$PWD" -w "$PWD" \
@@ -149,3 +153,5 @@ endGroup () {  {  init_opts=\"\$-\"; set +x ; } 2> /dev/null; if [ -n \"\$startT
 export PS4='+ \e[33;1m(\$0 @ line \$LINENO) \$\e[0m '; set -ex
 $_OCAML407_COMMAND
 $INPUT_CUSTOM_SCRIPT" script
+
+echo "::remove-matcher owner=coq-problem-matcher::"
