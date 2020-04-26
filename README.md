@@ -33,6 +33,7 @@ it will run (by default) the following commands:
 opam config list; opam repo list; opam list
 opam pin add -n -y -k path coq-proj folder
 opam update -y
+opam install -y -j 2 coq-proj --deps-only
 opam install -y -v -j 2 coq-proj
 opam list
 opam remove coq-proj
@@ -96,9 +97,10 @@ Among `"minimal"`, `"4.07-flambda"`, `"4.09-flambda"`.
 startGroup Print opam config
   opam config list; opam repo list; opam list
 endGroup
-startGroup Fetch dependencies
+startGroup Build dependencies
   opam pin add -n -y -k path $PACKAGE $WORKDIR
   opam update -y
+  opam install -y -j 2 $PACKAGE --deps-only
 endGroup
 startGroup Build
   opam install -y -v -j 2 $PACKAGE
