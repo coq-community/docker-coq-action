@@ -16,9 +16,9 @@ jobs:
       - name: shellcheck
         uses: reviewdog/action-shellcheck@v1
         with:
-          github_token: ${{ secrets.github_token }}
+          github_token: ${{ secrets.GITHUB_TOKEN }}
           reporter: github-pr-check
           path: "."
           pattern: "*.sh"
           exclude: "./.git/*"
-          level: info
+          level: warning
