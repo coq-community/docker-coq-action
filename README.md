@@ -92,7 +92,7 @@ Among `"minimal"`, `"4.07-flambda"`, `"4.09-flambda"`.
 
 *Optional* The main script run in the container; may be overridden. Default:
 
-```bash
+```
 startGroup Print opam config
   opam config list; opam repo list; opam list
 endGroup
