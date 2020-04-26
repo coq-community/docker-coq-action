@@ -163,5 +163,11 @@ The `docker-coq-action` provides built-in support for `opam` builds.
 If your project does not already have a `coq-….opam` file, you might
 generate one such file by using the corresponding template gathered in
 [coq-community/templates](https://github.com/coq-community/templates#readme).
-See also [opam's documentation on this file format](https://opam.ocaml.org/doc/Packaging.html#The-file-format-in-more-detail)
-for more details.
+
+This `.opam` file can then serve as a basis for submitting releases in
+[coq/opam-coq-archive](https://github.com/coq/opam-coq-archive), and
+related guidelines (including the required **`.opam` metadata**) are
+available in <https://coq.inria.fr/opam-packaging.html>.
+
+More details can be found in the
+[opam documentation](https://opam.ocaml.org/doc/Packaging.html#The-file-format-in-more-detail).
