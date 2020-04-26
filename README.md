@@ -3,6 +3,7 @@
 ![reviewdog][reviewdog-badge]
 [![coqorg][coqorg-shield]][coqorg-link]
 [![mathcomp][mathcomp-shield]][mathcomp-link]
+[![Example][example-shield]][example-link]
 [![Contributing][contributing-shield]][contributing-link]
 [![Code of Conduct][conduct-shield]][conduct-link]
 
@@ -13,6 +14,9 @@
 
 [mathcomp-shield]: https://img.shields.io/badge/see%20also-mathcomp%2Fmathcomp-blue.svg
 [mathcomp-link]: https://hub.docker.com/r/mathcomp/mathcomp
+
+[example-shield]: https://img.shields.io/badge/see%20also-example-brightgreen.svg
+[example-link]: https://github.com/erikmd/docker-coq-github-action-demo
 
 [contributing-shield]: https://img.shields.io/badge/contributions-welcome-%23f7931e.svg
 [contributing-link]: https://github.com/coq-community/manifesto/blob/master/CONTRIBUTING.md
@@ -61,6 +65,8 @@ steps:
     coq_version: ${{ matrix.coq_version }}
     ocaml_version: ${{ matrix.ocaml_version }}
 ```
+
+See also the [example repo](https://github.com/erikmd/docker-coq-github-action-demo).
 
 ### Inputs
 
