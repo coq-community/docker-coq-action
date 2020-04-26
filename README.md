@@ -156,11 +156,12 @@ steps:
     custom_image: ${{ matrix.image }}
 ```
 
-## TODO/IFNEEDBE
+### Remarks
 
-* We should document the contents/generation of a Coq `.opam` file
-  (e.g., with a link to coq-community templates)
-* We might want to replace the `custom_script` option with `script`,
-  `after_script`, etc.
-* Replace `opam install -y -v -j 2 foo` with
-  `opam install -y -v -j 2 foo --deps-only; opam install -y -v -j 2 foo`?
+The `docker-coq-action` provides built-in support for `opam` builds.
+
+If your project does not already have a `coq-….opam` file, you might
+generate one such file by using the corresponding template gathered in
+[coq-community/templates](https://github.com/coq-community/templates#readme).
+See also [opam's documentation on this file format](https://opam.ocaml.org/doc/Packaging.html#The-file-format-in-more-detail)
+for more details.
