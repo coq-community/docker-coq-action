@@ -121,8 +121,7 @@ section in the `docker-coq` wiki.
 
 *Note-2: this option is named `custom_script` rather than `script` or
 `run` to discourage changing its recommended, default value, while
-keeping the flexibility to be able to change it. This experimental
-option might be removed, or replaced with other similar options.*
+keeping the flexibility to be able to change it.*
 
 #### `custom_image`
 
