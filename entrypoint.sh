@@ -142,8 +142,8 @@ else
     _OCAML407_COMMAND=''
 fi
 
-cp /app/coq.json ./coq.json
-echo "::add-matcher::$PWD/coq.json"
+cp /app/coq.json "$HOME/coq.json"
+echo "::add-matcher::$HOME/coq.json"
 
 ## Note to docker-coq-action maintainers: Run ./helper.sh gen & Copy min.sh
 docker run -i --init --rm --name=COQ -e WORKDIR="$WORKDIR" -e PACKAGE="$PACKAGE" \
