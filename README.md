@@ -26,7 +26,7 @@ This GitHub action can be used together with
 For more details about these images, see the
 [docker-coq wiki](https://github.com/coq-community/docker-coq/wiki).
 
-Assuming the Git repositiory contains a `folder/coq-proj.opam` file,
+Assuming the Git repository contains a `folder/coq-proj.opam` file,
 it will run (by default) the following commands:
 
 ```bash
@@ -119,7 +119,7 @@ See also the
 [CI setup / Remarks](https://github.com/coq-community/docker-coq/wiki/CI-setup#remarks)
 section in the `docker-coq` wiki.
 
-*Note-2: this option is named `custom-script` rather than `script` or
+*Note-2: this option is named `custom_script` rather than `script` or
 `run` to discourage changing its recommended, default value, while
 keeping the flexibility to be able to change it. This experimental
 option might be removed, or replaced with other similar options.*
