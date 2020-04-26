@@ -26,7 +26,7 @@ This GitHub action can be used together with
 For more details about these images, see the
 [docker-coq wiki](https://github.com/coq-community/docker-coq/wiki).
 
-Assuming the Git repositiory contains a `folder/coq-proj.opam` file,
+Assuming the Git repository contains a `folder/coq-proj.opam` file,
 it will run (by default) the following commands:
 
 ```bash
@@ -92,7 +92,7 @@ Among `"minimal"`, `"4.07-flambda"`, `"4.09-flambda"`.
 
 *Optional* The main script run in the container; may be overridden. Default:
 
-```bash
+```
 startGroup Print opam config
   opam config list; opam repo list; opam list
 endGroup
@@ -113,16 +113,15 @@ endGroup
 UID=GID=1000 while the GitHub action workdir has (UID=1001, GID=116).
 This is not an issue when relying on `opam` to build the Coq project.
 Otherwise, you may want to use `sudo` in the container to change the
-permissions (or install additional Debian packages).
+permissions. You may also install additional Debian packages.
 
-See also the
+For more details, see the
 [CI setup / Remarks](https://github.com/coq-community/docker-coq/wiki/CI-setup#remarks)
 section in the `docker-coq` wiki.
 
-*Note-2: this option is named `custom-script` rather than `script` or
+*Note-2: this option is named `custom_script` rather than `script` or
 `run` to discourage changing its recommended, default value, while
-keeping the flexibility to be able to change it. This experimental
-option might be removed, or replaced with other similar options.*
+keeping the flexibility to be able to change it.*
 
 #### `custom_image`
 
@@ -157,11 +156,18 @@ steps:
     custom_image: ${{ matrix.image }}
 ```
 
-## TODO/IFNEEDBE
+### Remarks
 
-* We should document the contents/generation of a Coq `.opam` file
-  (e.g., with a link to coq-community templates)
-* We might want to replace the `custom_script` option with `script`,
-  `after_script`, etc.
-* Replace `opam install -y -v -j 2 foo` with
-  `opam install -y -v -j 2 foo --deps-only; opam install -y -v -j 2 foo`?
+The `docker-coq-action` provides built-in support for `opam` builds.
+
+If your project does not already have a `coq-….opam` file, you might
+generate one such file by using the corresponding template gathered in
+[coq-community/templates](https://github.com/coq-community/templates#readme).
+
+This `.opam` file can then serve as a basis for submitting releases in
+[coq/opam-coq-archive](https://github.com/coq/opam-coq-archive), and
+related guidelines (including the required **`.opam` metadata**) are
+available in <https://coq.inria.fr/opam-packaging.html>.
+
+More details can be found in the
+[opam documentation](https://opam.ocaml.org/doc/Packaging.html#The-file-format-in-more-detail).
