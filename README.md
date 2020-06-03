@@ -58,12 +58,12 @@ strategy:
       - dev
     ocaml_version: ['4.07-flambda']
 steps:
-- uses: actions/checkout@v2
-- uses: coq-community/docker-coq-action@v1
-  with:
-    opam_file: 'folder/coq-proj.opam'
-    coq_version: ${{ matrix.coq_version }}
-    ocaml_version: ${{ matrix.ocaml_version }}
+  - uses: actions/checkout@v2
+  - uses: coq-community/docker-coq-action@v1
+    with:
+      opam_file: 'folder/coq-proj.opam'
+      coq_version: ${{ matrix.coq_version }}
+      ocaml_version: ${{ matrix.ocaml_version }}
 ```
 
 See also the [example repo](https://github.com/erikmd/docker-coq-github-action-demo).
@@ -157,11 +157,11 @@ strategy:
       - mathcomp/mathcomp:1.11.0-coq-dev
       - mathcomp/mathcomp-dev:coq-dev
 steps:
-- uses: actions/checkout@v2
-- uses: coq-community/docker-coq-action@v1
-  with:
-    opam_file: 'folder/coq-proj.opam'
-    custom_image: ${{ matrix.image }}
+  - uses: actions/checkout@v2
+  - uses: coq-community/docker-coq-action@v1
+    with:
+      opam_file: 'folder/coq-proj.opam'
+      custom_image: ${{ matrix.image }}
 ```
 
 ### Remarks
