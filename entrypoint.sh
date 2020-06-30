@@ -121,7 +121,7 @@ fi
 # todo: update this after the one-switch docker-coq migration
 OCAML407="false"
 if [ "$INPUT_OCAML_VERSION" = '4.09-flambda' ]; then
-    COQ_IMAGE="${COQ_IMAGE}-ocaml-4.09.0-flambda"
+    COQ_IMAGE="${COQ_IMAGE}-ocaml-4.09-flambda"
 elif [ "$INPUT_OCAML_VERSION" = '4.07-flambda' ]; then
     OCAML407="true"
 # else Assume "$INPUT_OCAML_VERSION" = 'minimal'
