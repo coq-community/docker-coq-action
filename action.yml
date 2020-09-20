@@ -6,8 +6,8 @@ description: 'GitHub Action using Docker-Coq'
 author: 'Erik Martin-Dorel'
 inputs:
   opam_file:
-    description: 'The path of the .opam file, relative to the repo root.'
-    required: true
+    description: 'The path of the .opam file (or a directory), relative to the repo root.'
+    default: '.'
   coq_version:
     description: '"8.X", "latest", or "dev".'
     default: 'latest'
