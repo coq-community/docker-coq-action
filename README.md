@@ -72,18 +72,25 @@ See also the [example repo](https://github.com/erikmd/docker-coq-github-action-d
 
 #### `opam_file`
 
-**Required** the path of the `.opam` file, relative to the repo root.
+*Optional* the path of the `.opam` file (or a directory), relative to the repo root.
+Default `"."` (if the argument is omitted or an empty string).
 
-*Note:* relying on the value of this `INPUT_OPAM_FILE` variable, the
+*Note-1:* relying on the value of this `INPUT_OPAM_FILE` variable, the
 following two variables are exported when running the `custom_script`:
 
 ```bash
-WORKDIR=$(dirname "$INPUT_OPAM_FILE")
-PACKAGE=$(basename "$INPUT_OPAM_FILE" .opam)
+if [ -z "$INPUT_OPAM_FILE" ] || [ -d "$INPUT_OPAM_FILE" ]; then
+    WORKDIR=""
+    PACKAGE=${INPUT_OPAM_FILE:-.}
+else
+    WORKDIR=$(dirname "$INPUT_OPAM_FILE")
+    PACKAGE=$(basename "$INPUT_OPAM_FILE" .opam)
+fi
 ```
 
-See also the
-[`custom_script` default value](#custom_script).
+*Note-2:* if this value is a directory (e.g., `.`), relying on the
+[`custom_script` default value](#custom_script), the action will
+install all the `*.opam` packages stored in this directory.
 
 #### `coq_version`
 

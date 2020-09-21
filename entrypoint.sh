@@ -7,8 +7,13 @@ timegroup_file="/app/timegroup.sh"
 # shellcheck source=./timegroup.sh
 . "$timegroup_file"
 
-WORKDIR=$(dirname "$INPUT_OPAM_FILE")
-PACKAGE=$(basename "$INPUT_OPAM_FILE" .opam)
+if [ -z "$INPUT_OPAM_FILE" ] || [ -d "$INPUT_OPAM_FILE" ]; then
+    WORKDIR=""
+    PACKAGE=${INPUT_OPAM_FILE:-.}
+else
+    WORKDIR=$(dirname "$INPUT_OPAM_FILE")
+    PACKAGE=$(basename "$INPUT_OPAM_FILE" .opam)
+fi
 
 startGroup Print runner configuration
 
@@ -52,7 +57,7 @@ Usage:
   $0
 
 Options:
-INPUT_OPAM_FILE: the path of the .opam file, relative to the repo root
+INPUT_OPAM_FILE: the path of the .opam file (or a directory), relative to the repo root
 INPUT_COQ_VERSION: the version of Coq (without patch-level)
 INPUT_OCAML_VERSION: the version of OCaml (minimal, 4.07-flambda, 4.09-flambda)
 INPUT_CUSTOM_SCRIPT: the main script run in the container
@@ -79,19 +84,6 @@ shift "$((OPTIND-1))" # Shift off the options and optional "--".
 if test $# -gt 0; then
     echo "Warning: Arguments ignored: $*"
 fi
-
-if test -z "$INPUT_OPAM_FILE"; then
-    echo "ERROR: No opam_file specified."
-    usage
-    exit 1
-fi
-
-case "$INPUT_OPAM_FILE" in
-    *.opam)
-        :;;
-    *)
-        echo "Warning: the opam_file argument should have the '.opam' suffix.";;
-esac
 
 if test -z "$INPUT_CUSTOM_IMAGE"; then
     if test -z "$INPUT_COQ_VERSION"; then
