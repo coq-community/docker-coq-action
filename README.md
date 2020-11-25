@@ -106,7 +106,7 @@ Among `"minimal"`, `"4.07-flambda"`, `"4.09-flambda"`.
 
 *Optional* The main script run in the container; may be overridden. Default:
 
-```
+```bash
 startGroup Print opam config
   opam config list; opam repo list; opam list
 endGroup
@@ -114,6 +114,9 @@ startGroup Build dependencies
   opam pin add -n -y -k path $PACKAGE $WORKDIR
   opam update -y
   opam install -y -j 2 $PACKAGE --deps-only
+endGroup
+startGroup List installed packages
+  opam list
 endGroup
 startGroup Build
   opam install -y -v -j 2 $PACKAGE
