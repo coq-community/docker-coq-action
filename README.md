@@ -57,6 +57,7 @@ strategy:
       - '8.11'
       - dev
     ocaml_version: ['4.07-flambda']
+  fail-fast: false  # don't stop jobs if one fails
 steps:
   - uses: actions/checkout@v2
   - uses: coq-community/docker-coq-action@v1
@@ -196,6 +197,7 @@ strategy:
       - mathcomp/mathcomp:1.10.0-coq-8.11
       - mathcomp/mathcomp:1.11.0-coq-dev
       - mathcomp/mathcomp-dev:coq-dev
+  fail-fast: false  # don't stop jobs if one fails
 steps:
   - uses: actions/checkout@v2
   - uses: coq-community/docker-coq-action@v1
