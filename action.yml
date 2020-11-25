@@ -37,6 +37,8 @@ inputs:
       endGroup
   custom_image:
     description: 'The name of the Docker image to pull; unset by default.'
+  export:
+    description: 'Space-separated list of env variables to export to the custom_script.'
 runs:
   using: 'docker'
   image: 'Dockerfile'

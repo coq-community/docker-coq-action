@@ -206,6 +206,39 @@ steps:
       custom_image: ${{ matrix.image }}
 ```
 
+#### `export`
+
+*Optional* A space-separated list of `env` variables to export to the `custom_script`.
+
+*Note-1:* The values of the variables to export may be defined by using the
+[`env`](https://docs.github.com/en/free-pro-team@latest/actions/reference/environment-variables)
+keyword.
+
+*Note-2:* Regarding the naming of these variables:
+
+* Only use ASCII letters, `_` and digits, i.e., matching the `[a-zA-Z_][a-zA-Z0-9_]*` regexp.
+* Avoid [reserved identifiers](https://docs.github.com/en/free-pro-team@latest/actions/reference/environment-variables) (namely: `HOME`, `CI`, and strings starting with `GITHUB_`, `ACTIONS_`, `RUNNER_`, or `INPUT_`).
+
+Here is a minimal working example of this feature:
+
+```yaml
+runs-on: ubuntu-latest
+steps:
+  - uses: coq-community/docker-coq-action@v1
+    with:
+      custom_script: |
+        printf "%s\n" "$first_example"
+        startGroup Build dependencies, with-test
+          opam pin add -n -y -k path $PACKAGE $WORKDIR
+          opam update -y
+          opam install -y -j 2 $PACKAGE --deps-only
+        endGroup
+      export: 'first_example OPAMWITHTEST'
+    env:
+      first_example: 'some value'
+      OPAMWITHTEST: 'true'
+```
+
 ### Remarks
 
 The `docker-coq-action` provides built-in support for `opam` builds.

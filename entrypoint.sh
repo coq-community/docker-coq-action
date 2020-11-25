@@ -33,6 +33,7 @@ echo
 echo "INPUT_COQ_VERSION=$INPUT_COQ_VERSION"
 echo "INPUT_OCAML_VERSION=$INPUT_OCAML_VERSION"
 echo "INPUT_OPAM_FILE=$INPUT_OPAM_FILE"
+echo "INPUT_EXPORT='$INPUT_EXPORT'"
 echo "WORKDIR=$WORKDIR"
 echo "PACKAGE=$PACKAGE"
 
@@ -54,6 +55,7 @@ Usage:
   INPUT_OCAML_VERSION=minimal \\
   INPUT_CUSTOM_SCRIPT='...' \\
   INPUT_CUSTOM_IMAGE=''
+  INPUT_EXPORT=''
   $0
 
 Options:
@@ -62,6 +64,7 @@ INPUT_COQ_VERSION: the version of Coq (without patch-level)
 INPUT_OCAML_VERSION: the version of OCaml (minimal, 4.07-flambda, 4.09-flambda)
 INPUT_CUSTOM_SCRIPT: the main script run in the container
 INPUT_CUSTOM_IMAGE: the name of the Docker image to pull
+INPUT_EXPORT: the space-separated list of env variables to export
 EOF
 }
 
@@ -110,6 +113,12 @@ if test -z "$INPUT_CUSTOM_SCRIPT"; then
     exit 1
 fi
 
+if printf "%s" "$INPUT_EXPORT" | grep -e '^[a-zA-Z_][a-zA-Z0-9_ ]*$' -q -v; then
+    echo "ERROR: The export field is incorrect."
+    usage
+    exit 1
+fi
+
 # todo: update this after the one-switch docker-coq migration
 OCAML407="false"
 if [ "$INPUT_OCAML_VERSION" = '4.09-flambda' ]; then
@@ -138,7 +147,8 @@ cp /app/coq.json "$HOME/coq.json"
 echo "::add-matcher::$HOME/coq.json"
 
 ## Note to docker-coq-action maintainers: Run ./helper.sh gen & Copy min.sh
-docker run -i --init --rm --name=COQ -e WORKDIR="$WORKDIR" -e PACKAGE="$PACKAGE" \
+# shellcheck disable=SC2046,SC2086
+docker run -i --init --rm --name=COQ $( [ -n "$INPUT_EXPORT" ] && printf -- "-e %s " $INPUT_EXPORT ) -e WORKDIR="$WORKDIR" -e PACKAGE="$PACKAGE" \
        -v "$HOST_WORKSPACE_REPO:$PWD" -w "$PWD" \
        "$COQ_IMAGE" /bin/bash --login -c "
 exec 2>&1 ; endGroup () {  {  init_opts=\"\$-\"; set +x ; } 2> /dev/null; if [ -n \"\$startTime\" ]; then endTime=\$(date -u +%s); echo \"::endgroup::\"; printf \"↳ \"; date -u -d \"@\$((endTime - startTime))\" '+%-Hh %-Mm %-Ss'; echo; unset startTime; else echo 'Error: missing startGroup command.'; case \"\$init_opts\" in  *x*) set -x ;; esac; return 1; fi; case \"\$init_opts\" in  *x*) set -x ;; esac; } ; startGroup () {  {  init_opts=\"\$-\"; set +x ; } 2> /dev/null; if [ -n \"\$startTime\" ]; then endGroup; fi; if [ \$# -ge 1 ]; then groupTitle=\"\$*\"; else groupTitle=\"Unnamed group\"; fi; echo; echo \"::group::\$groupTitle\"; startTime=\$(date -u +%s); case \"\$init_opts\" in  *x*) set -x ;; esac; } # generated from helper.sh
