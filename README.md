@@ -133,7 +133,37 @@ This is not an issue when relying on `opam` to build the Coq project.
 Otherwise, you may want to use `sudo` in the container to change the
 permissions. You may also install additional Debian packages.
 
-For more details, see the
+Typically, this would lead to a workflow specification like this:
+
+```yaml
+runs-on: ubuntu-latest
+strategy:
+  matrix:
+    image:
+      - 'coqorg/coq:dev'
+steps:
+  - uses: actions/checkout@v2
+  - uses: coq-community/docker-coq-action@v1
+    with:
+      opam_file: 'coq-bignums.opam'
+      custom_image: ${{ matrix.image }}
+      custom_script: |
+        ...
+        startGroup Workaround permission issue
+          sudo chown -R coq:coq .  # <--
+        endGroup
+        startGroup Run tests
+          make -C tests
+        endGroup
+  - name: Revert permissions
+    # to avoid a warning at cleanup time
+    if: ${{ always() }}
+    run: sudo chown -R 1001:116 .  # <--
+```
+
+This example was taken from the [coq/bignums CI workflow](https://github.com/coq/bignums/blob/master/.github/workflows/build-coq-bignums.yml).
+
+For more details, see also the
 [CI setup / Remarks](https://github.com/coq-community/docker-coq/wiki/CI-setup#remarks)
 section in the `docker-coq` wiki.
 
