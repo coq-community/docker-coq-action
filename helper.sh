@@ -45,6 +45,7 @@ main_helper () {
         set -x
         exec > "$gen_file"
 
+        echo -n 'exec 2>&1 ; '  # workaround GHA unflushed stdout/stderr
         minimify endGroup
         echo -n ' ; '
         minimify startGroup
