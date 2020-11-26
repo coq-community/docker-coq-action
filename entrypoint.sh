@@ -119,14 +119,22 @@ if printf "%s" "$INPUT_EXPORT" | grep -e '^[a-zA-Z_][a-zA-Z0-9_ ]*$' -q -v; then
     exit 1
 fi
 
+apk add --no-cache perl
+
+moperl() {
+    mo="$1"
+    value="$2"
+    perl -wpe 'BEGIN {$dest = '\'"$value"\'';}; s/\{\{'"$mo"'\}\}/$dest/g;'
+}
+
 INPUT_CUSTOM_SCRIPT_EXPANDED=$(printf "%s" "$INPUT_CUSTOM_SCRIPT" | \
-  sed -e "s/{{before_install}}/$INPUT_BEFORE_INSTALL/g" \
-    -e "s/{{install}}/$INPUT_INSTALL/g" \
-    -e "s/{{after_install}}/$INPUT_AFTER_INSTALL/g" \
-    -e "s/{{before_script}}/$INPUT_BEFORE_SCRIPT/g" \
-    -e "s/{{script}}/$INPUT_SCRIPT/g" \
-    -e "s/{{after_script}}/$INPUT_AFTER_SCRIPT/g" \
-    -e "s/{{uninstall}}/$INPUT_UNINSTALL/g")
+  moperl before_install "$INPUT_BEFORE_INSTALL" | \
+  moperl install "$INPUT_INSTALL" | \
+  moperl after_install "$INPUT_AFTER_INSTALL" | \
+  moperl before_script "$INPUT_BEFORE_SCRIPT" | \
+  moperl script "$INPUT_SCRIPT" | \
+  moperl after_script "$INPUT_AFTER_SCRIPT" | \
+  moperl uninstall "$INPUT_UNINSTALL")
 
 if test -z "$INPUT_CUSTOM_SCRIPT_EXPANDED"; then
     echo "ERROR: The expanded script is empty."
