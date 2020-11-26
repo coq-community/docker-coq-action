@@ -38,6 +38,7 @@ opam config list; opam repo list; opam list
 opam pin add -n -y -k path coq-proj folder
 opam update -y
 opam install -y -j 2 coq-proj --deps-only
+opam list
 opam install -y -v -j 2 coq-proj
 opam list
 opam remove coq-proj
@@ -103,28 +104,100 @@ install all the `*.opam` packages stored in this directory.
 *Optional* The version of OCaml. Default `"minimal"`.
 Among `"minimal"`, `"4.07-flambda"`, `"4.09-flambda"`.
 
-#### `custom_script`
+#### `before_install`
 
-*Optional* The main script run in the container; may be overridden. Default:
+*Optional* The bash snippet to run before `install`
+
+Default:
+
+```
+opam config list; opam repo list; opam list
+```
+
+See [`custom_script`](#custom_script) for more details.
+
+#### `install`
+
+*Optional* The bash snippet to install the `opam` `PACKAGE` dependencies.
+
+Default:
 
 ```bash
-startGroup Print opam config
-  opam config list; opam repo list; opam list
-endGroup
+opam pin add -n -y -k path $PACKAGE $WORKDIR
+opam update -y
+opam install -y -j 2 $PACKAGE --deps-only
+```
+
+See [`custom_script`](#custom_script) for more details.
+
+#### `after_install`
+
+*Optional* The bash snippet to run after `install` (if successful).
+
+Default:
+
+```bash
+opam list
+```
+
+See [`custom_script`](#custom_script) for more details.
+
+#### `before_script`
+
+*Optional* The bash snippet to run before `script`. Default `""` (empty string).
+
+See [`custom_script`](#custom_script) for more details.
+
+#### `script`
+
+*Optional* The bash snippet to install the `opam` `PACKAGE`.
+
+Default:
+
+```bash
+opam install -y -v -j 2 $PACKAGE
+opam list
+```
+
+See [`custom_script`](#custom_script) for more details.
+
+#### `after_script`
+
+*Optional* The bash snippet to run after `script` (if successful). Default `""` (empty string).
+
+See [`custom_script`](#custom_script) for more details.
+
+#### `uninstall`
+
+*Optional* The bash snippet to uninstall the `opam` `PACKAGE`.
+
+Default:
+
+```bash
+opam remove $PACKAGE
+```
+
+See [`custom_script`](#custom_script) for more details.
+
+#### `custom_script`
+
+*Optional* The main script run in the container; might be overridden.
+
+Default:
+
+```bash
 startGroup Build dependencies
-  opam pin add -n -y -k path $PACKAGE $WORKDIR
-  opam update -y
-  opam install -y -j 2 $PACKAGE --deps-only
-endGroup
-startGroup List installed packages
-  opam list
+  {{before_install}}
+  {{install}}
+  {{after_install}}
 endGroup
 startGroup Build
-  opam install -y -v -j 2 $PACKAGE
-  opam list
+  {{before_script}}
+  {{script}}
+  {{after_script}}
 endGroup
 startGroup Uninstallation test
-  opam remove $PACKAGE
+  {{uninstall}}
 endGroup
 ```
 
@@ -169,7 +242,7 @@ For more details, see also the
 section in the `docker-coq` wiki.
 
 *Note-2: this option is named `custom_script` rather than `script` or
-`run` to discourage changing its recommended, default value, while
+`run` to **discourage changing its recommended, default value**, while
 keeping the flexibility to be able to change it.*
 
 #### `custom_image`

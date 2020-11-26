@@ -119,6 +119,21 @@ if printf "%s" "$INPUT_EXPORT" | grep -e '^[a-zA-Z_][a-zA-Z0-9_ ]*$' -q -v; then
     exit 1
 fi
 
+INPUT_CUSTOM_SCRIPT_EXPANDED=$(printf "%s" "$INPUT_CUSTOM_SCRIPT" | \
+  sed -e "s/{{before_install}}/$INPUT_BEFORE_INSTALL/g" \
+    -e "s/{{install}}/$INPUT_INSTALL/g" \
+    -e "s/{{after_install}}/$INPUT_AFTER_INSTALL/g" \
+    -e "s/{{before_script}}/$INPUT_BEFORE_SCRIPT/g" \
+    -e "s/{{script}}/$INPUT_SCRIPT/g" \
+    -e "s/{{after_script}}/$INPUT_AFTER_SCRIPT/g" \
+    -e "s/{{uninstall}}/$INPUT_UNINSTALL/g")
+
+if test -z "$INPUT_CUSTOM_SCRIPT_EXPANDED"; then
+    echo "ERROR: The expanded script is empty."
+    usage
+    exit 1
+fi
+
 # todo: update this after the one-switch docker-coq migration
 OCAML407="false"
 if [ "$INPUT_OCAML_VERSION" = '4.09-flambda' ]; then
@@ -154,6 +169,6 @@ docker run -i --init --rm --name=COQ $( [ -n "$INPUT_EXPORT" ] && printf -- "-e 
 exec 2>&1 ; endGroup () {  {  init_opts=\"\$-\"; set +x ; } 2> /dev/null; if [ -n \"\$startTime\" ]; then endTime=\$(date -u +%s); echo \"::endgroup::\"; printf \"↳ \"; date -u -d \"@\$((endTime - startTime))\" '+%-Hh %-Mm %-Ss'; echo; unset startTime; else echo 'Error: missing startGroup command.'; case \"\$init_opts\" in  *x*) set -x ;; esac; return 1; fi; case \"\$init_opts\" in  *x*) set -x ;; esac; } ; startGroup () {  {  init_opts=\"\$-\"; set +x ; } 2> /dev/null; if [ -n \"\$startTime\" ]; then endGroup; fi; if [ \$# -ge 1 ]; then groupTitle=\"\$*\"; else groupTitle=\"Unnamed group\"; fi; echo; echo \"::group::\$groupTitle\"; startTime=\$(date -u +%s); case \"\$init_opts\" in  *x*) set -x ;; esac; } # generated from helper.sh
 export PS4='+ \e[33;1m(\$0 @ line \$LINENO) \$\e[0m '; set -ex
 $_OCAML407_COMMAND
-$INPUT_CUSTOM_SCRIPT" script
+$INPUT_CUSTOM_SCRIPT_EXPANDED" script
 
 echo "::remove-matcher owner=coq-problem-matcher::"
