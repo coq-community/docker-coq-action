@@ -224,20 +224,21 @@ Here is a minimal working example of this feature:
 ```yaml
 runs-on: ubuntu-latest
 steps:
+  - uses: actions/checkout@v2
   - uses: coq-community/docker-coq-action@v1
     with:
-      custom_script: |
-        printf "%s\n" "$first_example"
-        startGroup Build dependencies, with-test
-          opam pin add -n -y -k path $PACKAGE $WORKDIR
-          opam update -y
-          opam install -y -j 2 $PACKAGE --deps-only
-        endGroup
-      export: 'first_example OPAMWITHTEST'
+      opam_file: 'folder/coq-proj.opam'
+      coq_version: 'dev'
+      ocaml_version: '4.07-flambda'
+      export: 'OPAMWITHTEST'  # space-separated list of variables
     env:
-      first_example: 'some value'
       OPAMWITHTEST: 'true'
 ```
+
+Here, setting the [`OPAMWITHTEST`](https://opam.ocaml.org/doc/man/opam-install.html#lbAG)
+environment variable is useful to run the unit tests
+(specified using `opam`'s [`with-test`](http://opam.ocaml.org/doc/Manual.html#pkgvar-with-test)
+clause) after the package build.
 
 ### Remarks
 
