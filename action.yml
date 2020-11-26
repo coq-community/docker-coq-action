@@ -42,7 +42,7 @@ inputs:
     default: |
       opam remove $PACKAGE
   custom_script:
-    description: 'The main script run in the container; might be overridden.'
+    description: 'The main script run in the container; may be overridden.'
     default: |
       startGroup Build dependencies
         {{before_install}}
