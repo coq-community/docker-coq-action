@@ -44,17 +44,25 @@ inputs:
   custom_script:
     description: 'The main script run in the container; may be overridden.'
     default: |
-      startGroup Build dependencies
+      startGroup before_install
         {{before_install}}
+      endGroup
+      startGroup install
         {{install}}
+      endGroup
+      startGroup after_install
         {{after_install}}
       endGroup
-      startGroup Build
+      startGroup before_script
         {{before_script}}
+      endGroup
+      startGroup script
         {{script}}
+      endGroup
+      startGroup after_script
         {{after_script}}
       endGroup
-      startGroup Uninstallation test
+      startGroup uninstall
         {{uninstall}}
       endGroup
   custom_image:

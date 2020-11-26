@@ -186,17 +186,25 @@ See [`custom_script`](#custom_script) for more details.
 Default:
 
 ```
-startGroup Build dependencies
+startGroup before_install
   {{before_install}}
+endGroup
+startGroup install
   {{install}}
+endGroup
+startGroup after_install
   {{after_install}}
 endGroup
-startGroup Build
+startGroup before_script
   {{before_script}}
+endGroup
+startGroup script
   {{script}}
+endGroup
+startGroup after_script
   {{after_script}}
 endGroup
-startGroup Uninstallation test
+startGroup uninstall
   {{uninstall}}
 endGroup
 ```
