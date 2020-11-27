@@ -33,11 +33,12 @@ For more details about these images, see the
 Assuming the Git repository contains a `folder/coq-proj.opam` file,
 it will run (by default) the following commands:
 
-```bash
+```
 opam config list; opam repo list; opam list
 opam pin add -n -y -k path coq-proj folder
 opam update -y
 opam install -y -j 2 coq-proj --deps-only
+opam list
 opam install -y -v -j 2 coq-proj
 opam list
 opam remove coq-proj
@@ -79,7 +80,7 @@ Default `"."` (if the argument is omitted or an empty string).
 *Note-1:* relying on the value of this `INPUT_OPAM_FILE` variable, the
 following two variables are exported when running the `custom_script`:
 
-```bash
+```
 if [ -z "$INPUT_OPAM_FILE" ] || [ -d "$INPUT_OPAM_FILE" ]; then
     WORKDIR=""
     PACKAGE=${INPUT_OPAM_FILE:-.}
@@ -103,74 +104,128 @@ install all the `*.opam` packages stored in this directory.
 *Optional* The version of OCaml. Default `"minimal"`.
 Among `"minimal"`, `"4.07-flambda"`, `"4.09-flambda"`.
 
+#### `before_install`
+
+*Optional* The bash snippet to run before `install`
+
+Default:
+
+```
+opam config list; opam repo list; opam list
+```
+
+See [`custom_script`](#custom_script) for more details.
+
+#### `install`
+
+*Optional* The bash snippet to install the `opam` `PACKAGE` dependencies.
+
+Default:
+
+```
+opam pin add -n -y -k path $PACKAGE $WORKDIR
+opam update -y
+opam install -y -j 2 $PACKAGE --deps-only
+```
+
+See [`custom_script`](#custom_script) for more details.
+
+#### `after_install`
+
+*Optional* The bash snippet to run after `install` (if successful).
+
+Default:
+
+```
+opam list
+```
+
+See [`custom_script`](#custom_script) for more details.
+
+#### `before_script`
+
+*Optional* The bash snippet to run before `script`. Default `""` (empty string).
+
+See [`custom_script`](#custom_script) for more details.
+
+#### `script`
+
+*Optional* The bash snippet to install the `opam` `PACKAGE`.
+
+Default:
+
+```
+opam install -y -v -j 2 $PACKAGE
+opam list
+```
+
+See [`custom_script`](#custom_script) for more details.
+
+#### `after_script`
+
+*Optional* The bash snippet to run after `script` (if successful). Default `""` (empty string).
+
+See [`custom_script`](#custom_script) for more details.
+
+#### `uninstall`
+
+*Optional* The bash snippet to uninstall the `opam` `PACKAGE`.
+
+Default:
+
+```
+opam remove $PACKAGE
+```
+
+See [`custom_script`](#custom_script) for more details.
+
 #### `custom_script`
 
-*Optional* The main script run in the container; may be overridden. Default:
+*Optional* The main script run in the container; may be overridden; but overriding more specific parts of the script is preferred.
 
-```bash
-startGroup Print opam config
-  opam config list; opam repo list; opam list
+Default:
+
+```
+startGroup before_install dependencies
+  {{before_install}}
 endGroup
-startGroup Build dependencies
-  opam pin add -n -y -k path $PACKAGE $WORKDIR
-  opam update -y
-  opam install -y -j 2 $PACKAGE --deps-only
+startGroup install dependencies
+  {{install}}
 endGroup
-startGroup List installed packages
-  opam list
+startGroup after_install dependencies
+  {{after_install}}
 endGroup
-startGroup Build
-  opam install -y -v -j 2 $PACKAGE
-  opam list
+startGroup before_script
+  {{before_script}}
 endGroup
-startGroup Uninstallation test
-  opam remove $PACKAGE
+startGroup script
+  {{script}}
+endGroup
+startGroup after_script
+  {{after_script}}
+endGroup
+startGroup uninstall
+  {{uninstall}}
 endGroup
 ```
 
-*Note-1:* if you use the `docker-coq` images, the container user has
-UID=GID=1000 while the GitHub action workdir has (UID=1001, GID=116).
-This is not an issue when relying on `opam` to build the Coq project.
-Otherwise, you may want to use `sudo` in the container to change the
-permissions. You may also install additional Debian packages.
+*Note-1:* the semantics of this variable is a *standard Bash script*,
+that is evaluated within the workflow container after replacing the
+"mustache" placeholders with the value of their variable counterpart.
+For example, `{{uninstall}}` will be replaced with the value of the
+[`uninstall`](#uninstall) variable (the default value of which being
+the string `opam remove $PACKAGE`).
 
-Typically, this would lead to a workflow specification like this:
+*Note-2:* this option is named `custom_script` rather than `run` or so
+to **discourage changing its recommended, default value** for building
+a regular `opam` project, while keeping the flexibility to be able to
+change it.
 
-```yaml
-runs-on: ubuntu-latest
-strategy:
-  matrix:
-    image:
-      - 'coqorg/coq:dev'
-steps:
-  - uses: actions/checkout@v2
-  - uses: coq-community/docker-coq-action@v1
-    with:
-      opam_file: 'coq-bignums.opam'
-      custom_image: ${{ matrix.image }}
-      custom_script: |
-        ...
-        startGroup Workaround permission issue
-          sudo chown -R coq:coq .  # <--
-        endGroup
-        startGroup Run tests
-          make -C tests
-        endGroup
-  - name: Revert permissions
-    # to avoid a warning at cleanup time
-    if: ${{ always() }}
-    run: sudo chown -R 1001:116 .  # <--
-```
+*Note-3:* if you decide to override the `custom_script` value anyway,
+you can just as well rely on the "mustache interpolation" of
+`{{before_install}}` … `{{uninstall}}`, and customize the underlying
+values.
 
-This example was taken from the [coq/bignums CI workflow](https://github.com/coq/bignums/blob/master/.github/workflows/build-coq-bignums.yml).
-
-For more details, see also the
-[CI setup / Remarks](https://github.com/coq-community/docker-coq/wiki/CI-setup#remarks)
-section in the `docker-coq` wiki.
-
-*Note-2: this option is named `custom_script` rather than `script` or
-`run` to discourage changing its recommended, default value, while
-keeping the flexibility to be able to change it.*
 
 #### `custom_image`
 
@@ -241,6 +296,49 @@ environment variable is useful to run the unit tests
 clause) after the package build.
 
 ### Remarks
+
+#### Permissions
+
+If you use the
+[`docker-coq`](https://github.com/coq-community/docker-coq) images,
+the container user has UID=GID=1000 while the GitHub action workdir
+has (UID=1001, GID=116).
+This is not an issue when relying on `opam` to build the Coq project.
+Otherwise, you may want to use `sudo` in the container to change the
+permissions. You may also install additional Debian packages.
+
+Typically, this would lead to a workflow specification like this:
+
+```yaml
+runs-on: ubuntu-latest
+strategy:
+  matrix:
+    image:
+      - 'coqorg/coq:dev'
+steps:
+  - uses: actions/checkout@v2
+  - uses: coq-community/docker-coq-action@v1
+    with:
+      opam_file: 'coq-demo.opam'
+      custom_image: ${{ matrix.image }}
+      before_script: |
+        echo Workaround permission issue
+        sudo chown -R coq:coq .    # <--
+      script: |
+        make -j2
+      uninstall: |
+        make clean
+  - name: Revert permissions
+    # to avoid a warning at cleanup time
+    if: ${{ always() }}
+    run: sudo chown -R 1001:116 .  # <--
+```
+
+For more details, see the
+[CI setup / Remarks](https://github.com/coq-community/docker-coq/wiki/CI-setup#remarks)
+section in the `docker-coq` wiki.
+
+#### OPAM
 
 The `docker-coq-action` provides built-in support for `opam` builds.
 
