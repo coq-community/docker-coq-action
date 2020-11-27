@@ -206,6 +206,40 @@ steps:
       custom_image: ${{ matrix.image }}
 ```
 
+#### `export`
+
+*Optional* A space-separated list of `env` variables to export to the `custom_script`.
+
+*Note-1:* The values of the variables to export may be defined by using the
+[`env`](https://docs.github.com/en/free-pro-team@latest/actions/reference/environment-variables)
+keyword.
+
+*Note-2:* Regarding the naming of these variables:
+
+* Only use ASCII letters, `_` and digits, i.e., matching the `[a-zA-Z_][a-zA-Z0-9_]*` regexp.
+* Avoid [reserved identifiers](https://docs.github.com/en/free-pro-team@latest/actions/reference/environment-variables) (namely: `HOME`, `CI`, and strings starting with `GITHUB_`, `ACTIONS_`, `RUNNER_`, or `INPUT_`).
+
+Here is a minimal working example of this feature:
+
+```yaml
+runs-on: ubuntu-latest
+steps:
+  - uses: actions/checkout@v2
+  - uses: coq-community/docker-coq-action@v1
+    with:
+      opam_file: 'folder/coq-proj.opam'
+      coq_version: 'dev'
+      ocaml_version: '4.07-flambda'
+      export: 'OPAMWITHTEST'  # space-separated list of variables
+    env:
+      OPAMWITHTEST: 'true'
+```
+
+Here, setting the [`OPAMWITHTEST`](https://opam.ocaml.org/doc/man/opam-install.html#lbAG)
+environment variable is useful to run the unit tests
+(specified using `opam`'s [`with-test`](http://opam.ocaml.org/doc/Manual.html#pkgvar-with-test)
+clause) after the package build.
+
 ### Remarks
 
 The `docker-coq-action` provides built-in support for `opam` builds.
