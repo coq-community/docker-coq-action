@@ -319,22 +319,22 @@ steps:
   - uses: actions/checkout@v2
   - uses: coq-community/docker-coq-action@v1
     with:
-      opam_file: 'coq-bignums.opam'
+      opam_file: 'coq-demo.opam'
       custom_image: ${{ matrix.image }}
       before_script: |
         echo Workaround permission issue
         sudo chown -R coq:coq .    # <--
-      after_script: |
-        make -C tests
+      script: |
+        make -j2
+      uninstall: |
+        make clean
   - name: Revert permissions
     # to avoid a warning at cleanup time
     if: ${{ always() }}
     run: sudo chown -R 1001:116 .  # <--
 ```
 
-This example was inspired from the [coq/bignums CI workflow](https://github.com/coq/bignums/blob/master/.github/workflows/build-coq-bignums.yml).
-
-For more details, see also the
+For more details, see the
 [CI setup / Remarks](https://github.com/coq-community/docker-coq/wiki/CI-setup#remarks)
 section in the `docker-coq` wiki.
 
