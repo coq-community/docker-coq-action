@@ -293,6 +293,23 @@ clause) after the package build.
 
 ### Remarks
 
+#### startGroup/endGroup
+
+The default value of fields `{{before_install}}`, `{{install}}`,
+`{{after_install}}`, `{{script}}`, and `{{uninstall}}` involves the
+functions `startGroup` (taking 1 argument: `startGroup "Group title"`)
+and `endGroup`.
+
+These bash functions have the following features:
+
+* they create foldable groups in the GitHub Actions logs
+    (see the [online doc](https://github.com/actions/toolkit/blob/master/docs/commands.md#group-and-ungroup-log-lines)),
+* and they compute the elapsed time for the considered group;
+* these groups cannot be nested,
+* and if an `endGroup` has been forgotten, it is implicitly and
+  automatically inserted at the next `startGroup` (albeit it is better
+  to make each `endGroup` explicit, for readability).
+
 #### Permissions
 
 If you use the
