@@ -2,6 +2,21 @@
 # -*- compile-command: "./helper.sh gen"; -*-
 # Author: Erik Martin-Dorel, 2020
 
+## Usage
+#
+# Run (./helper.sh --help)
+#
+## Overview
+#
+# Run (./helper.sh gen) to generate min.sh;
+# Copy-and-paste min.sh in entrypoint.sh.
+#
+## Remark
+#
+# The generated code in min.sh is escaped as needed by entrypoint.sh.
+# Replace escape="true" with escape="false" in minimify() if you want
+# to test the code locally after doing (./helper.sh gen && . min.sh).
+
 srcdir=$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null && pwd )
 
 # shellcheck source=./timegroup.sh
@@ -50,7 +65,7 @@ main_helper () {
         echo -n ' ; '
         minimify startGroup
         echo ' # generated from helper.sh'
-    elif [ $# -eq 1 ] && [ "$1" = "--help" ]; then
+    else
         cat <<EOF
 Usage:
 
