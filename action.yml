@@ -17,54 +17,50 @@ inputs:
   before_install:
     description: 'Customizable script run before "install", empty by default.'
     default: |
-      opam config list; opam repo list; opam list
+      startGroup Print opam config
+        opam config list; opam repo list; opam list
+      endGroup
   install:
     description: 'Customizable script to install the opam dependencies.'
     default: |
-      opam pin add -n -y -k path $PACKAGE $WORKDIR
-      opam update -y
-      opam install -y -j 2 $PACKAGE --deps-only
+      startGroup Install dependencies
+        opam pin add -n -y -k path $PACKAGE $WORKDIR
+        opam update -y
+        opam install -y -j 2 $PACKAGE --deps-only
+      endGroup
   after_install:
     description: 'Customizable script run after "install".'
     default: |
-      opam list
+      startGroup List installed packages
+        opam list
+      endGroup
   before_script:
     description: 'Customizable script run before the opam build, empty by default.'        
   script:
     description: 'Customizable script run to install the opam package(s).'
     default: |
-      opam install -y -v -j 2 $PACKAGE
-      opam list  
+      startGroup Build
+        opam install -y -v -j 2 $PACKAGE
+        opam list
+      endGroup
   after_script:
     description: 'Customizable script run after the opam build, empty by default.'
   uninstall:
     description: 'Customizable script run to uninstall the opam package(s).'
     default: |
-      opam remove $PACKAGE
+      startGroup Installation test
+        opam remove $PACKAGE
+      endGroup
   custom_script:
     description: 'The main script run in the container; may be overridden.'
     default: |
-      startGroup before_install dependencies
-        {{before_install}}
-      endGroup
-      startGroup install dependencies
-        {{install}}
-      endGroup
-      startGroup after_install dependencies
-        {{after_install}}
-      endGroup
-      startGroup before_script
-        {{before_script}}
-      endGroup
-      startGroup script
-        {{script}}
-      endGroup
-      startGroup after_script
-        {{after_script}}
-      endGroup
-      startGroup uninstall
-        {{uninstall}}
-      endGroup
+      {{before_install}}
+      {{install}}
+      {{after_install}}
+      {{before_script}}
+      {{script}}
+      {{after_script}}
+      {{uninstall}}
   custom_image:
     description: 'The name of the Docker image to pull; unset by default.'
   export:
