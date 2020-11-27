@@ -186,13 +186,13 @@ See [`custom_script`](#custom_script) for more details.
 Default:
 
 ```
-startGroup before_install
+startGroup before_install dependencies
   {{before_install}}
 endGroup
-startGroup install
+startGroup install dependencies
   {{install}}
 endGroup
-startGroup after_install
+startGroup after_install dependencies
   {{after_install}}
 endGroup
 startGroup before_script
