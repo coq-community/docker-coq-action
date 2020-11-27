@@ -111,7 +111,7 @@ Among `"minimal"`, `"4.07-flambda"`, `"4.09-flambda"`.
 Default:
 
 ```
-startGroup Print opam config
+startGroup "Print opam config"
   opam config list; opam repo list; opam list
 endGroup
 ```
@@ -125,7 +125,7 @@ See [`custom_script`](#custom_script) for more details.
 Default:
 
 ```
-startGroup Install dependencies
+startGroup "Install dependencies"
   opam pin add -n -y -k path $PACKAGE $WORKDIR
   opam update -y
   opam install -y -j 2 $PACKAGE --deps-only
@@ -141,7 +141,7 @@ See [`custom_script`](#custom_script) for more details.
 Default:
 
 ```
-startGroup List installed packages
+startGroup "List installed packages"
   opam list
 endGroup
 ```
@@ -161,7 +161,7 @@ See [`custom_script`](#custom_script) for more details.
 Default:
 
 ```
-startGroup Build
+startGroup "Build"
   opam install -y -v -j 2 $PACKAGE
   opam list
 endGroup
@@ -182,7 +182,7 @@ See [`custom_script`](#custom_script) for more details.
 Default:
 
 ```
-startGroup Uninstallation test
+startGroup "Uninstallation test"
   opam remove $PACKAGE
 endGroup
 ```
@@ -335,15 +335,15 @@ steps:
       opam_file: 'coq-demo.opam'
       custom_image: ${{ matrix.image }}
       before_script: |
-        startGroup Workaround permission issue
+        startGroup "Workaround permission issue"
           sudo chown -R coq:coq .  # <--
         endGroup
       script: |
-        startGroup Build project
+        startGroup "Build project"
           make -j2
         endGroup
       uninstall: |
-        startGroup Clean project
+        startGroup "Clean project"
           make clean
         endGroup
   - name: Revert permissions
