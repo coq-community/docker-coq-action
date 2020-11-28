@@ -111,7 +111,9 @@ Among `"minimal"`, `"4.07-flambda"`, `"4.09-flambda"`.
 Default:
 
 ```
-opam config list; opam repo list; opam list
+startGroup "Print opam config"
+  opam config list; opam repo list; opam list
+endGroup
 ```
 
 See [`custom_script`](#custom_script) for more details.
@@ -123,9 +125,11 @@ See [`custom_script`](#custom_script) for more details.
 Default:
 
 ```
-opam pin add -n -y -k path $PACKAGE $WORKDIR
-opam update -y
-opam install -y -j 2 $PACKAGE --deps-only
+startGroup "Install dependencies"
+  opam pin add -n -y -k path $PACKAGE $WORKDIR
+  opam update -y
+  opam install -y -j 2 $PACKAGE --deps-only
+endGroup
 ```
 
 See [`custom_script`](#custom_script) for more details.
@@ -137,7 +141,9 @@ See [`custom_script`](#custom_script) for more details.
 Default:
 
 ```
-opam list
+startGroup "List installed packages"
+  opam list
+endGroup
 ```
 
 See [`custom_script`](#custom_script) for more details.
@@ -155,8 +161,10 @@ See [`custom_script`](#custom_script) for more details.
 Default:
 
 ```
-opam install -y -v -j 2 $PACKAGE
-opam list
+startGroup "Build"
+  opam install -y -v -j 2 $PACKAGE
+  opam list
+endGroup
 ```
 
 See [`custom_script`](#custom_script) for more details.
@@ -174,7 +182,9 @@ See [`custom_script`](#custom_script) for more details.
 Default:
 
 ```
-opam remove $PACKAGE
+startGroup "Uninstallation test"
+  opam remove $PACKAGE
+endGroup
 ```
 
 See [`custom_script`](#custom_script) for more details.
@@ -186,27 +196,13 @@ See [`custom_script`](#custom_script) for more details.
 Default:
 
 ```
-startGroup before_install dependencies
-  {{before_install}}
-endGroup
-startGroup install dependencies
-  {{install}}
-endGroup
-startGroup after_install dependencies
-  {{after_install}}
-endGroup
-startGroup before_script
-  {{before_script}}
-endGroup
-startGroup script
-  {{script}}
-endGroup
-startGroup after_script
-  {{after_script}}
-endGroup
-startGroup uninstall
-  {{uninstall}}
-endGroup
+{{before_install}}
+{{install}}
+{{after_install}}
+{{before_script}}
+{{script}}
+{{after_script}}
+{{uninstall}}
 ```
 
 *Note-1:* the semantics of this variable is a *standard Bash script*,
@@ -297,6 +293,23 @@ clause) after the package build.
 
 ### Remarks
 
+#### startGroup/endGroup
+
+The default value of fields `{{before_install}}`, `{{install}}`,
+`{{after_install}}`, `{{script}}`, and `{{uninstall}}` involves the
+functions `startGroup` (taking 1 argument: `startGroup "Group title"`)
+and `endGroup`.
+
+These bash functions have the following features:
+
+* they create foldable groups in the GitHub Actions logs
+    (see the [online doc](https://github.com/actions/toolkit/blob/master/docs/commands.md#group-and-ungroup-log-lines)),
+* and they compute the elapsed time for the considered group;
+* these groups cannot be nested,
+* and if an `endGroup` has been forgotten, it is implicitly and
+  automatically inserted at the next `startGroup` (albeit it is better
+  to make each `endGroup` explicit, for readability).
+
 #### Permissions
 
 If you use the
@@ -322,12 +335,17 @@ steps:
       opam_file: 'coq-demo.opam'
       custom_image: ${{ matrix.image }}
       before_script: |
-        echo Workaround permission issue
-        sudo chown -R coq:coq .    # <--
+        startGroup "Workaround permission issue"
+          sudo chown -R coq:coq .  # <--
+        endGroup
       script: |
-        make -j2
+        startGroup "Build project"
+          make -j2
+        endGroup
       uninstall: |
-        make clean
+        startGroup "Clean project"
+          make clean
+        endGroup
   - name: Revert permissions
     # to avoid a warning at cleanup time
     if: ${{ always() }}
