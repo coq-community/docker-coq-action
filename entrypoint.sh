@@ -15,7 +15,7 @@ else
     PACKAGE=$(basename "$INPUT_OPAM_FILE" .opam)
 fi
 
-startGroup Print runner configuration
+startGroup "Print runner configuration"
 
 echo "GITHUB_WORKFLOW=$GITHUB_WORKFLOW"
 echo "RUNNER_OS=$RUNNER_OS"
@@ -119,6 +119,8 @@ if printf "%s" "$INPUT_EXPORT" | grep -e '^[a-zA-Z_][a-zA-Z0-9_ ]*$' -q -v; then
     exit 1
 fi
 
+startGroup "Install perl for mustache interpolation"
+
 apk add --no-cache perl
 
 moperl() {
@@ -136,6 +138,8 @@ INPUT_CUSTOM_SCRIPT_EXPANDED=$(printf "%s" "$INPUT_CUSTOM_SCRIPT" | \
   moperl after_script "$INPUT_AFTER_SCRIPT" | \
   moperl uninstall "$INPUT_UNINSTALL")
 
+endGroup
+
 if test -z "$INPUT_CUSTOM_SCRIPT_EXPANDED"; then
     echo "ERROR: The expanded script is empty."
     usage
@@ -152,7 +156,7 @@ elif [ "$INPUT_OCAML_VERSION" = '4.07-flambda' ]; then
 fi
 echo OCAML407="$OCAML407"
 
-startGroup Pull docker-coq image
+startGroup "Pull docker-coq image"
 
 echo COQ_IMAGE="$COQ_IMAGE"
 docker pull "$COQ_IMAGE"
