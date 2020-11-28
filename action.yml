@@ -48,7 +48,7 @@ inputs:
   uninstall:
     description: 'Customizable script run to uninstall the opam package(s).'
     default: |
-      startGroup "Installation test"
+      startGroup "Uninstallation test"
         opam remove $PACKAGE
       endGroup
   custom_script:
