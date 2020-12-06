@@ -444,3 +444,81 @@ steps:
 For more details, see the
 [CI setup / Remarks](https://github.com/coq-community/docker-coq/wiki/CI-setup#remarks)
 section in the `docker-coq` wiki.
+
+### Verbose output and variable leaking
+
+The code run in the `docker-coq-action` container relies on the
+following invocation to display a customized prompt before each
+command:
+
+```bash
+export PS4='+ \e[33;1m($0 @ line $LINENO) \$\e[0m '; set -ex
+```
+
+As a result, due to the `set -x` option, the value of each variable is
+exposed in the log.
+
+For example, the script
+
+```bash
+startGroup "Toy example"
+  echo "ex_var=$ex_var"
+endGroup
+```
+
+will produce a log such as:
+
+[![env log](./images/2021-08-11_env_log.png)](./images/2021-08-11_env_log.png)
+
+Hence the following two remarks:
+
+1. If need be, it is possible to temporarily disable the trace feature
+   in your script, surrounding the lines at stake by (`set +x`, `set -x`).  
+   Your script would thus look like:
+
+   ```bash
+   set +x
+
+   #...some code with no trace...
+
+   set -x
+   ```
+
+   or, to get some even less verbose output:
+
+   ```bash
+   { set +x; } 2>/dev/null
+
+   #...some code with no trace...
+
+   set -x
+   ```
+
+2. Fortunately, this trace feature cannot make repository secrets
+   `${{ secrets.STH }}` leak, as
+   [GitHub Actions automatically redact them in the log](https://docs.github.com/en/actions/reference/encrypted-secrets#accessing-your-secrets).  
+   Regarding secrets obtained by other means, e.g. from a command-line
+   program, it is recommended to perform the three actions below in a
+   previous `run:` step:
+
+   * store the "locally-created secret" in an environment variable:
+
+     ```bash
+     SOME_TOKEN="..."
+     ```
+
+   * immediately [mark the variable as masked](https://docs.github.com/en/actions/reference/workflow-commands-for-github-actions#masking-a-value-in-log):
+
+     ```bash
+     echo "::add-mask::$SOME_TOKEN"
+     ```
+
+   * register the variable to [make it available for subsequent steps](https://docs.github.com/en/actions/reference/workflow-commands-for-github-actions#setting-an-environment-variable):
+
+     ```bash
+     printf "%s\n" "SOME_TOKEN=$(printf "%q" "$SOME_TOKEN")" >> $GITHUB_ENV
+     ```
+
+   A comprehensive example of this approach is available in PR [erikmd/docker-coq-github-action-demo#12](https://github.com/erikmd/docker-coq-github-action-demo/pull/12).
+
+   For completeness, note that masking inputs involved in `workflow_dispatch` may require some `jq`-based workaround, as mentioned in issue [actions/runner#643](https://github.com/actions/runner/issues/643).
