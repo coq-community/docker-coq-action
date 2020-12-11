@@ -102,7 +102,12 @@ install all the `*.opam` packages stored in this directory.
 #### `ocaml_version`
 
 *Optional* The version of OCaml. Default `"minimal"`.
-Among `"minimal"`, `"4.07-flambda"`, `"4.09-flambda"`.
+Among `"minimal"` (*deprecated, to be removed on 14 December 2020*),
+`"default"`, `"4.02"`, `"4.05"`, `"4.07-flambda"`,
+`"4.08-flambda"`, `"4.09-flambda"`, `"4.10-flambda"`, `"4.11-flambda"`.
+
+The supported compilers w.r.t. each version of Coq are documented in the
+[Supported tags](https://github.com/coq-community/docker-coq/wiki#supported-tags) section of the `docker-coq` wiki.
 
 #### `before_install`
 
