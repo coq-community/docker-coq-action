@@ -303,6 +303,29 @@ clause) after the package build.
 
 ### Remarks
 
+#### Verbose output
+
+The code run in the `docker-coq-action` container relies on the
+following invocation to display a customized prompt before each
+command:
+
+```
+export PS4='+ \e[33;1m($0 @ line $LINENO) \$\e[0m '; set -ex
+```
+
+As a result, due to the `set -x` option, the value of each variable is
+exposed in the log. If ever you'd like to disable that feature
+temporarily in your `custom_script`, you can enclose the offending
+lines by (`set +x`, `set -x`), writing a script like this:
+
+```
+{ set +x; } 2>/dev/null
+
+#...some code...
+
+set -x
+```
+
 #### startGroup/endGroup
 
 The default value of fields `{{before_install}}`, `{{install}}`,
