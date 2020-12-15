@@ -102,7 +102,7 @@ install all the `*.opam` packages stored in this directory.
 Append the `-native` suffix if the version is `>= 8.13` (or `dev`)
 *and* you are interested in the image that contains the
 [`coq-native`](https://opam.ocaml.org/packages/coq-native/) package.
-E.g., `dev-native`. In this case, the `ocaml_version` must be `4.07`.
+E.g., `"dev-native"`. In this case, the `ocaml_version` must be `"4.07"`.
 
 #### `ocaml_version`
 
