@@ -99,10 +99,18 @@ install all the `*.opam` packages stored in this directory.
 *Optional* The version of Coq. E.g., `"8.10"`. Default
 `"latest"` (= latest stable version).
 
+Append the `-native` suffix if the version is `>= 8.13` (or `dev`)
+*and* you are interested in the image that contains the
+[`coq-native`](http://opam.ocaml.org/packages/coq-native/) package.
+E.g., `dev-native`. In this case, the `ocaml_version` must be `4.07`.
+
 #### `ocaml_version`
 
 *Optional* The version of OCaml. Default `"minimal"`.
-Among `"minimal"`, `"4.07-flambda"`, `"4.09-flambda"`.
+Among `"minimal"`, `"4.07-flambda"`, `"4.07"`, ``"4.08-flambda"`,
+`"4.09-flambda"`, `"4.10-flambda"`, `"4.11-flambda"`.
+
+For details, see: <https://github.com/coq-community/docker-coq/wiki#supported-tags>
 
 #### `before_install`
 
