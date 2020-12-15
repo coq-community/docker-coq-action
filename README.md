@@ -101,7 +101,7 @@ install all the `*.opam` packages stored in this directory.
 
 Append the `-native` suffix if the version is `>= 8.13` (or `dev`)
 *and* you are interested in the image that contains the
-[`coq-native`](http://opam.ocaml.org/packages/coq-native/) package.
+[`coq-native`](https://opam.ocaml.org/packages/coq-native/) package.
 E.g., `dev-native`. In this case, the `ocaml_version` must be `4.07`.
 
 #### `ocaml_version`
@@ -298,7 +298,7 @@ steps:
 
 Here, setting the [`OPAMWITHTEST`](https://opam.ocaml.org/doc/man/opam-install.html#lbAG)
 environment variable is useful to run the unit tests
-(specified using `opam`'s [`with-test`](http://opam.ocaml.org/doc/Manual.html#pkgvar-with-test)
+(specified using `opam`'s [`with-test`](https://opam.ocaml.org/doc/Manual.html#pkgvar-with-test)
 clause) after the package build.
 
 ### Remarks
