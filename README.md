@@ -110,6 +110,8 @@ E.g., `dev-native`. In this case, the `ocaml_version` must be `4.07`.
 Among `"minimal"`, `"4.07-flambda"`, `"4.07"`, `"4.08-flambda"`,
 `"4.09-flambda"`, `"4.10-flambda"`, `"4.11-flambda"`.
 
+**Warning!** not all OCaml versions are available with all Coq versions.
+
 For details, see: <https://github.com/coq-community/docker-coq/wiki#supported-tags>
 
 #### `before_install`
