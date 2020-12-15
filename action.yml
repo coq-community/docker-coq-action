@@ -12,7 +12,7 @@ inputs:
     description: '"8.X", "latest", or "dev".'
     default: 'latest'
   ocaml_version:
-    description: 'minimal, 4.07-flambda, or 4.09-flambda'
+    description: '"minimal", "4.XX", or "4.XX-flambda", see https://github.com/coq-community/docker-coq/wiki#supported-tags'
     default: 'minimal'
   before_install:
     description: 'Customizable script run before "install", empty by default.'
