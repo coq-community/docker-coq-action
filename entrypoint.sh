@@ -103,8 +103,22 @@ if test -z "$INPUT_CUSTOM_IMAGE"; then
 
     # TODO: validation of INPUT_COQ_VERSION, INPUT_OCAML_VERSION
     COQ_IMAGE="coqorg/coq:$INPUT_COQ_VERSION"
+
+    # TODO: update this after the one-switch docker-coq migration
+    if [ "$INPUT_OCAML_VERSION" = '4.07-flambda' ]; then
+	OCAML407="true"
+    elif [ "$INPUT_OCAML_VERSION" = 'minimal' ]; then
+	OCAML407="false"
+    elif [ "$INPUT_OCAML_VERSION" = '4.05' ]; then
+	OCAML407="false"
+    else
+	OCAML407="false"
+	COQ_IMAGE="${COQ_IMAGE}-ocaml-${INPUT_OCAML_VERSION}"
+    fi
 else
     COQ_IMAGE="$INPUT_CUSTOM_IMAGE"
+    # TODO: update this after the one-switch docker-coq migration
+    OCAML407="false"
 fi
 
 if test -z "$INPUT_CUSTOM_SCRIPT"; then
@@ -146,20 +160,13 @@ if test -z "$INPUT_CUSTOM_SCRIPT_EXPANDED"; then
     exit 1
 fi
 
-# todo: update this after the one-switch docker-coq migration
-OCAML407="false"
-if [ "$INPUT_OCAML_VERSION" = '4.09-flambda' ]; then
-    COQ_IMAGE="${COQ_IMAGE}-ocaml-4.09-flambda"
-elif [ "$INPUT_OCAML_VERSION" = '4.07-flambda' ]; then
-    OCAML407="true"
-# else Assume "$INPUT_OCAML_VERSION" = 'minimal'
-fi
-echo OCAML407="$OCAML407"
-
 startGroup "Pull docker-coq image"
 
 echo COQ_IMAGE="$COQ_IMAGE"
 docker pull "$COQ_IMAGE"
+
+# TODO: update this after the one-switch docker-coq migration
+echo OCAML407="$OCAML407"
 
 endGroup
 
