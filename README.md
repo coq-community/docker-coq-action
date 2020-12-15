@@ -107,7 +107,7 @@ E.g., `dev-native`. In this case, the `ocaml_version` must be `4.07`.
 #### `ocaml_version`
 
 *Optional* The version of OCaml. Default `"minimal"`.
-Among `"minimal"`, `"4.07-flambda"`, `"4.07"`, ``"4.08-flambda"`,
+Among `"minimal"`, `"4.07-flambda"`, `"4.07"`, `"4.08-flambda"`,
 `"4.09-flambda"`, `"4.10-flambda"`, `"4.11-flambda"`.
 
 For details, see: <https://github.com/coq-community/docker-coq/wiki#supported-tags>
