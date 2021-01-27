@@ -139,8 +139,8 @@ apk add --no-cache perl
 
 moperl() {
     mo="$1"
-    value="$2"
-    perl -wpe 'BEGIN {$dest = '\'"$value"\'';}; s/\{\{'"$mo"'\}\}/$dest/g;'
+    dest="$2"
+    perl -wpe 'BEGIN {$mo=shift @ARGV; $dest=shift @ARGV;}; s/\{\{$mo\}\}/$dest/g;' "$mo" "$dest"
 }
 
 INPUT_CUSTOM_SCRIPT_EXPANDED=$(printf "%s" "$INPUT_CUSTOM_SCRIPT" | \
