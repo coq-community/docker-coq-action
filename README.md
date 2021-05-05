@@ -126,7 +126,7 @@ startGroup "Print opam config"
 endGroup
 ```
 
-See [`custom_script`](#custom_script) for more details.
+See [`custom_script`](#custom_script) and [startGroup/endGroup](#startGroup/endGroup) for more details.
 
 #### `install`
 
@@ -142,7 +142,7 @@ startGroup "Install dependencies"
 endGroup
 ```
 
-See [`custom_script`](#custom_script) for more details.
+See [`custom_script`](#custom_script) and [startGroup/endGroup](#startGroup/endGroup) for more details.
 
 #### `after_install`
 
@@ -156,13 +156,13 @@ startGroup "List installed packages"
 endGroup
 ```
 
-See [`custom_script`](#custom_script) for more details.
+See [`custom_script`](#custom_script) and [startGroup/endGroup](#startGroup/endGroup) for more details.
 
 #### `before_script`
 
 *Optional* The bash snippet to run before `script`. Default `""` (empty string).
 
-See [`custom_script`](#custom_script) for more details.
+See [`custom_script`](#custom_script) and [startGroup/endGroup](#startGroup/endGroup) for more details.
 
 #### `script`
 
@@ -177,13 +177,13 @@ startGroup "Build"
 endGroup
 ```
 
-See [`custom_script`](#custom_script) for more details.
+See [`custom_script`](#custom_script) and [startGroup/endGroup](#startGroup/endGroup) for more details.
 
 #### `after_script`
 
 *Optional* The bash snippet to run after `script` (if successful). Default `""` (empty string).
 
-See [`custom_script`](#custom_script) for more details.
+See [`custom_script`](#custom_script) and [startGroup/endGroup](#startGroup/endGroup) for more details.
 
 #### `uninstall`
 
@@ -197,7 +197,7 @@ startGroup "Uninstallation test"
 endGroup
 ```
 
-See [`custom_script`](#custom_script) for more details.
+See [`custom_script`](#custom_script) and [startGroup/endGroup](#startGroup/endGroup) for more details.
 
 #### `custom_script`
 
@@ -306,7 +306,7 @@ clause) after the package build.
 #### startGroup/endGroup
 
 The default value of fields `{{before_install}}`, `{{install}}`,
-`{{after_install}}`, `{{script}}`, and `{{uninstall}}` involves the
+`{{after_install}}`, `{{script}}`, and `{{uninstall}}` involves the bash
 functions `startGroup` (taking 1 argument: `startGroup "Group title"`)
 and `endGroup`.
 
