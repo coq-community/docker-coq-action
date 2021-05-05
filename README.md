@@ -29,14 +29,13 @@ This is a GitHub action that uses (by default)
 which in turn is based on [coqorg/base](https://hub.docker.com/r/coqorg/coq/),
 a Docker image with a debian enviroment.
 
-For more details about these images, see the
-[docker-coq wiki](https://github.com/coq-community/docker-coq/wiki).
-
     docker-coq-action (GitHub action)
     --> docker-coq (Dockerfile)
     --> docker-base (Dockerfile still from coq-community)
     --> debian docker
 
+For more details about these images, see the
+[docker-coq wiki](https://github.com/coq-community/docker-coq/wiki).
 
 Assuming the Git repository contains a `folder/coq-proj.opam` file,
 it will run (by default) the following commands:
@@ -51,6 +50,10 @@ opam install -y -v -j 2 coq-proj
 opam list
 opam remove coq-proj
 ```
+
+For more details about opam, see the remarks below about the
+[`.opam`](#opam) file.
+
 
 ## Using the Github Action
 
