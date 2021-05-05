@@ -1,4 +1,4 @@
-# Docker-Coq action
+# Docker-Coq GitHub action
 
 ![reviewdog][reviewdog-badge]
 [![coqorg][coqorg-shield]][coqorg-link]
@@ -24,11 +24,19 @@
 [conduct-shield]: https://img.shields.io/badge/%E2%9D%A4-code%20of%20conduct-%23f15a24.svg
 [conduct-link]: https://github.com/coq-community/manifesto/blob/master/CODE_OF_CONDUCT.md
 
-This GitHub action can be used together with
-[coqorg/coq](https://hub.docker.com/r/coqorg/coq/) Docker images.
+This is a GitHub action that uses (by default) 
+[coqorg/coq](https://hub.docker.com/r/coqorg/coq/) Docker images,
+which in turn is based on [coqorg/base](https://hub.docker.com/r/coqorg/coq/),
+a Docker image with a debian enviroment.
 
 For more details about these images, see the
 [docker-coq wiki](https://github.com/coq-community/docker-coq/wiki).
+
+    docker-coq-action (GitHub action)
+    --> docker-coq (Dockerfile)
+    --> docker-base (Dockerfile still from coq-community)
+    --> debian docker
+
 
 Assuming the Git repository contains a `folder/coq-proj.opam` file,
 it will run (by default) the following commands:
@@ -44,7 +52,7 @@ opam list
 opam remove coq-proj
 ```
 
-## Usage
+## Using the Github Action
 
 See [action.yml](./action.yml)
 
@@ -70,7 +78,7 @@ steps:
 
 See also the [example repo](https://github.com/erikmd/docker-coq-github-action-demo).
 
-### Inputs
+### Inputs to the action.yaml file
 
 #### `opam_file`
 
