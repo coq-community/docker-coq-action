@@ -134,7 +134,7 @@ startGroup "Print opam config"
 endGroup
 ```
 
-See [`custom_script`](#custom_script) and [startGroup/endGroup](#startGroup/endGroup) for more details.
+See [`custom_script`](#custom_script) and [startGroup/endGroup](#startGroupendGroup) for more details.
 
 #### `install`
 
@@ -150,7 +150,7 @@ startGroup "Install dependencies"
 endGroup
 ```
 
-See [`custom_script`](#custom_script) and [startGroup/endGroup](#startGroup/endGroup) for more details.
+See [`custom_script`](#custom_script) and [startGroup/endGroup](#startGroupendGroup) for more details.
 
 #### `after_install`
 
@@ -164,13 +164,13 @@ startGroup "List installed packages"
 endGroup
 ```
 
-See [`custom_script`](#custom_script) and [startGroup/endGroup](#startGroup/endGroup) for more details.
+See [`custom_script`](#custom_script) and [startGroup/endGroup](#startGroupendGroup) for more details.
 
 #### `before_script`
 
 *Optional* The bash snippet to run before `script`. Default `""` (empty string).
 
-See [`custom_script`](#custom_script) and [startGroup/endGroup](#startGroup/endGroup) for more details.
+See [`custom_script`](#custom_script) and [startGroup/endGroup](#startGroupendGroup) for more details.
 
 #### `script`
 
@@ -185,13 +185,13 @@ startGroup "Build"
 endGroup
 ```
 
-See [`custom_script`](#custom_script) and [startGroup/endGroup](#startGroup/endGroup) for more details.
+See [`custom_script`](#custom_script) and [startGroup/endGroup](#startGroupendGroup) for more details.
 
 #### `after_script`
 
 *Optional* The bash snippet to run after `script` (if successful). Default `""` (empty string).
 
-See [`custom_script`](#custom_script) and [startGroup/endGroup](#startGroup/endGroup) for more details.
+See [`custom_script`](#custom_script) and [startGroup/endGroup](#startGroupendGroup) for more details.
 
 #### `uninstall`
 
@@ -205,7 +205,7 @@ startGroup "Uninstallation test"
 endGroup
 ```
 
-See [`custom_script`](#custom_script) and [startGroup/endGroup](#startGroup/endGroup) for more details.
+See [`custom_script`](#custom_script) and [startGroup/endGroup](#startGroupendGroup) for more details.
 
 #### `custom_script`
 
