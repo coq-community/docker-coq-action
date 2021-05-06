@@ -81,7 +81,7 @@ steps:
       ocaml_version: ${{ matrix.ocaml_version }}
 ```
 
-Each field can be customized, see [below](#inputs-to-the-action.yaml-file)
+Each field can be customized, see below
 for the documentation of those specific to the docker-coq-action,
 or the GitHub Actions official documentation for the standard fields involved in workflows.
 
