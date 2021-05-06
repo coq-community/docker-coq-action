@@ -42,7 +42,7 @@ For more details about these images, see the
 Assuming the Git repository contains a `folder/coq-proj.opam` file,
 it will run (by default) the following commands:
 
-```
+```bash
 opam config list; opam repo list; opam list
 opam pin add -n -y -k path coq-proj folder
 opam update -y
