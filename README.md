@@ -88,7 +88,8 @@ See also the [example repo](https://github.com/erikmd/docker-coq-github-action-d
 #### `opam_file` *Optional*
 
 The path of the `.opam` file (or a directory), relative to the repo root.
-Default `"."` (if the argument is omitted or an empty string).
+
+Default: `"."` (if the argument is omitted or an empty string).
 
 *Note-1:* relying on the value of this `INPUT_OPAM_FILE` variable, the
 following two variables are exported when running the `custom_script`:
@@ -109,8 +110,9 @@ install all the `*.opam` packages stored in this directory.
 
 #### `coq_version` *Optional* 
 
-The version of Coq. E.g., `"8.10"`. Default
-`"latest"` (= latest stable version).
+The version of Coq. E.g., `"8.10"`.
+
+Default: `"latest"` (= latest stable version).
 
 Append the `-native` suffix if the version is `>= 8.13` (or `dev`)
 *and* you are interested in the image that contains the
@@ -119,7 +121,10 @@ E.g., `"dev-native"`. In this case, the `ocaml_version` must be `"4.07"`.
 
 #### `ocaml_version` *Optional*
 
-The version of OCaml. Default `"minimal"`.
+The version of OCaml.
+
+Default: `"minimal"`.
+
 Among `"minimal"`, `"4.07-flambda"`, `"4.07"`, `"4.08-flambda"`,
 `"4.09-flambda"`, `"4.10-flambda"`, `"4.11-flambda"`.
 
@@ -173,7 +178,9 @@ See [`custom_script`](#custom_script) and [startGroup/endGroup](#startGroupendGr
 
 #### `before_script` *Optional* 
 
-The bash snippet to run before `script`. Default `""` (empty string).
+The bash snippet to run before `script`.
+
+Default: `""` (empty string).
 
 See [`custom_script`](#custom_script) and [startGroup/endGroup](#startGroupendGroup) for more details.
 
@@ -194,7 +201,9 @@ See [`custom_script`](#custom_script) and [startGroup/endGroup](#startGroupendGr
 
 #### `after_script` *Optional* 
 
-The bash snippet to run after `script` (if successful). Default `""` (empty string).
+The bash snippet to run after `script` (if successful).
+
+Default: `""` (empty string).
 
 See [`custom_script`](#custom_script) and [startGroup/endGroup](#startGroupendGroup) for more details.
 
@@ -248,7 +257,9 @@ values.
 
 #### `custom_image` *Optional* 
 
-The name of the Docker image to pull; unset by default.
+The name of the Docker image to pull.
+
+Default: unset
 
 If this variable is unset, its value is computed from the values of
 keywords `coq_version` and `ocaml_version`.
