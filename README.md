@@ -85,9 +85,9 @@ See also the [example repo](https://github.com/erikmd/docker-coq-github-action-d
 
 ### Inputs to the action.yaml file
 
-#### `opam_file`
+#### `opam_file` *Optional*
 
-*Optional* the path of the `.opam` file (or a directory), relative to the repo root.
+The path of the `.opam` file (or a directory), relative to the repo root.
 Default `"."` (if the argument is omitted or an empty string).
 
 *Note-1:* relying on the value of this `INPUT_OPAM_FILE` variable, the
@@ -107,9 +107,9 @@ fi
 [`custom_script` default value](#custom_script), the action will
 install all the `*.opam` packages stored in this directory.
 
-#### `coq_version`
+#### `coq_version` *Optional* 
 
-*Optional* The version of Coq. E.g., `"8.10"`. Default
+The version of Coq. E.g., `"8.10"`. Default
 `"latest"` (= latest stable version).
 
 Append the `-native` suffix if the version is `>= 8.13` (or `dev`)
@@ -117,9 +117,9 @@ Append the `-native` suffix if the version is `>= 8.13` (or `dev`)
 [`coq-native`](https://opam.ocaml.org/packages/coq-native/) package.
 E.g., `"dev-native"`. In this case, the `ocaml_version` must be `"4.07"`.
 
-#### `ocaml_version`
+#### `ocaml_version` *Optional*
 
-*Optional* The version of OCaml. Default `"minimal"`.
+The version of OCaml. Default `"minimal"`.
 Among `"minimal"`, `"4.07-flambda"`, `"4.07"`, `"4.08-flambda"`,
 `"4.09-flambda"`, `"4.10-flambda"`, `"4.11-flambda"`.
 
@@ -127,9 +127,9 @@ Among `"minimal"`, `"4.07-flambda"`, `"4.07"`, `"4.08-flambda"`,
 
 For details, see: <https://github.com/coq-community/docker-coq/wiki#supported-tags>
 
-#### `before_install`
+#### `before_install` *Optional*
 
-*Optional* The bash snippet to run before `install`
+The bash snippet to run before `install`
 
 Default:
 
@@ -141,9 +141,9 @@ endGroup
 
 See [`custom_script`](#custom_script) and [startGroup/endGroup](#startGroupendGroup) for more details.
 
-#### `install`
+#### `install` *Optional* 
 
-*Optional* The bash snippet to install the `opam` `PACKAGE` dependencies.
+The bash snippet to install the `opam` `PACKAGE` dependencies.
 
 Default:
 
@@ -157,9 +157,9 @@ endGroup
 
 See [`custom_script`](#custom_script) and [startGroup/endGroup](#startGroupendGroup) for more details.
 
-#### `after_install`
+#### `after_install` *Optional* 
 
-*Optional* The bash snippet to run after `install` (if successful).
+The bash snippet to run after `install` (if successful).
 
 Default:
 
@@ -171,15 +171,15 @@ endGroup
 
 See [`custom_script`](#custom_script) and [startGroup/endGroup](#startGroupendGroup) for more details.
 
-#### `before_script`
+#### `before_script` *Optional* 
 
-*Optional* The bash snippet to run before `script`. Default `""` (empty string).
+The bash snippet to run before `script`. Default `""` (empty string).
 
 See [`custom_script`](#custom_script) and [startGroup/endGroup](#startGroupendGroup) for more details.
 
-#### `script`
+#### `script` *Optional* 
 
-*Optional* The bash snippet to install the `opam` `PACKAGE`.
+The bash snippet to install the `opam` `PACKAGE`.
 
 Default:
 
@@ -192,15 +192,15 @@ endGroup
 
 See [`custom_script`](#custom_script) and [startGroup/endGroup](#startGroupendGroup) for more details.
 
-#### `after_script`
+#### `after_script` *Optional* 
 
-*Optional* The bash snippet to run after `script` (if successful). Default `""` (empty string).
+The bash snippet to run after `script` (if successful). Default `""` (empty string).
 
 See [`custom_script`](#custom_script) and [startGroup/endGroup](#startGroupendGroup) for more details.
 
-#### `uninstall`
+#### `uninstall` *Optional* 
 
-*Optional* The bash snippet to uninstall the `opam` `PACKAGE`.
+The bash snippet to uninstall the `opam` `PACKAGE`.
 
 Default:
 
@@ -212,9 +212,9 @@ endGroup
 
 See [`custom_script`](#custom_script) and [startGroup/endGroup](#startGroupendGroup) for more details.
 
-#### `custom_script`
+#### `custom_script` *Optional* 
 
-*Optional* The main script run in the container; may be overridden; but overriding more specific parts of the script is preferred.
+The main script run in the container; may be overridden; but overriding more specific parts of the script is preferred.
 
 Default:
 
@@ -246,9 +246,9 @@ you can just as well rely on the "mustache interpolation" of
 values.
 
 
-#### `custom_image`
+#### `custom_image` *Optional* 
 
-*Optional* The name of the Docker image to pull; unset by default.
+The name of the Docker image to pull; unset by default.
 
 If this variable is unset, its value is computed from the values of
 keywords `coq_version` and `ocaml_version`.
@@ -280,9 +280,9 @@ steps:
       custom_image: ${{ matrix.image }}
 ```
 
-#### `export`
+#### `export` *Optional* 
 
-*Optional* A space-separated list of `env` variables to export to the `custom_script`.
+A space-separated list of `env` variables to export to the `custom_script`.
 
 *Note-1:* The values of the variables to export may be defined by using the
 [`env`](https://docs.github.com/en/free-pro-team@latest/actions/reference/environment-variables)
