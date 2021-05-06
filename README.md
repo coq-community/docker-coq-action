@@ -94,7 +94,7 @@ Default: `"."` (if the argument is omitted or an empty string).
 *Note-1:* relying on the value of this `INPUT_OPAM_FILE` variable, the
 following two variables are exported when running the `custom_script`:
 
-```
+```bash
 if [ -z "$INPUT_OPAM_FILE" ] || [ -d "$INPUT_OPAM_FILE" ]; then
     WORKDIR=""
     PACKAGE=${INPUT_OPAM_FILE:-.}
@@ -138,7 +138,7 @@ The bash snippet to run before `install`
 
 Default:
 
-```
+```bash
 startGroup "Print opam config"
   opam config list; opam repo list; opam list
 endGroup
@@ -152,7 +152,7 @@ The bash snippet to install the `opam` `PACKAGE` dependencies.
 
 Default:
 
-```
+```bash
 startGroup "Install dependencies"
   opam pin add -n -y -k path $PACKAGE $WORKDIR
   opam update -y
@@ -168,7 +168,7 @@ The bash snippet to run after `install` (if successful).
 
 Default:
 
-```
+```bash
 startGroup "List installed packages"
   opam list
 endGroup
@@ -190,7 +190,7 @@ The bash snippet to install the `opam` `PACKAGE`.
 
 Default:
 
-```
+```bash
 startGroup "Build"
   opam install -y -v -j 2 $PACKAGE
   opam list
@@ -213,7 +213,7 @@ The bash snippet to uninstall the `opam` `PACKAGE`.
 
 Default:
 
-```
+```bash
 startGroup "Uninstallation test"
   opam remove $PACKAGE
 endGroup
