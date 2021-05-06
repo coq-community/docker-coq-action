@@ -334,7 +334,7 @@ The default value of fields `{{before_install}}`, `{{install}}`,
 functions `startGroup` (taking 1 argument: `startGroup "Group title"`)
 and `endGroup`.
 
-These bash functions have the following features:
+These bash functions are defined in [timegroup.sh](./timegroup.sh) and have the following features:
 
 * they create foldable groups in the GitHub Actions logs
     (see the [online doc](https://github.com/actions/toolkit/blob/master/docs/commands.md#group-and-ungroup-log-lines)),
