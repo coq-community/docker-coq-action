@@ -27,7 +27,7 @@
 This is a GitHub action that uses (by default) 
 [coqorg/coq](https://hub.docker.com/r/coqorg/coq/) Docker images,
 which in turn is based on [coqorg/base](https://hub.docker.com/r/coqorg/coq/),
-a Docker image with a debian enviroment.
+a Docker image with a Debian environment.
 
     docker-coq-action (GitHub action)
     --> docker-coq (Dockerfile)
