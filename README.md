@@ -59,9 +59,9 @@ For more details about opam, see the remarks below about the
 
 ## Using the Github Action
 
-See [action.yml](./action.yml)
-
-### Example
+Using a [GitHub Action](https://docs.github.com/en/actions)
+in your GitHub repository amounts to committing a file `.github/workflows/your-workflow-name.yml`,
+e.g. `.github/workflows/build.yml`, containing (among others), a snippet such as:
 
 ```yaml
 runs-on: ubuntu-latest  # container actions require GNU/Linux
@@ -80,6 +80,12 @@ steps:
       coq_version: ${{ matrix.coq_version }}
       ocaml_version: ${{ matrix.ocaml_version }}
 ```
+
+Each field can be customized, see [below](#inputs-to-the-action.yaml-file)
+for the documentation of those specific to the docker-coq-action,
+or the GitHub Actions official documentation for the standard fields involved in workflows.
+
+See [action.yml](./action.yml)
 
 See also the [example repo](https://github.com/erikmd/docker-coq-github-action-demo).
 
