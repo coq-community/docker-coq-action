@@ -90,7 +90,7 @@ See [action.yml](./action.yml)
 
 See also the [example repo](https://github.com/erikmd/docker-coq-github-action-demo).
 
-### Inputs to the action.yaml file
+### Inputs
 
 #### `opam_file` *Optional*
 
