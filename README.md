@@ -302,6 +302,8 @@ steps:
 
 A space-separated list of `env` variables to export to the `custom_script`.
 
+Default: '', i.e. no additional variable is exported
+
 *Note-1:* The values of the variables to export may be defined by using the
 [`env`](https://docs.github.com/en/free-pro-team@latest/actions/reference/environment-variables)
 keyword.
