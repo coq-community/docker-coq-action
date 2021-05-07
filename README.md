@@ -39,6 +39,25 @@ a Docker image with a Debian environment.
 For more details about these images, see the
 [docker-coq wiki](https://github.com/coq-community/docker-coq/wiki).
 
+## OPAM
+
+The `docker-coq-action` provides built-in support for `opam` builds.
+
+`coq` is built on-top of `ocaml` and so `coq` projects use `ocaml`'s
+package manager (`opam`) to build themselves.
+This Github Action supports `opam` out of the box.
+If your project does not already have a `coq-….opam` file, you might
+generate one such file by using the corresponding template gathered in
+[coq-community/templates](https://github.com/coq-community/templates#readme).
+
+This `.opam` file can then serve as a basis for submitting releases in
+[coq/opam-coq-archive](https://github.com/coq/opam-coq-archive), and
+related guidelines (including the required **`.opam` metadata**) are
+available in <https://coq.inria.fr/opam-packaging.html>.
+
+More details can be found in the
+[opam documentation](https://opam.ocaml.org/doc/Packaging.html#The-file-format-in-more-detail).
+
 Assuming the Git repository contains a `folder/coq-proj.opam` file,
 it will run (by default) the following commands:
 
@@ -52,10 +71,6 @@ opam install -y -v -j 2 coq-proj
 opam list
 opam remove coq-proj
 ```
-
-For more details about opam, see the remarks below about the
-[`.opam`](#opam) file.
-
 
 ## Using the Github Action
 
@@ -399,18 +414,3 @@ For more details, see the
 [CI setup / Remarks](https://github.com/coq-community/docker-coq/wiki/CI-setup#remarks)
 section in the `docker-coq` wiki.
 
-#### OPAM
-
-The `docker-coq-action` provides built-in support for `opam` builds.
-
-If your project does not already have a `coq-….opam` file, you might
-generate one such file by using the corresponding template gathered in
-[coq-community/templates](https://github.com/coq-community/templates#readme).
-
-This `.opam` file can then serve as a basis for submitting releases in
-[coq/opam-coq-archive](https://github.com/coq/opam-coq-archive), and
-related guidelines (including the required **`.opam` metadata**) are
-available in <https://coq.inria.fr/opam-packaging.html>.
-
-More details can be found in the
-[opam documentation](https://opam.ocaml.org/doc/Packaging.html#The-file-format-in-more-detail).
