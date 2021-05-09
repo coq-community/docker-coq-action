@@ -34,7 +34,7 @@ a Docker image with a Debian environment.
 | x | docker-coq-action | GitHub action | <n/a>
 | ↳ | docker-coq        | Dockerfile    | coqorg/coq
 | ↳ | docker-base       | Dockerfile    | coqorg/base
-| ↳ | debian docker     | Docker image  | \_/debian
+| ↳ | Debian            | Docker image  | \_/debian
 
 For more details about these images, see the
 [docker-coq wiki](https://github.com/coq-community/docker-coq/wiki).
