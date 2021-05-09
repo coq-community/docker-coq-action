@@ -107,7 +107,9 @@ See also the [example repo](https://github.com/erikmd/docker-coq-github-action-d
 
 ### Inputs
 
-#### `opam_file` *Optional*
+#### `opam_file`
+
+*Optional*
 
 The path of the `.opam` file (or a directory), relative to the repo root.
 
@@ -130,7 +132,9 @@ fi
 [`custom_script` default value](#custom_script), the action will
 install all the `*.opam` packages stored in this directory.
 
-#### `coq_version` *Optional* 
+#### `coq_version`
+
+*Optional* 
 
 The version of Coq. E.g., `"8.10"`.
 
@@ -141,7 +145,9 @@ Append the `-native` suffix if the version is `>= 8.13` (or `dev`)
 [`coq-native`](https://opam.ocaml.org/packages/coq-native/) package.
 E.g., `"dev-native"`. In this case, the `ocaml_version` must be `"4.07"`.
 
-#### `ocaml_version` *Optional*
+#### `ocaml_version`
+
+*Optional*
 
 The version of OCaml.
 
@@ -154,7 +160,9 @@ Among `"minimal"`, `"4.07-flambda"`, `"4.07"`, `"4.08-flambda"`,
 
 For details, see: <https://github.com/coq-community/docker-coq/wiki#supported-tags>
 
-#### `before_install` *Optional*
+#### `before_install`
+
+*Optional*
 
 The bash snippet to run before `install`
 
@@ -168,7 +176,9 @@ endGroup
 
 See [`custom_script`](#custom_script) and [startGroup/endGroup](#startGroupendGroup) for more details.
 
-#### `install` *Optional* 
+#### `install`
+
+*Optional* 
 
 The bash snippet to install the `opam` `PACKAGE` dependencies.
 
@@ -184,7 +194,9 @@ endGroup
 
 See [`custom_script`](#custom_script) and [startGroup/endGroup](#startGroupendGroup) for more details.
 
-#### `after_install` *Optional* 
+#### `after_install`
+
+*Optional* 
 
 The bash snippet to run after `install` (if successful).
 
@@ -198,7 +210,9 @@ endGroup
 
 See [`custom_script`](#custom_script) and [startGroup/endGroup](#startGroupendGroup) for more details.
 
-#### `before_script` *Optional* 
+#### `before_script`
+
+*Optional* 
 
 The bash snippet to run before `script`.
 
@@ -206,7 +220,9 @@ Default: `""` (empty string).
 
 See [`custom_script`](#custom_script) and [startGroup/endGroup](#startGroupendGroup) for more details.
 
-#### `script` *Optional* 
+#### `script`
+
+*Optional* 
 
 The bash snippet to install the `opam` `PACKAGE`.
 
@@ -221,7 +237,9 @@ endGroup
 
 See [`custom_script`](#custom_script) and [startGroup/endGroup](#startGroupendGroup) for more details.
 
-#### `after_script` *Optional* 
+#### `after_script`
+
+*Optional* 
 
 The bash snippet to run after `script` (if successful).
 
@@ -229,7 +247,9 @@ Default: `""` (empty string).
 
 See [`custom_script`](#custom_script) and [startGroup/endGroup](#startGroupendGroup) for more details.
 
-#### `uninstall` *Optional* 
+#### `uninstall`
+
+*Optional* 
 
 The bash snippet to uninstall the `opam` `PACKAGE`.
 
@@ -243,7 +263,9 @@ endGroup
 
 See [`custom_script`](#custom_script) and [startGroup/endGroup](#startGroupendGroup) for more details.
 
-#### `custom_script` *Optional* 
+#### `custom_script`
+
+*Optional* 
 
 The main script run in the container; may be overridden; but overriding more specific parts of the script is preferred.
 
@@ -277,7 +299,9 @@ you can just as well rely on the "mustache interpolation" of
 values.
 
 
-#### `custom_image` *Optional* 
+#### `custom_image`
+
+*Optional* 
 
 The name of the Docker image to pull.
 
@@ -313,7 +337,9 @@ steps:
       custom_image: ${{ matrix.image }}
 ```
 
-#### `export` *Optional* 
+#### `export`
+
+*Optional* 
 
 A space-separated list of `env` variables to export to the `custom_script`.
 
