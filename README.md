@@ -26,7 +26,7 @@
 
 This is a GitHub action that uses (by default) 
 [coqorg/coq](https://hub.docker.com/r/coqorg/coq/) Docker images,
-which in turn is based on [coqorg/base](https://hub.docker.com/r/coqorg/coq/),
+which in turn is based on [coqorg/base](https://hub.docker.com/r/coqorg/base/),
 a Docker image with a Debian environment.
 
 |   | GitHub repo       | Type          | Docker Hub
