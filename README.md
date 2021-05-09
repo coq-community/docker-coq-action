@@ -192,6 +192,8 @@ startGroup "Install dependencies"
 endGroup
 ```
 
+where `$PACKAGE` and `$WORKDIR` are set from the [`opam_file`](#opam_file) variable.
+
 See [`custom_script`](#custom_script) and [startGroup/endGroup](#startGroupendGroup) for more details.
 
 #### `after_install`
@@ -235,6 +237,8 @@ startGroup "Build"
 endGroup
 ```
 
+where `$PACKAGE` is set from the [`opam_file`](#opam_file) variable.
+
 See [`custom_script`](#custom_script) and [startGroup/endGroup](#startGroupendGroup) for more details.
 
 #### `after_script`
@@ -260,6 +264,8 @@ startGroup "Uninstallation test"
   opam remove $PACKAGE
 endGroup
 ```
+
+where `$PACKAGE` is set from the [`opam_file`](#opam_file) variable.
 
 See [`custom_script`](#custom_script) and [startGroup/endGroup](#startGroupendGroup) for more details.
 
