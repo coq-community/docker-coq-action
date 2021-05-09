@@ -134,7 +134,7 @@ install all the `*.opam` packages stored in this directory.
 
 #### `coq_version`
 
-*Optional* 
+*Optional*
 
 The version of Coq. E.g., `"8.10"`.
 
@@ -178,7 +178,7 @@ See [`custom_script`](#custom_script) and [startGroup/endGroup](#startGroupendGr
 
 #### `install`
 
-*Optional* 
+*Optional*
 
 The bash snippet to install the `opam` `PACKAGE` dependencies.
 
@@ -196,7 +196,7 @@ See [`custom_script`](#custom_script) and [startGroup/endGroup](#startGroupendGr
 
 #### `after_install`
 
-*Optional* 
+*Optional*
 
 The bash snippet to run after `install` (if successful).
 
@@ -212,7 +212,7 @@ See [`custom_script`](#custom_script) and [startGroup/endGroup](#startGroupendGr
 
 #### `before_script`
 
-*Optional* 
+*Optional*
 
 The bash snippet to run before `script`.
 
@@ -222,7 +222,7 @@ See [`custom_script`](#custom_script) and [startGroup/endGroup](#startGroupendGr
 
 #### `script`
 
-*Optional* 
+*Optional*
 
 The bash snippet to install the `opam` `PACKAGE`.
 
@@ -239,7 +239,7 @@ See [`custom_script`](#custom_script) and [startGroup/endGroup](#startGroupendGr
 
 #### `after_script`
 
-*Optional* 
+*Optional*
 
 The bash snippet to run after `script` (if successful).
 
@@ -249,7 +249,7 @@ See [`custom_script`](#custom_script) and [startGroup/endGroup](#startGroupendGr
 
 #### `uninstall`
 
-*Optional* 
+*Optional*
 
 The bash snippet to uninstall the `opam` `PACKAGE`.
 
@@ -265,7 +265,7 @@ See [`custom_script`](#custom_script) and [startGroup/endGroup](#startGroupendGr
 
 #### `custom_script`
 
-*Optional* 
+*Optional*
 
 The main script run in the container; may be overridden; but overriding more specific parts of the script is preferred.
 
@@ -298,10 +298,9 @@ you can just as well rely on the "mustache interpolation" of
 `{{before_install}}` … `{{uninstall}}`, and customize the underlying
 values.
 
-
 #### `custom_image`
 
-*Optional* 
+*Optional*
 
 The name of the Docker image to pull.
 
@@ -339,7 +338,7 @@ steps:
 
 #### `export`
 
-*Optional* 
+*Optional*
 
 A space-separated list of `env` variables to export to the `custom_script`.
 
