@@ -101,7 +101,7 @@ for the documentation of those specific to the docker-coq-action,
 or the GitHub Actions official documentation for the
 [standard fields involved in workflows](https://docs.github.com/en/actions/reference/workflow-syntax-for-github-actions).
 
-See [action.yml](./action.yml)
+See [action.yml](./action.yml).
 
 See also the [example repo](https://github.com/erikmd/docker-coq-github-action-demo).
 
@@ -413,4 +413,3 @@ steps:
 For more details, see the
 [CI setup / Remarks](https://github.com/coq-community/docker-coq/wiki/CI-setup#remarks)
 section in the `docker-coq` wiki.
-
