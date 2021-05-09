@@ -380,9 +380,9 @@ environment variable is useful to run the unit tests
 (specified using `opam`'s [`with-test`](https://opam.ocaml.org/doc/Manual.html#pkgvar-with-test)
 clause) after the package build.
 
-### Remarks
+## Remarks
 
-#### startGroup/endGroup
+### startGroup/endGroup
 
 The default value of fields `{{before_install}}`, `{{install}}`,
 `{{after_install}}`, `{{script}}`, and `{{uninstall}}` involves the bash
@@ -399,7 +399,7 @@ These bash functions are defined in [timegroup.sh](./timegroup.sh) and have the 
   automatically inserted at the next `startGroup` (albeit it is better
   to make each `endGroup` explicit, for readability).
 
-#### Permissions
+### Permissions
 
 If you use the
 [`docker-coq`](https://github.com/coq-community/docker-coq) images,
