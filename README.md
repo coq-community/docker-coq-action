@@ -29,12 +29,12 @@ This is a GitHub action that uses (by default)
 which in turn is based on [coqorg/base](https://hub.docker.com/r/coqorg/base/),
 a Docker image with a Debian environment.
 
-|   | GitHub repo       | Type          | Docker Hub
-|---|-------------------|---------------|-------------
-| x | docker-coq-action | GitHub action | <n/a>
-| ↳ | docker-coq        | Dockerfile    | coqorg/coq
-| ↳ | docker-base       | Dockerfile    | coqorg/base
-| ↳ | Debian            | Docker image  | \_/debian
+|   | GitHub repo                                                             | Type          | Docker Hub                                             |
+|---|-------------------------------------------------------------------------|---------------|--------------------------------------------------------|
+| x | [docker-coq-action](https://github.com/coq-community/docker-coq-action) | GitHub action | N/A                                                    |
+| ↳ | [docker-coq](https://github.com/coq-community/docker-coq)               | Dockerfile    | [`coqorg/coq`](https://hub.docker.com/r/coqorg/coq/)   |
+| ↳ | [docker-base](https://github.com/coq-community/docker-base)             | Dockerfile    | [`coqorg/base`](https://hub.docker.com/r/coqorg/base/) |
+| ↳ | Debian                                                                  | Linux distro  | [`debian`](https://hub.docker.com/_/debian/)           |
 
 For more details about these images, see the
 [docker-coq wiki](https://github.com/coq-community/docker-coq/wiki).
