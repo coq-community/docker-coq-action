@@ -8,13 +8,14 @@ on:
       - "**"  # forall submitted Pull Requests
 jobs:
 
+  # ######################################################################
   # This job illustrates the fact that docker-coq-action is "coq-agnostic"
   # and can be used with any Docker image.
-
+  #
   # The two fields that are required to address this use case are:
   # https://github.com/coq-community/docker-coq-action#custom_image
   # https://github.com/coq-community/docker-coq-action#custom_script
-
+  # ######################################################################
   python-demo:
     name: docker-coq-action / python
     runs-on: ubuntu-latest
@@ -30,7 +31,15 @@ jobs:
         with:
           repository: 'erikmd/poc-github-ci'
           ref: 'master'
-      - uses: coq-community/docker-coq-action@${{ github.sha }}
+      # This step must be removed if the GHA .yml file is committed
+      # in your own Python project repository:
+      - uses: actions/checkout@v2
+        with:
+          path: 'docker-coq-action'
+      # This "uses" clause must be replaced, if the GHA .yml file is committed
+      # in your own Python project repository, with
+      # - uses: coq-community/docker-coq-action@v1
+      - uses: './docker-coq-action'
         with:
           custom_image: ${{ matrix.image }}
           custom_script: |
