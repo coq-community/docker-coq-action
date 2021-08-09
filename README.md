@@ -101,9 +101,27 @@ for the documentation of those specific to the docker-coq-action,
 or the GitHub Actions official documentation for the
 [standard fields involved in workflows](https://docs.github.com/en/actions/reference/workflow-syntax-for-github-actions).
 
-See [action.yml](./action.yml).
+### References
 
-See also the [example repo](https://github.com/erikmd/docker-coq-github-action-demo).
+For details, see also:
+
+* the [action.yml](./action.yml) file (containing the metadata processed by the GitHub Actions platform itself, as well as some comments, albeit more terse than the [documentation below](#inputs));
+* the accompanying [`coq-demo` example repo](https://github.com/erikmd/docker-coq-github-action-demo);
+* the two workflows [coq-demo.yml](./.github/workflows/coq-demo.yml) and [python-demo.yml](./.github/workflows/python-demo.yml) that both serve as `docker-coq-action`'s CI test-suite and provide some typical examples of use (except that the `"BEGIN GHA_TEST_ENV … END GHA_TEST_ENV"` blocks are specific to this repo).
+
+### Versioning
+
+The Git repo of `docker-coq-action` uses `master` as developing branch
+and `v1` as release branch; and the corresponding tags `v1.x.y` follow
+[semantic versioning](https://semver.org/).
+
+We develop `docker-coq-action` with a special focus on backward
+compatibility, so that if your workflow just uses
+**`coq-community/docker-coq-action@v1`**, you will be able to benefit
+from new features, while expecting no breaking change.
+
+However, we recall that the version of any GitHub Action can just as
+well be [referenced by a tag or a SHA](https://docs.github.com/en/actions/learn-github-actions/finding-and-customizing-actions#using-release-management-for-your-custom-actions).
 
 ### Inputs
 
