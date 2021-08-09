@@ -1,4 +1,4 @@
-# Docker-Coq GitHub action
+# Docker-Coq GitHub Action
 
 ![reviewdog][reviewdog-badge]
 [![coqorg][coqorg-shield]][coqorg-link]
@@ -24,14 +24,14 @@
 [conduct-shield]: https://img.shields.io/badge/%E2%9D%A4-code%20of%20conduct-%23f15a24.svg
 [conduct-link]: https://github.com/coq-community/manifesto/blob/master/CODE_OF_CONDUCT.md
 
-This is a GitHub action that uses (by default) 
+This is a GitHub Action that uses (by default)
 [coqorg/coq](https://hub.docker.com/r/coqorg/coq/) Docker images,
 which in turn is based on [coqorg/base](https://hub.docker.com/r/coqorg/base/),
 a Docker image with a Debian environment.
 
 |   | GitHub repo                                                             | Type          | Docker Hub                                             |
 |---|-------------------------------------------------------------------------|---------------|--------------------------------------------------------|
-| x | [docker-coq-action](https://github.com/coq-community/docker-coq-action) | GitHub action | N/A                                                    |
+| ⊙ | [docker-coq-action](https://github.com/coq-community/docker-coq-action) | GitHub Action | N/A                                                    |
 | ↳ | [docker-coq](https://github.com/coq-community/docker-coq)               | Dockerfile    | [`coqorg/coq`](https://hub.docker.com/r/coqorg/coq/)   |
 | ↳ | [docker-base](https://github.com/coq-community/docker-base)             | Dockerfile    | [`coqorg/base`](https://hub.docker.com/r/coqorg/base/) |
 | ↳ | Debian                                                                  | Linux distro  | [`debian`](https://hub.docker.com/_/debian/)           |
@@ -45,7 +45,7 @@ The `docker-coq-action` provides built-in support for `opam` builds.
 
 `coq` is built on-top of `ocaml` and so `coq` projects use `ocaml`'s
 package manager (`opam`) to build themselves.
-This Github Action supports `opam` out of the box.
+This GitHub Action supports `opam` out of the box.
 If your project does not already have a `coq-….opam` file, you might
 generate one such file by using the corresponding template gathered in
 [coq-community/templates](https://github.com/coq-community/templates#readme).
@@ -72,7 +72,7 @@ opam list
 opam remove coq-proj
 ```
 
-## Using the Github Action
+## Using the GitHub Action
 
 Using a [GitHub Action](https://docs.github.com/en/actions)
 in your GitHub repository amounts to committing a file `.github/workflows/your-workflow-name.yml`,
@@ -403,7 +403,7 @@ These bash functions are defined in [timegroup.sh](./timegroup.sh) and have the 
 
 If you use the
 [`docker-coq`](https://github.com/coq-community/docker-coq) images,
-the container user has UID=GID=1000 while the GitHub action workdir
+the container user has UID=GID=1000 while the GitHub Actions workdir
 has (UID=1001, GID=116).
 This is not an issue when relying on `opam` to build the Coq project.
 Otherwise, you may want to use `sudo` in the container to change the
