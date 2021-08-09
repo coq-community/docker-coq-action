@@ -1,0 +1,46 @@
+name: Docker-based CI
+on:
+  push:
+    branches:
+      - master  # forall push/merge in master
+  pull_request:
+    branches:
+      - "**"  # forall submitted Pull Requests
+jobs:
+
+  # This job illustrates the fact that docker-coq-action is "coq-agnostic"
+  # and can be used with any Docker image.
+
+  # The two fields that are required to address this use case are:
+  # https://github.com/coq-community/docker-coq-action#custom_image
+  # https://github.com/coq-community/docker-coq-action#custom_script
+
+  python-demo:
+    name: docker-coq-action / python
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        image:
+          - 'python:3'
+      fail-fast: false  # don't stop jobs if one fails
+    steps:
+      - uses: actions/checkout@v2
+        # This "with" clause must be removed if the GHA .yml file is committed
+        # in your own Python project repository:
+        with:
+          repository: 'erikmd/poc-github-ci'
+          ref: 'master'
+      - uses: coq-community/docker-coq-action@${{ github.sha }}
+        with:
+          custom_image: ${{ matrix.image }}
+          custom_script: |
+            python --version
+            startGroup "Install dependencies"
+              pip install --no-cache-dir --upgrade pip
+              pip install --no-cache-dir -r requirements.txt
+            endGroup
+            startGroup "Run tests"
+              pytest *.py
+            endGroup
+        # in case there is a permission mismatch issue at GHA cleanup time,
+        # see https://github.com/coq-community/docker-coq-action#permissions
