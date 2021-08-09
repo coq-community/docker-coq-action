@@ -1,0 +1,242 @@
+name: Docker-Coq CI
+on:
+  push:
+    branches:
+      - master  # forall push/merge in master
+      - v1      # forall push/merge in v1
+  pull_request:
+    branches:
+      - "**"  # forall submitted Pull Requests
+jobs:
+
+  # The following two jobs are standard/recommended versions, assuming
+  # your coq project repository contains a committed .opam file.
+
+  demo-1:
+    name: coq_version / docker-coq / opam
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        # To get the list of supported (coq, ocaml) versions from coqorg/coq,
+        # see https://github.com/coq-community/docker-coq/wiki#supported-tags
+        coq_version:
+          - '8.13'
+          - 'dev'
+        ocaml_version: ['4.07-flambda']
+      fail-fast: false  # don't stop jobs if one fails
+    steps:
+      # BEGIN GHA_TEST_ENV
+      - uses: actions/checkout@v2
+        with:
+          repository: 'erikmd/docker-coq-github-action-demo'
+          ref: 'master'
+      - uses: actions/checkout@v2
+        with:
+          path: 'docker-coq-action'
+      - uses: './docker-coq-action'
+        # END GHA_TEST_ENV
+        with:
+          opam_file: 'coq-demo.opam'
+          coq_version: ${{ matrix.coq_version }}
+          ocaml_version: ${{ matrix.ocaml_version }}
+
+  demo-2:
+    name: custom_image / docker-mathcomp / opam
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        image:
+          - 'mathcomp/mathcomp-dev:coq-dev'
+          # - 'mathcomp/mathcomp:latest-coq-dev'  # not always available,
+          # see https://hub.docker.com/r/mathcomp/mathcomp#supported-tags
+      fail-fast: false  # don't stop jobs if one fails
+    steps:
+      # BEGIN GHA_TEST_ENV
+      - uses: actions/checkout@v2
+        with:
+          repository: 'erikmd/docker-coq-github-action-demo'
+          ref: 'master'
+      - uses: actions/checkout@v2
+        with:
+          path: 'docker-coq-action'
+      - uses: './docker-coq-action'
+        # END GHA_TEST_ENV
+        with:
+          opam_file: 'coq-demo.opam'
+          custom_image: ${{ matrix.image }}
+
+  # The following job illustrates the use of several customizable fields,
+  # while keeping the default value of the overall "custom_script" field,
+  # see https://github.com/coq-community/docker-coq-action#custom_script
+
+  demo-3:
+    name: custom_image / docker-coq / make / script
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        image:
+          - 'coqorg/coq:8.13'
+      fail-fast: false  # don't stop jobs if one fails
+    steps:
+      # BEGIN GHA_TEST_ENV
+      - uses: actions/checkout@v2
+        with:
+          repository: 'erikmd/docker-coq-github-action-demo'
+          ref: 'master'
+      - uses: actions/checkout@v2
+        with:
+          path: 'docker-coq-action'
+      - uses: './docker-coq-action'
+        # END GHA_TEST_ENV
+        with:
+          # As the install/script/uninstall fields are overridden,
+          # the "opam_file" field is unneeded in this example job.
+          custom_image: ${{ matrix.image }}
+          install: |
+            startGroup "Install dependencies"
+              opam install -y -j 2 coq-mathcomp-ssreflect
+            endGroup
+          before_script: |
+            startGroup "Workaround permission issue"
+              sudo chown -R coq:coq .
+            endGroup
+          script: |
+            startGroup "Build project"
+              coq_makefile -f _CoqProject -o Makefile
+              make -j2
+              make test
+              make install
+            endGroup
+          uninstall: |
+            startGroup "Clean project"
+              make clean
+              make uninstall
+            endGroup
+      - name: Revert permissions
+        # to avoid a warning at cleanup time
+        if: ${{ always() }}
+        run: sudo chown -R 1001:116 .
+
+  # The following job illustrates the redefinition of the
+  # "custom_script" field.
+  
+  demo-4:
+    name: custom_image / docker-coq / make / custom_script
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        image:
+          - 'coqorg/coq:8.13'
+      fail-fast: false  # don't stop jobs if one fails
+    steps:
+      # BEGIN GHA_TEST_ENV
+      - uses: actions/checkout@v2
+        with:
+          repository: 'erikmd/docker-coq-github-action-demo'
+          ref: 'master'
+      - uses: actions/checkout@v2
+        with:
+          path: 'docker-coq-action'
+      - uses: './docker-coq-action'
+        # END GHA_TEST_ENV
+        with:
+          custom_image: ${{ matrix.image }}
+          custom_script: |
+            startGroup "Print opam config"
+              opam config list; opam repo list; opam list
+            endGroup
+            startGroup "Install dependencies"
+              opam update -y
+              opam install -y -j 2 coq-mathcomp-ssreflect
+            endGroup
+            startGroup "List installed packages"
+              opam list
+            endGroup
+            startGroup "Workaround permission issue"
+              sudo chown -R coq:coq .
+            endGroup
+            startGroup "Build project"
+              coq_makefile -f _CoqProject -o Makefile
+              make -j2
+              make test
+              make install
+            endGroup
+            startGroup "Clean project"
+              make clean
+              make uninstall
+            endGroup
+      - name: Revert permissions
+        # to avoid a warning at cleanup time
+        if: ${{ always() }}
+        run: sudo chown -R 1001:116 .
+
+  # The following job illustrates how to pass environment variables.
+
+  demo-5:
+    name: custom_image / docker-coq / opam / env
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        image:
+          - 'coqorg/coq:8.13'
+      fail-fast: false  # don't stop jobs if one fails
+    steps:
+      # BEGIN GHA_TEST_ENV
+      - uses: actions/checkout@v2
+        with:
+          repository: 'erikmd/docker-coq-github-action-demo'
+          ref: 'master'
+      - uses: actions/checkout@v2
+        with:
+          path: 'docker-coq-action'
+      - uses: './docker-coq-action'
+        # END GHA_TEST_ENV
+        with:
+          opam_file: 'coq-demo.opam'
+          custom_image: ${{ matrix.image }}
+          before_script: |
+            startGroup "Toy example"
+              echo "ex_var=$ex_var"
+            endGroup
+          export: 'ex_var OPAMWITHTEST'  # space-separated list of variables
+        env:
+          OPAMWITHTEST: 'true'
+          ex_var: 'ex_value'
+
+  # The following job illustrates the installation of additional Debian packages.
+
+  demo-6:
+    name: custom_image / docker-coq / apt-get
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        image:
+          - 'coqorg/coq:8.13'
+      fail-fast: false  # don't stop jobs if one fails
+    steps:
+      # BEGIN GHA_TEST_ENV
+      - uses: actions/checkout@v2
+        with:
+          repository: 'erikmd/docker-coq-github-action-demo'
+          ref: 'master'
+      - uses: actions/checkout@v2
+        with:
+          path: 'docker-coq-action'
+      - uses: './docker-coq-action'
+        # END GHA_TEST_ENV
+        with:
+          opam_file: 'coq-demo.opam'
+          custom_image: ${{ matrix.image }}
+          before_script: |
+            startGroup "Install APT dependencies"
+              cat /etc/os-release
+              sudo apt-get update -y -q
+              sudo DEBIAN_FRONTEND=noninteractive apt-get install -y -q --no-install-recommends \
+                emacs \
+                tree  # for instance (in alphabetical order)
+            endGroup
+          after_script: |
+            startGroup "Post-test"
+              emacs --version
+              tree
+            endGroup
