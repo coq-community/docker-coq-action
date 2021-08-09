@@ -102,11 +102,15 @@ jobs:
             endGroup
           script: |
             startGroup "Build project"
+              coq_makefile -f _CoqProject -o Makefile
               make -j2
+              make test
+              make install
             endGroup
           uninstall: |
             startGroup "Clean project"
               make clean
+              make uninstall
             endGroup
       - name: Revert permissions
         # to avoid a warning at cleanup time
@@ -152,10 +156,14 @@ jobs:
               sudo chown -R coq:coq .
             endGroup
             startGroup "Build project"
+              coq_makefile -f _CoqProject -o Makefile
               make -j2
+              make test
+              make install
             endGroup
             startGroup "Clean project"
               make clean
+              make uninstall
             endGroup
       - name: Revert permissions
         # to avoid a warning at cleanup time
