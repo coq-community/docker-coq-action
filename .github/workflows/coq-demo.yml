@@ -25,16 +25,16 @@ jobs:
         ocaml_version: ['4.07-flambda']
       fail-fast: false  # don't stop jobs if one fails
     steps:
-      - &setup-coq-demo
-        uses: actions/checkout@v2
+      # BEGIN GHA_TEST_ENV
+      - uses: actions/checkout@v2
         with:
           repository: 'erikmd/docker-coq-github-action-demo'
           ref: 'master'
-      - &setup-docker-coq-action
-        uses: actions/checkout@v2
+      - uses: actions/checkout@v2
         with:
           path: 'docker-coq-action'
       - uses: './docker-coq-action'
+        # END GHA_TEST_ENV
         with:
           opam_file: 'coq-demo.opam'
           coq_version: ${{ matrix.coq_version }}
@@ -51,9 +51,16 @@ jobs:
           # see https://hub.docker.com/r/mathcomp/mathcomp#supported-tags
       fail-fast: false  # don't stop jobs if one fails
     steps:
-      - *setup-coq-demo
-      - *setup-docker-coq-action
+      # BEGIN GHA_TEST_ENV
+      - uses: actions/checkout@v2
+        with:
+          repository: 'erikmd/docker-coq-github-action-demo'
+          ref: 'master'
+      - uses: actions/checkout@v2
+        with:
+          path: 'docker-coq-action'
       - uses: './docker-coq-action'
+        # END GHA_TEST_ENV
         with:
           opam_file: 'coq-demo.opam'
           custom_image: ${{ matrix.image }}
@@ -71,9 +78,16 @@ jobs:
           - 'coqorg/coq:8.13'
       fail-fast: false  # don't stop jobs if one fails
     steps:
-      - *setup-coq-demo
-      - *setup-docker-coq-action
+      # BEGIN GHA_TEST_ENV
+      - uses: actions/checkout@v2
+        with:
+          repository: 'erikmd/docker-coq-github-action-demo'
+          ref: 'master'
+      - uses: actions/checkout@v2
+        with:
+          path: 'docker-coq-action'
       - uses: './docker-coq-action'
+        # END GHA_TEST_ENV
         with:
           # As the install/script/uninstall fields are overridden,
           # the "opam_file" field is unneeded in this example job.
@@ -111,9 +125,16 @@ jobs:
           - 'coqorg/coq:8.13'
       fail-fast: false  # don't stop jobs if one fails
     steps:
-      - *setup-coq-demo
-      - *setup-docker-coq-action
+      # BEGIN GHA_TEST_ENV
+      - uses: actions/checkout@v2
+        with:
+          repository: 'erikmd/docker-coq-github-action-demo'
+          ref: 'master'
+      - uses: actions/checkout@v2
+        with:
+          path: 'docker-coq-action'
       - uses: './docker-coq-action'
+        # END GHA_TEST_ENV
         with:
           custom_image: ${{ matrix.image }}
           custom_script: |
@@ -152,9 +173,16 @@ jobs:
           - 'coqorg/coq:8.13'
       fail-fast: false  # don't stop jobs if one fails
     steps:
-      - *setup-coq-demo
-      - *setup-docker-coq-action
+      # BEGIN GHA_TEST_ENV
+      - uses: actions/checkout@v2
+        with:
+          repository: 'erikmd/docker-coq-github-action-demo'
+          ref: 'master'
+      - uses: actions/checkout@v2
+        with:
+          path: 'docker-coq-action'
       - uses: './docker-coq-action'
+        # END GHA_TEST_ENV
         with:
           opam_file: 'coq-demo.opam'
           custom_image: ${{ matrix.image }}
@@ -178,9 +206,16 @@ jobs:
           - 'coqorg/coq:8.13'
       fail-fast: false  # don't stop jobs if one fails
     steps:
-      - *setup-coq-demo
-      - *setup-docker-coq-action
+      # BEGIN GHA_TEST_ENV
+      - uses: actions/checkout@v2
+        with:
+          repository: 'erikmd/docker-coq-github-action-demo'
+          ref: 'master'
+      - uses: actions/checkout@v2
+        with:
+          path: 'docker-coq-action'
       - uses: './docker-coq-action'
+        # END GHA_TEST_ENV
         with:
           opam_file: 'coq-demo.opam'
           custom_image: ${{ matrix.image }}
