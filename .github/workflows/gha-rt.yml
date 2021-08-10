@@ -1,0 +1,31 @@
+name: Regression Test
+on:
+  push:
+    branches:
+      - master  # forall push/merge in master
+  pull_request:
+    branches:
+      - "**"  # forall submitted Pull Requests
+jobs:
+
+  issue-40:
+    # interpolated scripts couldn't contain single-quotes
+    runs-on: ubuntu-latest
+    steps:
+      # BEGIN GHA_TEST_ENV
+      - uses: actions/checkout@v2
+        with:
+          repository: 'erikmd/docker-coq-github-action-demo'
+          ref: 'master'
+      - uses: actions/checkout@v2
+        with:
+          path: 'docker-coq-action'
+      - uses: './docker-coq-action'
+        # END GHA_TEST_ENV
+        with:
+          opam_file: 'coq-demo.opam'
+          custom_image: 'coqorg/coq:8.13'
+          before_script: |
+            opam repo list
+            opam repo add --all-switches --set-default coq-extra-dev 'https://coq.inria.fr/opam/extra-dev'
+            opam repo list

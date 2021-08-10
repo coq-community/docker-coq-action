@@ -138,9 +138,9 @@ startGroup "Install perl for mustache interpolation"
 apk add --no-cache perl
 
 moperl() {
-    mo="$1"
-    value="$2"
-    perl -wpe 'BEGIN {$dest = '\'"$value"\'';}; s/\{\{'"$mo"'\}\}/$dest/g;'
+    re="$1"  # pattern to replace, without the surrounding {{ }}'s
+    str="$2"
+    perl -wpe 'BEGIN {$re=shift @ARGV; $str=shift @ARGV;}; s/\{\{$re\}\}/$str/g;' "$re" "$str"
 }
 
 INPUT_CUSTOM_SCRIPT_EXPANDED=$(printf "%s" "$INPUT_CUSTOM_SCRIPT" | \
