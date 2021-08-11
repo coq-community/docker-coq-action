@@ -1,4 +1,4 @@
-# Docker-Coq GitHub action
+# Docker-Coq GitHub Action
 
 ![reviewdog][reviewdog-badge]
 [![coqorg][coqorg-shield]][coqorg-link]
@@ -24,14 +24,14 @@
 [conduct-shield]: https://img.shields.io/badge/%E2%9D%A4-code%20of%20conduct-%23f15a24.svg
 [conduct-link]: https://github.com/coq-community/manifesto/blob/master/CODE_OF_CONDUCT.md
 
-This is a GitHub action that uses (by default) 
+This is a GitHub Action that uses (by default)
 [coqorg/coq](https://hub.docker.com/r/coqorg/coq/) Docker images,
 which in turn is based on [coqorg/base](https://hub.docker.com/r/coqorg/base/),
 a Docker image with a Debian environment.
 
 |   | GitHub repo                                                             | Type          | Docker Hub                                             |
 |---|-------------------------------------------------------------------------|---------------|--------------------------------------------------------|
-| x | [docker-coq-action](https://github.com/coq-community/docker-coq-action) | GitHub action | N/A                                                    |
+| ⊙ | [docker-coq-action](https://github.com/coq-community/docker-coq-action) | GitHub Action | N/A                                                    |
 | ↳ | [docker-coq](https://github.com/coq-community/docker-coq)               | Dockerfile    | [`coqorg/coq`](https://hub.docker.com/r/coqorg/coq/)   |
 | ↳ | [docker-base](https://github.com/coq-community/docker-base)             | Dockerfile    | [`coqorg/base`](https://hub.docker.com/r/coqorg/base/) |
 | ↳ | Debian                                                                  | Linux distro  | [`debian`](https://hub.docker.com/_/debian/)           |
@@ -45,7 +45,7 @@ The `docker-coq-action` provides built-in support for `opam` builds.
 
 `coq` is built on-top of `ocaml` and so `coq` projects use `ocaml`'s
 package manager (`opam`) to build themselves.
-This Github Action supports `opam` out of the box.
+This GitHub Action supports `opam` out of the box.
 If your project does not already have a `coq-….opam` file, you might
 generate one such file by using the corresponding template gathered in
 [coq-community/templates](https://github.com/coq-community/templates#readme).
@@ -72,7 +72,7 @@ opam list
 opam remove coq-proj
 ```
 
-## Using the Github Action
+## Using the GitHub Action
 
 Using a [GitHub Action](https://docs.github.com/en/actions)
 in your GitHub repository amounts to committing a file `.github/workflows/your-workflow-name.yml`,
@@ -101,9 +101,31 @@ for the documentation of those specific to the docker-coq-action,
 or the GitHub Actions official documentation for the
 [standard fields involved in workflows](https://docs.github.com/en/actions/reference/workflow-syntax-for-github-actions).
 
-See [action.yml](./action.yml).
+### References
 
-See also the [example repo](https://github.com/erikmd/docker-coq-github-action-demo).
+For details, see also:
+
+* the [action.yml](./action.yml) file (containing the metadata processed by the GitHub Actions platform itself, as well as some comments, albeit more terse than the [documentation below](#inputs));
+* the accompanying [`coq-demo` example repo](https://github.com/erikmd/docker-coq-github-action-demo);
+* the two workflows [coq-demo.yml](./.github/workflows/coq-demo.yml) and [python-demo.yml](./.github/workflows/python-demo.yml) that both serve as `docker-coq-action`'s CI test-suite and provide some examples of use.
+
+### Versioning
+
+The Git repo of `docker-coq-action` uses `master` as developing branch
+and `v1` as release branch; and the corresponding tags `v1.x.y` follow
+[semantic versioning](https://semver.org/).
+
+We develop `docker-coq-action` with a special focus on backward
+compatibility, so that if your workflow just uses
+**`coq-community/docker-coq-action@v1`**, you will be able to benefit
+from new features, while expecting no breaking change.
+
+However, we recall that the version of any GitHub Action can just as
+well be [referenced by a tag or a commit SHA](https://docs.github.com/en/actions/learn-github-actions/finding-and-customizing-actions#using-release-management-for-your-custom-actions).
+
+Contrary to some custom practice of GitHub Actions maintainers, we do not change to which commit a tag points once it is published.
+As a result, the latest stable version denoted by the short Git reference `v1` is implemented as a *release branch*, not as a tag.
+Anyway, if you do not trust the maintainers of a given GitHub Action, it is always safer to reference a *commit SHA*.
 
 ### Inputs
 
@@ -403,7 +425,7 @@ These bash functions are defined in [timegroup.sh](./timegroup.sh) and have the 
 
 If you use the
 [`docker-coq`](https://github.com/coq-community/docker-coq) images,
-the container user has UID=GID=1000 while the GitHub action workdir
+the container user has UID=GID=1000 while the GitHub Actions workdir
 has (UID=1001, GID=116).
 This is not an issue when relying on `opam` to build the Coq project.
 Otherwise, you may want to use `sudo` in the container to change the

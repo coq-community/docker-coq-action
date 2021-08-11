@@ -25,7 +25,9 @@ jobs:
         ocaml_version: ['4.07-flambda']
       fail-fast: false  # don't stop jobs if one fails
     steps:
-      # BEGIN GHA_TEST_ENV
+      ################################################################
+      # Begin GHA_TEST_ENV # You should remove this GHA_TEST_ENV block
+      #                    # if you copy this demo workflow elsewhere!
       - uses: actions/checkout@v2
         with:
           repository: 'erikmd/docker-coq-github-action-demo'
@@ -34,7 +36,10 @@ jobs:
         with:
           path: 'docker-coq-action'
       - uses: './docker-coq-action'
-        # END GHA_TEST_ENV
+        # End GHA_TEST_ENV
+        ##################
+        # - uses: actions/checkout@v2
+        # - uses: coq-community/docker-coq-action@v1
         with:
           opam_file: 'coq-demo.opam'
           coq_version: ${{ matrix.coq_version }}
@@ -51,7 +56,9 @@ jobs:
           # see https://hub.docker.com/r/mathcomp/mathcomp#supported-tags
       fail-fast: false  # don't stop jobs if one fails
     steps:
-      # BEGIN GHA_TEST_ENV
+      ################################################################
+      # Begin GHA_TEST_ENV # You should remove this GHA_TEST_ENV block
+      #                    # if you copy this demo workflow elsewhere!
       - uses: actions/checkout@v2
         with:
           repository: 'erikmd/docker-coq-github-action-demo'
@@ -60,7 +67,10 @@ jobs:
         with:
           path: 'docker-coq-action'
       - uses: './docker-coq-action'
-        # END GHA_TEST_ENV
+        # End GHA_TEST_ENV
+        ##################
+        # - uses: actions/checkout@v2
+        # - uses: coq-community/docker-coq-action@v1
         with:
           opam_file: 'coq-demo.opam'
           custom_image: ${{ matrix.image }}
@@ -78,7 +88,9 @@ jobs:
           - 'coqorg/coq:8.13'
       fail-fast: false  # don't stop jobs if one fails
     steps:
-      # BEGIN GHA_TEST_ENV
+      ################################################################
+      # Begin GHA_TEST_ENV # You should remove this GHA_TEST_ENV block
+      #                    # if you copy this demo workflow elsewhere!
       - uses: actions/checkout@v2
         with:
           repository: 'erikmd/docker-coq-github-action-demo'
@@ -87,7 +99,10 @@ jobs:
         with:
           path: 'docker-coq-action'
       - uses: './docker-coq-action'
-        # END GHA_TEST_ENV
+        # End GHA_TEST_ENV
+        ##################
+        # - uses: actions/checkout@v2
+        # - uses: coq-community/docker-coq-action@v1
         with:
           # As the install/script/uninstall fields are overridden,
           # the "opam_file" field is unneeded in this example job.
@@ -129,7 +144,9 @@ jobs:
           - 'coqorg/coq:8.13'
       fail-fast: false  # don't stop jobs if one fails
     steps:
-      # BEGIN GHA_TEST_ENV
+      ################################################################
+      # Begin GHA_TEST_ENV # You should remove this GHA_TEST_ENV block
+      #                    # if you copy this demo workflow elsewhere!
       - uses: actions/checkout@v2
         with:
           repository: 'erikmd/docker-coq-github-action-demo'
@@ -138,7 +155,10 @@ jobs:
         with:
           path: 'docker-coq-action'
       - uses: './docker-coq-action'
-        # END GHA_TEST_ENV
+        # End GHA_TEST_ENV
+        ##################
+        # - uses: actions/checkout@v2
+        # - uses: coq-community/docker-coq-action@v1
         with:
           custom_image: ${{ matrix.image }}
           custom_script: |
@@ -181,7 +201,9 @@ jobs:
           - 'coqorg/coq:8.13'
       fail-fast: false  # don't stop jobs if one fails
     steps:
-      # BEGIN GHA_TEST_ENV
+      ################################################################
+      # Begin GHA_TEST_ENV # You should remove this GHA_TEST_ENV block
+      #                    # if you copy this demo workflow elsewhere!
       - uses: actions/checkout@v2
         with:
           repository: 'erikmd/docker-coq-github-action-demo'
@@ -190,7 +212,10 @@ jobs:
         with:
           path: 'docker-coq-action'
       - uses: './docker-coq-action'
-        # END GHA_TEST_ENV
+        # End GHA_TEST_ENV
+        ##################
+        # - uses: actions/checkout@v2
+        # - uses: coq-community/docker-coq-action@v1
         with:
           opam_file: 'coq-demo.opam'
           custom_image: ${{ matrix.image }}
@@ -214,7 +239,9 @@ jobs:
           - 'coqorg/coq:8.13'
       fail-fast: false  # don't stop jobs if one fails
     steps:
-      # BEGIN GHA_TEST_ENV
+      ################################################################
+      # Begin GHA_TEST_ENV # You should remove this GHA_TEST_ENV block
+      #                    # if you copy this demo workflow elsewhere!
       - uses: actions/checkout@v2
         with:
           repository: 'erikmd/docker-coq-github-action-demo'
@@ -223,7 +250,10 @@ jobs:
         with:
           path: 'docker-coq-action'
       - uses: './docker-coq-action'
-        # END GHA_TEST_ENV
+        # End GHA_TEST_ENV
+        ##################
+        # - uses: actions/checkout@v2
+        # - uses: coq-community/docker-coq-action@v1
         with:
           opam_file: 'coq-demo.opam'
           custom_image: ${{ matrix.image }}
