@@ -418,11 +418,12 @@ strategy:
   matrix:
     image:
       - 'coqorg/coq:dev'
+  fail-fast: false  # don't stop jobs if one fails
 steps:
   - uses: actions/checkout@v2
   - uses: coq-community/docker-coq-action@v1
     with:
-      opam_file: 'coq-demo.opam'
+      opam_file: 'folder/coq-proj.opam'
       custom_image: ${{ matrix.image }}
       before_script: |
         startGroup "Workaround permission issue"
