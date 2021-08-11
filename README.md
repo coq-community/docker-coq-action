@@ -641,7 +641,7 @@ steps:
         endGroup
 ```
 
-### Verbose output and variable leaking
+### Verbose output and Variable leaking
 
 The code run in the `docker-coq-action` container relies on the
 following invocation to display a customized prompt before each
@@ -654,7 +654,7 @@ export PS4='+ \e[33;1m($0 @ line $LINENO) \$\e[0m '; set -ex
 As a result, due to the `set -x` option, the value of each variable is
 exposed in the log.
 
-For example, the script
+For example, the script:
 
 ```bash
 startGroup "Risky example"
@@ -695,8 +695,8 @@ Hence the following two remarks:
    `${{ secrets.STH }}` leak, as
    [GitHub Actions automatically redact them in the log](https://docs.github.com/en/actions/reference/encrypted-secrets#accessing-your-secrets).  
    Regarding secrets obtained by other means, e.g. from a command-line
-   program, it is recommended to perform the three actions below in a
-   previous `run:` step:
+   program, it is recommended to perform the three actions below **in a
+   previous `run:` step**:
 
    * store the "locally-created secret" in an environment variable:
 
