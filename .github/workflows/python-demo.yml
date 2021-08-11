@@ -17,31 +17,26 @@ jobs:
   # https://github.com/coq-community/docker-coq-action#custom_script
   # ######################################################################
   python-demo:
-    name: docker-coq-action / python
+    name: custom_image / python:3
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        image:
-          - 'python:3'
-      fail-fast: false  # don't stop jobs if one fails
     steps:
+      ################################################################
+      # Begin GHA_TEST_ENV # You should remove this GHA_TEST_ENV block
+      #                    # if you copy this demo workflow elsewhere!
       - uses: actions/checkout@v2
-        # This "with" clause must be removed if the GHA .yml file is committed
-        # in your own Python project repository:
         with:
           repository: 'erikmd/poc-github-ci'
           ref: 'master'
-      # This step must be removed if the GHA .yml file is committed
-      # in your own Python project repository:
       - uses: actions/checkout@v2
         with:
           path: 'docker-coq-action'
-      # This "uses" clause must be replaced, if the GHA .yml file is committed
-      # in your own Python project repository, with
-      # - uses: coq-community/docker-coq-action@v1
       - uses: './docker-coq-action'
+        # End GHA_TEST_ENV
+        ##################
+        # - uses: actions/checkout@v2
+        # - uses: coq-community/docker-coq-action@v1
         with:
-          custom_image: ${{ matrix.image }}
+          custom_image: 'python:3'
           custom_script: |
             python --version
             startGroup "Install dependencies"

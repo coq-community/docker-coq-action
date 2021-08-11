@@ -107,7 +107,7 @@ For details, see also:
 
 * the [action.yml](./action.yml) file (containing the metadata processed by the GitHub Actions platform itself, as well as some comments, albeit more terse than the [documentation below](#inputs));
 * the accompanying [`coq-demo` example repo](https://github.com/erikmd/docker-coq-github-action-demo);
-* the two workflows [coq-demo.yml](./.github/workflows/coq-demo.yml) and [python-demo.yml](./.github/workflows/python-demo.yml) that both serve as `docker-coq-action`'s CI test-suite and provide some typical examples of use (except that the `"BEGIN GHA_TEST_ENV … END GHA_TEST_ENV"` blocks are specific to this repo).
+* the two workflows [coq-demo.yml](./.github/workflows/coq-demo.yml) and [python-demo.yml](./.github/workflows/python-demo.yml) that both serve as `docker-coq-action`'s CI test-suite and provide some examples of use.
 
 ### Versioning
 
