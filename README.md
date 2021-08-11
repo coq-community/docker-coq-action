@@ -399,6 +399,25 @@ These bash functions are defined in [timegroup.sh](./timegroup.sh) and have the 
   automatically inserted at the next `startGroup` (albeit it is better
   to make each `endGroup` explicit, for readability).
 
+Here is an example of script along with the output log so obtained:
+
+```bash
+ex_var="ex_value"
+# […]
+
+startGroup "Toy example"
+  echo "ex_var=$ex_var"
+endGroup
+```
+
+* Folded version:
+
+  [![folded group](./images/2021-08-11_ex_log_folded.png)](./images/2021-08-11_ex_log_folded.png)
+
+* Unfolded version:
+
+  [![unfolded group](./images/2021-08-11_ex_log_unfolded.png)](./images/2021-08-11_ex_log_unfolded.png)
+
 ### Pitfall: do not use `&&`; use semicolons
 
 Beware that the following script is *buggy*:
@@ -637,14 +656,15 @@ exposed in the log.
 For example, the script
 
 ```bash
-startGroup "Toy example"
-  echo "ex_var=$ex_var"
+startGroup "Risky example"
+  TOKEN=$(uuidgen -r)
+  curl -fsS -X POST -F token="$TOKEN" https://example.com >/dev/null
 endGroup
 ```
 
 will produce a log such as:
 
-[![env log](./images/2021-08-11_env_log.png)](./images/2021-08-11_env_log.png)
+[![verbose log](./images/2021-08-11_too_verbose_log.png)](./images/2021-08-11_too_verbose_log.png)
 
 Hence the following two remarks:
 
