@@ -121,7 +121,11 @@ compatibility, so that if your workflow just uses
 from new features, while expecting no breaking change.
 
 However, we recall that the version of any GitHub Action can just as
-well be [referenced by a tag or a SHA](https://docs.github.com/en/actions/learn-github-actions/finding-and-customizing-actions#using-release-management-for-your-custom-actions).
+well be [referenced by a tag or a commit SHA](https://docs.github.com/en/actions/learn-github-actions/finding-and-customizing-actions#using-release-management-for-your-custom-actions).
+
+Contrary to some custom practice of GitHub Actions maintainers, we do not change to which commit a tag points once it is published.
+As a result, the latest stable version denoted by the short Git reference `v1` is implemented as a *release branch*, not as a tag.
+Anyway, if you do not trust the maintainers of a given GitHub Action, it is always safer to reference a *commit SHA*.
 
 ### Inputs
 
