@@ -515,6 +515,72 @@ For more details, see the
 [CI setup / Remarks](https://github.com/coq-community/docker-coq/wiki/CI-setup#remarks)
 section in the `docker-coq` wiki.
 
+### Artifacts
+
+The `docker-coq-action` and its "child" Docker image (specified by the
+[`custom_image`](#custom_image) field) run inside a container, which
+implies the associated filesystem is isolated from the runner.
+
+However, the GitHub workspace directory is made available in the
+container (using a so-called bind-mount) and set as the current
+working directory.
+
+As a result:
+
+* all the files installed outside of this GitHub workspace directory
+  (such as `opam` packages installed in `/home/coq/.opam`) are "lost"
+  when `docker-coq-action` terminates;
+* all the files put in the GitHub workspace directory (or in a
+  sub-directory) are kept;  
+  so it is possible to create artifacts, then use an action such as
+  [`actions/upload-artifact@v2`](https://github.com/actions/upload-artifact)
+  in a subsequent step.
+
+Here is an example job for this use case, which also takes into
+account the previously-mentioned [permissions workaround](#permissions):
+
+```yaml
+runs-on: ubuntu-latest
+strategy:
+  matrix:
+    image:
+      - 'coqorg/coq:dev'
+  fail-fast: false  # don't stop jobs if one fails
+    steps:
+      - uses: coq-community/docker-coq-action@v1
+        with:
+          opam_file: 'coq-demo.opam'
+          custom_image: ${{ matrix.image }}
+          before_script: |
+            startGroup "Workaround permission issue"
+              sudo chown -R coq:coq .
+            endGroup
+          script: |
+            startGroup "Build project"
+              coq_makefile -f _CoqProject -o Makefile
+              make -j2
+            endGroup
+          after_script: |
+            set -o pipefail  # recommended if the script uses pipes
+
+            startGroup "Build artifacts"
+              mkdir -v -p artifacts
+              opam list > artifacts/opam_list.txt
+              make test 2>&1 | tee artifacts/make_test.txt
+            endGroup
+          uninstall: ''
+      - name: Revert permissions
+        # to avoid a warning at cleanup time
+        if: ${{ always() }}
+        run: sudo chown -R 1001:116 .
+      - uses: actions/upload-artifact@v2
+        with:
+          name: example-artifact
+          path: artifacts/
+          if-no-files-found: error  # 'warn' or 'ignore' are also available, defaults to `warn`
+          retention-days: 8
+```
+
 ### Install Debian packages
 
 If you use `docker-coq-action` with a
