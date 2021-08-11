@@ -421,6 +421,93 @@ These bash functions are defined in [timegroup.sh](./timegroup.sh) and have the 
   automatically inserted at the next `startGroup` (albeit it is better
   to make each `endGroup` explicit, for readability).
 
+Here is an example of script along with the output log so obtained:
+
+```bash
+ex_var="ex_value"
+# […]
+
+startGroup "Toy example"
+  echo "ex_var=$ex_var"
+endGroup
+```
+
+* Folded version:
+
+  [![folded group](./images/2021-08-11_ex_log_folded.png)](./images/2021-08-11_ex_log_folded.png)
+
+* Unfolded version:
+
+  [![unfolded group](./images/2021-08-11_ex_log_unfolded.png)](./images/2021-08-11_ex_log_unfolded.png)
+
+### Pitfall: do not use `&&`; use semicolons
+
+Beware that the following script is *buggy*:
+
+```bash
+script: |
+  startGroup "Build project"
+    make -j2 && make test && make install
+  endGroup
+```
+
+Because if `make test` fails, it won't make the CI fail.
+
+<details><summary><b>Explanation</b></summary>
+
+This is a typical pitfall that occur *in any shell-based CI platform*
+where the [`set -e`](
+https://manpages.ubuntu.com/manpages/hirsute/en/man1/set.1posix.html#description)
+option is implied: the early-exit associated to this option is
+disabled if the failing command is followed by `&&` or `||`.
+
+See e.g., the output of the following three commands:
+
+```bash
+bash -c 'set -e; false && true; echo $?; echo this should not be run'
+# → 1
+# → this should not be run
+
+bash -c 'set -e; false; true; echo $?; echo this should not be run'
+# (no output)
+
+bash -c 'set -e; ( false && true ); echo $?; echo this should not be run'
+# (no output)
+```
+
+</details>
+
+Instead, you should write one of the following variants:
+
+* using semicolons:
+
+  ```bash
+  script: |
+    startGroup "Build project"
+      make -j2 ; make test ; make install
+    endGroup
+  ```
+
+* using newlines:
+
+  ```bash
+  script: |
+    startGroup "Build project"
+      make -j2
+	  make test
+	  make install
+    endGroup
+  ```
+
+* using `&&` but within a subshell:
+
+  ```bash
+  script: |
+    startGroup "Build project"
+      ( make -j2 && make test && make install )
+    endGroup
+  ```
+
 ### Permissions
 
 If you use the
@@ -429,7 +516,8 @@ the container user has UID=GID=1000 while the GitHub Actions workdir
 has (UID=1001, GID=116).
 This is not an issue when relying on `opam` to build the Coq project.
 Otherwise, you may want to use `sudo` in the container to change the
-permissions. You may also install additional Debian packages.
+permissions. You may also install additional Debian packages
+(see the [dedicated section below](#install-debian-packages)).
 
 Typically, this would lead to a workflow specification like this:
 
@@ -439,11 +527,12 @@ strategy:
   matrix:
     image:
       - 'coqorg/coq:dev'
+  fail-fast: false  # don't stop jobs if one fails
 steps:
   - uses: actions/checkout@v2
   - uses: coq-community/docker-coq-action@v1
     with:
-      opam_file: 'coq-demo.opam'
+      opam_file: 'folder/coq-proj.opam'
       custom_image: ${{ matrix.image }}
       before_script: |
         startGroup "Workaround permission issue"
@@ -466,3 +555,189 @@ steps:
 For more details, see the
 [CI setup / Remarks](https://github.com/coq-community/docker-coq/wiki/CI-setup#remarks)
 section in the `docker-coq` wiki.
+
+### Artifacts
+
+The `docker-coq-action` and its "child" Docker image (specified by the
+[`custom_image`](#custom_image) field) run inside a container, which
+implies the associated filesystem is isolated from the runner.
+
+However, the GitHub workspace directory is made available in the
+container (using a so-called bind-mount) and set as the current
+working directory.
+
+As a result:
+
+* all the files installed outside of this GitHub workspace directory
+  (such as `opam` packages installed in `/home/coq/.opam`) are "lost"
+  when `docker-coq-action` terminates;
+* all the files put in the GitHub workspace directory (or in a
+  sub-directory) are kept;  
+  so it is possible to create artifacts, then use an action such as
+  [`actions/upload-artifact@v2`](https://github.com/actions/upload-artifact)
+  in a subsequent step.
+
+Here is an example job for this use case, which also takes into
+account the previously-mentioned [permissions workaround](#permissions):
+
+```yaml
+runs-on: ubuntu-latest
+strategy:
+  matrix:
+    image:
+      - 'coqorg/coq:dev'
+  fail-fast: false  # don't stop jobs if one fails
+    steps:
+      - uses: coq-community/docker-coq-action@v1
+        with:
+          opam_file: 'folder/coq-proj.opam'
+          custom_image: ${{ matrix.image }}
+          before_script: |
+            startGroup "Workaround permission issue"
+              sudo chown -R coq:coq .
+            endGroup
+          script: |
+            startGroup "Build project"
+              coq_makefile -f _CoqProject -o Makefile
+              make -j2
+            endGroup
+          after_script: |
+            set -o pipefail  # recommended if the script uses pipes
+
+            startGroup "Build artifacts"
+              mkdir -v -p artifacts
+              opam list > artifacts/opam_list.txt
+              make test 2>&1 | tee artifacts/make_test.txt
+            endGroup
+          uninstall: ''
+      - name: Revert permissions
+        # to avoid a warning at cleanup time
+        if: ${{ always() }}
+        run: sudo chown -R 1001:116 .
+      - uses: actions/upload-artifact@v2
+        with:
+          name: example-artifact
+          path: artifacts/
+          if-no-files-found: error  # 'warn' or 'ignore' are also available, defaults to `warn`
+          retention-days: 8
+```
+
+### Install Debian packages
+
+If you use `docker-coq-action` with a
+[Docker-Coq](https://github.com/coq-community/docker-coq) image (the
+default when the [`custom_image`](#custom_image) field is omitted),
+the image is based on Debian stable and the container user
+(UID=GID=1000) has `sudo` rights, so you can rely on `apt-get` to
+install additional Debian packages.
+
+This use case is illustrated by the following job that installs
+the `emacs` and `tree` packages:
+
+```yaml
+runs-on: ubuntu-latest
+strategy:
+  matrix:
+    image:
+      - 'coqorg/coq:dev'
+  fail-fast: false  # don't stop jobs if one fails
+steps:
+  - uses: actions/checkout@v2
+  - uses: coq-community/docker-coq-action@v1
+    with:
+      opam_file: 'folder/coq-proj.opam'
+      custom_image: ${{ matrix.image }}
+      before_script: |
+        startGroup "Install APT dependencies"
+          cat /etc/os-release  # Print the Debian OS version
+          sudo apt-get update -y -q  # Mandatory
+          sudo DEBIAN_FRONTEND=noninteractive apt-get install -y -q --no-install-recommends \
+            emacs \
+            tree  # for instance
+            # Alphabetical order is recommended for long package lists to ease review and update
+        endGroup
+      after_script: |
+        startGroup "Post-test"
+          emacs --version
+          tree
+        endGroup
+```
+
+### Verbose output and Variable leaking
+
+The code run in the `docker-coq-action` container relies on the
+following invocation to display a customized prompt before each
+command:
+
+```bash
+export PS4='+ \e[33;1m($0 @ line $LINENO) \$\e[0m '; set -ex
+```
+
+As a result, due to the `set -x` option, the value of each variable is
+exposed in the log.
+
+For example, the script:
+
+```bash
+startGroup "Risky example"
+  TOKEN=$(uuidgen -r)
+  curl -fsS -X POST -F token="$TOKEN" https://example.com >/dev/null
+endGroup
+```
+
+will produce a log such as:
+
+[![verbose log](./images/2021-08-11_too_verbose_log.png)](./images/2021-08-11_too_verbose_log.png)
+
+Hence the following two remarks:
+
+1. If need be, it is possible to temporarily disable the trace feature
+   in your script, surrounding the lines at stake by (`set +x`, `set -x`).  
+   Your script would thus look like:
+
+   ```bash
+   set +x
+
+   #...some code with no trace...
+
+   set -x
+   ```
+
+   or, to get some even less verbose output:
+
+   ```bash
+   { set +x; } 2>/dev/null
+
+   #...some code with no trace...
+
+   set -x
+   ```
+
+2. Fortunately, this trace feature cannot make repository secrets
+   `${{ secrets.STH }}` leak, as
+   [GitHub Actions automatically redact them in the log](https://docs.github.com/en/actions/reference/encrypted-secrets#accessing-your-secrets).  
+   Regarding secrets obtained by other means, e.g. from a command-line
+   program, it is recommended to perform the three actions below **in a
+   previous `run:` step**:
+
+   * store the "locally-created secret" in an environment variable:
+
+     ```bash
+     SOME_TOKEN="..."
+     ```
+
+   * immediately [mark the variable as masked](https://docs.github.com/en/actions/reference/workflow-commands-for-github-actions#masking-a-value-in-log):
+
+     ```bash
+     echo "::add-mask::$SOME_TOKEN"
+     ```
+
+   * register the variable to [make it available for subsequent steps](https://docs.github.com/en/actions/reference/workflow-commands-for-github-actions#setting-an-environment-variable):
+
+     ```bash
+     printf "%s\n" "SOME_TOKEN=$(printf "%q" "$SOME_TOKEN")" >> $GITHUB_ENV
+     ```
+
+   A comprehensive example of this approach is available in PR [erikmd/docker-coq-github-action-demo#12](https://github.com/erikmd/docker-coq-github-action-demo/pull/12).
+
+   For completeness, note that masking inputs involved in `workflow_dispatch` may require some `jq`-based workaround, as mentioned in issue [actions/runner#643](https://github.com/actions/runner/issues/643).
