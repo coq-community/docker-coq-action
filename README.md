@@ -444,7 +444,7 @@ endGroup
 
 Beware that the following script is *buggy*:
 
-```bash
+```yaml
 script: |
   startGroup "Build project"
     make -j2 && make test && make install
@@ -453,7 +453,7 @@ script: |
 
 Because if `make test` fails, it won't make the CI fail.
 
-<details><summary><b>Explanation</b></summary>
+<details><summary><b>(Explanation)</b></summary>
 
 This is a typical pitfall that occur *in any shell-based CI platform*
 where the [`set -e`](
@@ -481,7 +481,7 @@ Instead, you should write one of the following variants:
 
 * using semicolons:
 
-  ```bash
+  ```yaml
   script: |
     startGroup "Build project"
       make -j2 ; make test ; make install
@@ -490,7 +490,7 @@ Instead, you should write one of the following variants:
 
 * using newlines:
 
-  ```bash
+  ```yaml
   script: |
     startGroup "Build project"
       make -j2
@@ -501,7 +501,7 @@ Instead, you should write one of the following variants:
 
 * using `&&` but within a subshell:
 
-  ```bash
+  ```yaml
   script: |
     startGroup "Build project"
       ( make -j2 && make test && make install )

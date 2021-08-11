@@ -160,7 +160,7 @@ if test -z "$INPUT_CUSTOM_SCRIPT_EXPANDED"; then
     exit 1
 fi
 
-startGroup "Pull docker-coq image"
+startGroup "Pull docker image"
 
 echo COQ_IMAGE="$COQ_IMAGE"
 docker pull "$COQ_IMAGE"
