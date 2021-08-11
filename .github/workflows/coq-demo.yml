@@ -240,3 +240,56 @@ jobs:
               emacs --version
               tree
             endGroup
+
+# The following job illustrates the upload of generated artifacts.
+
+  demo-7:
+    name: custom_image / docker-coq / upload-artifacts
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        image:
+          - 'coqorg/coq:8.13'
+      fail-fast: false  # don't stop jobs if one fails
+    steps:
+      # BEGIN GHA_TEST_ENV
+      - uses: actions/checkout@v2
+        with:
+          repository: 'erikmd/docker-coq-github-action-demo'
+          ref: 'master'
+      - uses: actions/checkout@v2
+        with:
+          path: 'docker-coq-action'
+      - uses: './docker-coq-action'
+        # END GHA_TEST_ENV
+        with:
+          opam_file: 'coq-demo.opam'
+          custom_image: ${{ matrix.image }}
+          before_script: |
+            startGroup "Workaround permission issue"
+              sudo chown -R coq:coq .
+            endGroup
+          script: |
+            startGroup "Build project"
+              coq_makefile -f _CoqProject -o Makefile
+              make -j2
+            endGroup
+          after_script: |
+            set -o pipefail  # recommended if the script uses pipes
+
+            startGroup "Build artifacts"
+              mkdir -v -p artifacts
+              opam list > artifacts/opam_list.txt
+              make test 2>&1 | tee artifacts/make_test.txt
+            endGroup
+          uninstall: ''
+      - name: Revert permissions
+        # to avoid a warning at cleanup time
+        if: ${{ always() }}
+        run: sudo chown -R 1001:116 .
+      - uses: actions/upload-artifact@v2
+        with:
+          name: example-artifact
+          path: artifacts/
+          if-no-files-found: error  # 'warn' or 'ignore' are also available, defaults to `warn`
+          retention-days: 8
