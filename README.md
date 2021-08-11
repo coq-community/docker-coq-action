@@ -399,6 +399,74 @@ These bash functions are defined in [timegroup.sh](./timegroup.sh) and have the 
   automatically inserted at the next `startGroup` (albeit it is better
   to make each `endGroup` explicit, for readability).
 
+### Pitfall: do not use `&&`; use semicolons
+
+Beware that the following script is *buggy*:
+
+```bash
+script: |
+  startGroup "Build project"
+    make -j2 && make test && make install
+  endGroup
+```
+
+Because if `make test` fails, it won't make the CI fail.
+
+<details><summary><b>Explanation</b></summary>
+
+This is a typical pitfall that occur *in any shell-based CI platform*
+where the [`set -e`](
+https://manpages.ubuntu.com/manpages/hirsute/en/man1/set.1posix.html#description)
+option is implied: the early-exit associated to this option is
+disabled if the failing command is followed by `&&` or `||`.
+
+See e.g., the output of the following three commands:
+
+```bash
+bash -c 'set -e; false && true; echo $?; echo this should not be run'
+# → 1
+# → this should not be run
+
+bash -c 'set -e; false; true; echo $?; echo this should not be run'
+# (no output)
+
+bash -c 'set -e; ( false && true ); echo $?; echo this should not be run'
+# (no output)
+```
+
+</details>
+
+Instead, you should write one of the following variants:
+
+* using semicolons:
+
+  ```bash
+  script: |
+    startGroup "Build project"
+      make -j2 ; make test ; make install
+    endGroup
+  ```
+
+* using newlines:
+
+  ```bash
+  script: |
+    startGroup "Build project"
+      make -j2
+	  make test
+	  make install
+    endGroup
+  ```
+
+* using `&&` but within a subshell:
+
+  ```bash
+  script: |
+    startGroup "Build project"
+      ( make -j2 && make test && make install )
+    endGroup
+  ```
+
 ### Permissions
 
 If you use the
