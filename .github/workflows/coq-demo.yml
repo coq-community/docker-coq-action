@@ -206,7 +206,7 @@ jobs:
   # The following job illustrates the installation of additional Debian packages.
 
   demo-6:
-    name: custom_image / docker-coq / apt-get
+    name: custom_image / docker-coq / opam / apt-get
     runs-on: ubuntu-latest
     strategy:
       matrix:
@@ -244,7 +244,7 @@ jobs:
 # The following job illustrates the upload of generated artifacts.
 
   demo-7:
-    name: custom_image / docker-coq / upload-artifacts
+    name: custom_image / docker-coq / opam+make / upload-artifacts
     runs-on: ubuntu-latest
     strategy:
       matrix:
