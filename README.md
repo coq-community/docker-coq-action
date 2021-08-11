@@ -407,7 +407,8 @@ the container user has UID=GID=1000 while the GitHub action workdir
 has (UID=1001, GID=116).
 This is not an issue when relying on `opam` to build the Coq project.
 Otherwise, you may want to use `sudo` in the container to change the
-permissions. You may also install additional Debian packages.
+permissions. You may also install additional Debian packages
+(see the [dedicated section below](#install-debian-packages)).
 
 Typically, this would lead to a workflow specification like this:
 
@@ -444,6 +445,46 @@ steps:
 For more details, see the
 [CI setup / Remarks](https://github.com/coq-community/docker-coq/wiki/CI-setup#remarks)
 section in the `docker-coq` wiki.
+
+### Install Debian packages
+
+If you use `docker-coq-action` with a
+[Docker-Coq](https://github.com/coq-community/docker-coq) image (the
+default when the [`custom_image`](#custom_image) field is omitted),
+the image is based on Debian stable and the container user
+(UID=GID=1000) has `sudo` rights, so you can rely on `apt-get` to
+install additional Debian packages.
+
+This use case is illustrated by the following job that installs
+the `emacs` and `tree` packages:
+
+```yaml
+runs-on: ubuntu-latest
+strategy:
+  matrix:
+    image:
+      - 'coqorg/coq:dev'
+  fail-fast: false  # don't stop jobs if one fails
+steps:
+  - uses: actions/checkout@v2
+  - uses: coq-community/docker-coq-action@v1
+    with:
+      opam_file: 'folder/coq-proj.opam'
+      custom_image: ${{ matrix.image }}
+      before_script: |
+        startGroup "Install APT dependencies"
+          cat /etc/os-release  # Print the Debian OS version
+          sudo apt-get update -y -q  # Mandatory
+          sudo DEBIAN_FRONTEND=noninteractive apt-get install -y -q --no-install-recommends \
+            emacs \
+            tree  # for instance (in alphabetical order)
+        endGroup
+      after_script: |
+        startGroup "Post-test"
+          emacs --version
+          tree
+        endGroup
+```
 
 ### Verbose output and variable leaking
 
