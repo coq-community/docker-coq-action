@@ -631,7 +631,8 @@ steps:
           sudo apt-get update -y -q  # Mandatory
           sudo DEBIAN_FRONTEND=noninteractive apt-get install -y -q --no-install-recommends \
             emacs \
-            tree  # for instance (in alphabetical order)
+            tree  # for instance
+            # Alphabetical order is recommended for long package lists to ease review and update
         endGroup
       after_script: |
         startGroup "Post-test"
