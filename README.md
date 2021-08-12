@@ -1,13 +1,23 @@
 # Docker-Coq GitHub Action
 
-![reviewdog][reviewdog-badge]
+[![reviewdog][reviewdog-badge]][reviewdog-link]
+[![Docker-Coq CI][docker-coq-ci-badge]][docker-coq-ci-link]
+[![Docker-based CI][python-ci-badge]][python-ci-link]
+[![Regression Test][rt-ci-badge]][rt-ci-link]  
 [![coqorg][coqorg-shield]][coqorg-link]
 [![mathcomp][mathcomp-shield]][mathcomp-link]
 [![Example][example-shield]][example-link]
 [![Contributing][contributing-shield]][contributing-link]
 [![Code of Conduct][conduct-shield]][conduct-link]
 
-[reviewdog-badge]: https://github.com/coq-community/docker-coq-action/workflows/reviewdog/badge.svg?branch=master
+[reviewdog-badge]: https://github.com/coq-community/docker-coq-action/actions/workflows/reviewdog.yml/badge.svg?branch=master
+[docker-coq-ci-badge]: https://github.com/coq-community/docker-coq-action/actions/workflows/coq-demo.yml/badge.svg?branch=master
+[python-ci-badge]: https://github.com/coq-community/docker-coq-action/actions/workflows/python-demo.yml/badge.svg?branch=master
+[rt-ci-badge]: https://github.com/coq-community/docker-coq-action/actions/workflows/gha-rt.yml/badge.svg?branch=master
+[reviewdog-link]:https://github.com/coq-community/docker-coq-action/actions/workflows/reviewdog.yml
+[docker-coq-ci-link]:https://github.com/coq-community/docker-coq-action/actions/workflows/coq-demo.yml
+[python-ci-link]:https://github.com/coq-community/docker-coq-action/actions/workflows/python-demo.yml
+[rt-ci-link]:https://github.com/coq-community/docker-coq-action/actions/workflows/gha-rt.yml
 
 [coqorg-shield]: https://img.shields.io/badge/depends%20on-coqorg%2Fcoq-blue.svg
 [coqorg-link]: https://hub.docker.com/r/coqorg/coq
