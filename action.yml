@@ -15,7 +15,7 @@ inputs:
     description: '"minimal", "4.XX", or "4.XX-flambda", see https://github.com/coq-community/docker-coq/wiki#supported-tags'
     default: 'minimal'
   before_install:
-    description: 'Customizable script run before "install", empty by default.'
+    description: 'Customizable script run before "install".'
     default: |
       startGroup "Print opam config"
         opam config list; opam repo list; opam list
