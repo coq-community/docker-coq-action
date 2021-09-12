@@ -186,7 +186,7 @@ The version of OCaml.
 Default: `"minimal"`.
 
 Among `"minimal"`, `"4.07-flambda"`, `"4.07"`, `"4.08-flambda"`,
-`"4.09-flambda"`, `"4.10-flambda"`, `"4.11-flambda"`.
+`"4.09-flambda"`, `"4.10-flambda"`, `"4.11-flambda"`, `"4.12-flambda"`.
 
 **Warning!** not all OCaml versions are available with all Coq versions.
 
