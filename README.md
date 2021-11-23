@@ -90,6 +90,10 @@ e.g. `.github/workflows/build.yml`, containing (among others), a snippet such as
 
 ```yaml
 runs-on: ubuntu-latest  # container actions require GNU/Linux
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
 strategy:
   matrix:
     coq_version:
