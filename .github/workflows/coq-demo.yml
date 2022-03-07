@@ -7,6 +7,11 @@ on:
   pull_request:
     branches:
       - "**"  # forall submitted Pull Requests
+  schedule:
+  # test master every day at 16:00 UTC
+  # cf. https://crontab.guru/
+    - cron: '0 16 * * *'
+
 jobs:
 
   # The following two jobs are standard/recommended versions, assuming

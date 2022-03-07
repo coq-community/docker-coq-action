@@ -3,6 +3,7 @@ on:
   push:
     branches:
       - master  # forall push/merge in master
+      - v1      # forall push/merge in v1
   pull_request:
     branches:
       - "**"  # forall submitted Pull Requests
