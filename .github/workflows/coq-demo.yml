@@ -25,7 +25,7 @@ jobs:
         # To get the list of supported (coq, ocaml) versions from coqorg/coq,
         # see https://github.com/coq-community/docker-coq/wiki#supported-tags
         coq_version:
-          - '8.13'
+          - 'latest'
           - 'dev'
         ocaml_version: ['4.07-flambda']
       fail-fast: false  # don't stop jobs if one fails
@@ -57,6 +57,7 @@ jobs:
       matrix:
         image:
           - 'mathcomp/mathcomp-dev:coq-dev'
+          - 'mathcomp/mathcomp:latest-coq-8.15'
           # - 'mathcomp/mathcomp:latest-coq-dev'  # not always available,
           # see https://hub.docker.com/r/mathcomp/mathcomp#supported-tags
       fail-fast: false  # don't stop jobs if one fails
@@ -90,7 +91,8 @@ jobs:
     strategy:
       matrix:
         image:
-          - 'coqorg/coq:8.13'
+          - 'coqorg/coq:latest'
+          - 'coqorg/coq:dev'
       fail-fast: false  # don't stop jobs if one fails
     steps:
       ################################################################
@@ -146,7 +148,8 @@ jobs:
     strategy:
       matrix:
         image:
-          - 'coqorg/coq:8.13'
+          - 'coqorg/coq:latest'
+          - 'coqorg/coq:dev'
       fail-fast: false  # don't stop jobs if one fails
     steps:
       ################################################################
@@ -203,7 +206,7 @@ jobs:
     strategy:
       matrix:
         image:
-          - 'coqorg/coq:8.13'
+          - 'coqorg/coq:latest'
       fail-fast: false  # don't stop jobs if one fails
     steps:
       ################################################################
@@ -227,6 +230,7 @@ jobs:
           before_script: |
             startGroup "Toy example"
               echo "ex_var=$ex_var"
+              [ "$ex_var" = "ex_value" ]
             endGroup
           export: 'ex_var OPAMWITHTEST'  # space-separated list of variables
         env:
@@ -241,7 +245,8 @@ jobs:
     strategy:
       matrix:
         image:
-          - 'coqorg/coq:8.13'
+          - 'coqorg/coq:latest'
+          - 'coqorg/coq:dev'
       fail-fast: false  # don't stop jobs if one fails
     steps:
       ################################################################
@@ -285,7 +290,7 @@ jobs:
     strategy:
       matrix:
         image:
-          - 'coqorg/coq:8.13'
+          - 'coqorg/coq:latest'
       fail-fast: false  # don't stop jobs if one fails
     steps:
       ################################################################
