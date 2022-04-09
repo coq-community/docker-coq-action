@@ -73,6 +73,7 @@ it will run (by default) the following commands:
 
 ```bash
 opam config list; opam repo list; opam list
+sudo apt-get update -y -q
 opam pin add -n -y -k path coq-proj folder
 opam update -y
 opam install --confirm-level=unsafe-yes -j 2 coq-proj --deps-only
@@ -81,6 +82,11 @@ opam install -y -v -j 2 coq-proj
 opam list
 opam remove coq-proj
 ```
+
+The `apt-get` command and the `--confirm-level=unsafe-yes` opam option
+are necessary for automatic installation of system packages
+that may be required by `coq-proj.opam`, as described in the
+[opam 2.1 release notes](https://opam.ocaml.org/blog/opam-2-1-0/#Seamless-integration-of-System-dependencies-handling-a-k-a-quot-depexts-quot).
 
 ## Using the GitHub Action
 
@@ -218,6 +224,7 @@ Default:
 
 ```bash
 startGroup "Install dependencies"
+  sudo apt-get update -y -q
   opam pin add -n -y -k path $PACKAGE $WORKDIR
   opam update -y
   opam install --confirm-level=unsafe-yes -j 2 $PACKAGE --deps-only
