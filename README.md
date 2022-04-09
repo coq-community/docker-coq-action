@@ -667,7 +667,7 @@ steps:
       before_script: |
         startGroup "Install APT dependencies"
           cat /etc/os-release  # Print the Debian OS version
-          sudo apt-get update -y -q  # Mandatory
+          # sudo apt-get update -y -q # this mandatory command is already run in install step by default
           sudo DEBIAN_FRONTEND=noninteractive apt-get install -y -q --no-install-recommends \
             emacs \
             tree  # for instance
