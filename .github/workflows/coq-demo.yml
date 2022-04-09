@@ -237,10 +237,42 @@ jobs:
           OPAMWITHTEST: 'true'
           ex_var: 'ex_value'
 
-  # The following job illustrates the installation of additional Debian packages.
+  # The following two jobs illustrate the installation of system packages.
 
   demo-6:
-    name: custom_image / docker-coq / opam / apt-get
+    name: custom_image / docker-coq / opam / auto install depexts
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        image:
+          - 'coqorg/coq:dev'
+      fail-fast: false  # don't stop jobs if one fails
+    steps:
+      ################################################################
+      # Begin GHA_TEST_ENV # You should remove this GHA_TEST_ENV block
+      #                    # if you copy this demo workflow elsewhere!
+      - uses: actions/checkout@v2
+        with:
+          repository: 'erikmd/docker-coq-github-action-demo'
+          ref: 'master'
+      - uses: actions/checkout@v2
+        with:
+          path: 'docker-coq-action'
+      - uses: './docker-coq-action'
+        # End GHA_TEST_ENV
+        ##################
+        # - uses: actions/checkout@v2
+        # - uses: coq-community/docker-coq-action@v1
+        with:
+          opam_file: 'coq-depexts-test.opam'
+          custom_image: ${{ matrix.image }}
+          after_script: |
+            startGroup "Post-test"
+              gappa --version
+            endGroup
+
+  demo-7:
+    name: custom_image / docker-coq / opam / apt-get install more
     runs-on: ubuntu-latest
     strategy:
       matrix:
@@ -284,7 +316,7 @@ jobs:
 
   # The following job illustrates the upload of generated artifacts.
 
-  demo-7:
+  demo-8:
     name: custom_image / docker-coq / opam+make / upload-artifacts
     runs-on: ubuntu-latest
     strategy:
