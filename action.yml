@@ -24,9 +24,10 @@ inputs:
     description: 'Customizable script to install the opam dependencies.'
     default: |
       startGroup "Install dependencies"
+        sudo apt-get update -y -q
         opam pin add -n -y -k path $PACKAGE $WORKDIR
         opam update -y
-        opam install -y -j 2 $PACKAGE --deps-only
+        opam install --confirm-level=unsafe-yes -j 2 $PACKAGE --deps-only
       endGroup
   after_install:
     description: 'Customizable script run after "install".'
