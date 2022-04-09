@@ -75,7 +75,7 @@ it will run (by default) the following commands:
 opam config list; opam repo list; opam list
 opam pin add -n -y -k path coq-proj folder
 opam update -y
-opam install -y -j 2 coq-proj --deps-only
+opam install --confirm-level=unsafe-yes -j 2 coq-proj --deps-only
 opam list
 opam install -y -v -j 2 coq-proj
 opam list
@@ -220,7 +220,7 @@ Default:
 startGroup "Install dependencies"
   opam pin add -n -y -k path $PACKAGE $WORKDIR
   opam update -y
-  opam install -y -j 2 $PACKAGE --deps-only
+  opam install --confirm-level=unsafe-yes -j 2 $PACKAGE --deps-only
 endGroup
 ```
 
