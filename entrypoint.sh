@@ -18,6 +18,10 @@ fi
 startGroup "Print runner configuration"
 
 echo "GITHUB_WORKFLOW=$GITHUB_WORKFLOW"
+echo "GITHUB_RUN_ID=$GITHUB_RUN_ID"
+echo "GITHUB_RUN_NUMBER=$GITHUB_RUN_NUMBER"
+# echo "GITHUB_ACTION=$GITHUB_ACTION"  # useless (and slash missing)
+echo "GITHUB_REPOSITORY=$GITHUB_REPOSITORY"
 echo "RUNNER_OS=$RUNNER_OS"
 echo "RUNNER_TEMP=$RUNNER_TEMP"
 echo "RUNNER_WORKSPACE=$RUNNER_WORKSPACE"
@@ -68,6 +72,9 @@ INPUT_EXPORT: the space-separated list of env variables to export
 EOF
 }
 
+cp /app/coq.json "$HOME/coq.json"
+echo "::add-matcher::$HOME/coq.json"
+
 ## Parse options
 OPTIND=1 # Reset is necessary if getopts was used previously in the script.  It is a good idea to make this local in a function.
 while getopts "h" opt; do
@@ -88,37 +95,84 @@ if test $# -gt 0; then
     echo "Warning: Arguments ignored: $*"
 fi
 
+# TODO: character validation of INPUT_COQ_VERSION, INPUT_OCAML_VERSION
+
 if test -z "$INPUT_CUSTOM_IMAGE"; then
+
     if test -z "$INPUT_COQ_VERSION"; then
         echo "ERROR: No Coq version specified."
         usage
         exit 1
     fi
 
-    if test -z "$INPUT_OCAML_VERSION"; then
-        echo "ERROR: No OCaml version specified."
-        usage
-        exit 1
-    fi
+    if [ "$INPUT_OCAML_VERSION" = 'default' ]; then
 
-    # TODO: validation of INPUT_COQ_VERSION, INPUT_OCAML_VERSION
-    COQ_IMAGE="coqorg/coq:$INPUT_COQ_VERSION"
+        COQ_IMAGE="coqorg/coq:$INPUT_COQ_VERSION"
 
-    # TODO: update this after the one-switch docker-coq migration
-    if [ "$INPUT_OCAML_VERSION" = '4.07-flambda' ]; then
-	OCAML407="true"
-    elif [ "$INPUT_OCAML_VERSION" = 'minimal' ]; then
-	OCAML407="false"
-    elif [ "$INPUT_OCAML_VERSION" = '4.05' ]; then
-	OCAML407="false"
+    elif printf "%s" "$INPUT_COQ_VERSION" | grep -e '.-native$' -q; then
+
+        COQ_IMAGE="coqorg/coq:$INPUT_COQ_VERSION"
+
+        if test -n "$INPUT_OCAML_VERSION"; then
+            # HERE, "ocaml_version" is nonempty and different from 'default'
+            # HERE, "coq_version" ends in '…-native'
+
+            # Warning: coq-native enabled: ocaml_version SHOULD be '' or 'default'.
+
+            # Rely on line 'echo "::add-matcher::$HOME/coq.json"' above.
+            cat <<EOF
+File "./.github/workflows", line 1, characters 0-1:
+Warning: When the coq_version contains the "-native" suffix, the ocaml_version SHOULD be "default" or the empty string: please check and fix https://github.com/${GITHUB_REPOSITORY}/actions/runs/${GITHUB_RUN_ID}/workflow (see also https://github.com/coq-community/docker-coq-action#coq_version for details).
+EOF
+        fi
+
     else
-	OCAML407="false"
-	COQ_IMAGE="${COQ_IMAGE}-ocaml-${INPUT_OCAML_VERSION}"
+
+        if test -z "$INPUT_OCAML_VERSION"; then
+            echo "ERROR: No OCaml version specified."
+            usage
+            exit 1
+        fi
+
+        # HERE, "coq_version" and is nonempty and different from 'default'
+        # HERE, "coq_version" does not end in '…-native'
+        # HERE, "ocaml_version" is nonempty
+
+        if [ "$INPUT_OCAML_VERSION" = 'minimal' ]; then
+        # TODO: uncomment this when the 'minimal' deprecation phase ends.
+        #     echo "ERROR: ocaml_version: 'minimal' is not supported anymore."
+        #     exit 1
+        # TODO: remove the following when the 'minimal' deprecation phase ends.
+
+        # Rely on line 'echo "::add-matcher::$HOME/coq.json"' above.
+            cat <<EOF
+File "./.github/workflows", line 1, characters 0-1:
+Warning: Setting ocaml_version to "minimal" is DEPRECATED (to be removed on 2022-06-27 AOE): please use "default", or a specific ocaml_version in https://github.com/${GITHUB_REPOSITORY}/actions/runs/${GITHUB_RUN_ID}/workflow (see https://github.com/coq-community/docker-coq-action#ocaml_version for details).
+EOF
+            case "$INPUT_COQ_VERSION" in
+                8.4 | 8.5 | 8.6)
+                    OCAML_VERSION='4.02';;
+                8.4.* | 8.5.* | 8.6.*)
+                    OCAML_VERSION='4.02.3';;
+                8.7 | 8.8 | 8.9 | 8.10 | 8.11 | 8.12 | 8.13 | 8.14 | 8.15 | latest)
+                    OCAML_VERSION='4.05';;
+                8.7.* | 8.8.* | 8.9.* | 8.10.* | 8.11.* | 8.12.* | 8.13.* | 8.14.* | 8.15.*)
+                    OCAML_VERSION='4.05.0';;
+                dev | 8.16)
+                    OCAML_VERSION='4.09-flambda';;
+                8.16*)
+                    OCAML_VERSION='4.09.0-flambda';;
+                *)
+                    echo "ERROR: ocaml_version: 'minimal' unrecognized for this coq_version."
+                    exit 1
+            esac
+            COQ_IMAGE="coqorg/coq:${INPUT_COQ_VERSION}-ocaml-${OCAML_VERSION}"
+        else
+            COQ_IMAGE="coqorg/coq:${INPUT_COQ_VERSION}-ocaml-${INPUT_OCAML_VERSION}"
+        fi
     fi
 else
     COQ_IMAGE="$INPUT_CUSTOM_IMAGE"
-    # TODO: update this after the one-switch docker-coq migration
-    OCAML407="false"
 fi
 
 if test -z "$INPUT_CUSTOM_SCRIPT"; then
@@ -165,20 +219,7 @@ startGroup "Pull docker image"
 echo COQ_IMAGE="$COQ_IMAGE"
 docker pull "$COQ_IMAGE"
 
-# TODO: update this after the one-switch docker-coq migration
-echo OCAML407="$OCAML407"
-
 endGroup
-
-if [ "$OCAML407" = "true" ]; then
-    # shellcheck disable=SC2016
-    _OCAML407_COMMAND='startGroup Change opam switch; opam switch ${COMPILER_EDGE}; eval $(opam env); endGroup'
-else
-    _OCAML407_COMMAND=''
-fi
-
-cp /app/coq.json "$HOME/coq.json"
-echo "::add-matcher::$HOME/coq.json"
 
 ## Note to docker-coq-action maintainers: Run ./helper.sh gen & Copy min.sh
 # shellcheck disable=SC2046,SC2086
@@ -187,7 +228,6 @@ docker run -i --init --rm --name=COQ $( [ -n "$INPUT_EXPORT" ] && printf -- "-e 
        "$COQ_IMAGE" /bin/bash --login -c "
 exec 2>&1 ; endGroup () {  {  init_opts=\"\$-\"; set +x ; } 2> /dev/null; if [ -n \"\$startTime\" ]; then endTime=\$(date -u +%s); echo \"::endgroup::\"; printf \"↳ \"; date -u -d \"@\$((endTime - startTime))\" '+%-Hh %-Mm %-Ss'; echo; unset startTime; else echo 'Error: missing startGroup command.'; case \"\$init_opts\" in  *x*) set -x ;; esac; return 1; fi; case \"\$init_opts\" in  *x*) set -x ;; esac; } ; startGroup () {  {  init_opts=\"\$-\"; set +x ; } 2> /dev/null; if [ -n \"\$startTime\" ]; then endGroup; fi; if [ \$# -ge 1 ]; then groupTitle=\"\$*\"; else groupTitle=\"Unnamed group\"; fi; echo; echo \"::group::\$groupTitle\"; startTime=\$(date -u +%s); case \"\$init_opts\" in  *x*) set -x ;; esac; } # generated from helper.sh
 export PS4='+ \e[33;1m(\$0 @ line \$LINENO) \$\e[0m '; set -ex
-$_OCAML407_COMMAND
 $INPUT_CUSTOM_SCRIPT_EXPANDED" script
 
 echo "::remove-matcher owner=coq-problem-matcher::"

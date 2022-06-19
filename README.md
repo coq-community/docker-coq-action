@@ -99,9 +99,9 @@ runs-on: ubuntu-latest  # container actions require GNU/Linux
 strategy:
   matrix:
     coq_version:
-      - '8.11'
+      - '8.16'
       - dev
-    ocaml_version: ['4.07-flambda']
+    ocaml_version: ['default']
   fail-fast: false  # don't stop jobs if one fails
 steps:
   - uses: actions/checkout@v2
@@ -181,7 +181,11 @@ Default: `"latest"` (= latest stable version).
 Append the `-native` suffix if the version is `>= 8.13` (or `dev`)
 *and* you are interested in the image that contains the
 [`coq-native`](https://opam.ocaml.org/packages/coq-native/) package.
-E.g., `"dev-native"`. In this case, the `ocaml_version` must be `"4.07"`.
+E.g., `"8.13-native"`, `"latest-native"`, `"dev-native"`.
+
+If the `coq_version` value contains the `-native` suffix,
+the `ocaml_version` value is ignored (as `coq-native` images only come with a single OCaml version).
+Still, a warning is raised if `ocaml_version` is nonempty and different from `"default"`.
 
 #### `ocaml_version`
 
@@ -189,14 +193,15 @@ E.g., `"dev-native"`. In this case, the `ocaml_version` must be `"4.07"`.
 
 The version of OCaml.
 
-Default: `"minimal"`.
+Default: `"default"` (= Docker-Coq's default OCaml version for the given Coq version).
 
-Among `"minimal"`, `"4.07-flambda"`, `"4.07"`, `"4.08-flambda"`,
-`"4.09-flambda"`, `"4.10-flambda"`, `"4.11-flambda"`, `"4.12-flambda"`.
+Among `"minimal"` (*deprecated, to be removed after 27 June 2022 AOE*),
+`"default"`, `"4.02"`, `"4.05"`, `"4.07-flambda"`, `"4.08-flambda"`, `"4.09-flambda"`, `"4.10-flambda"`, `"4.11-flambda"`, `"4.12-flambda"`, `"4.13-flambda"`, `"4.14-flambda"`…
 
 **Warning!** not all OCaml versions are available with all Coq versions.
 
-For details, see: <https://github.com/coq-community/docker-coq/wiki#supported-tags>
+The supported compilers w.r.t. each version of Coq are documented in the
+[OCaml-versions policy](https://github.com/coq-community/docker-coq/wiki#ocaml-versions-policy) section of the `docker-coq` wiki.
 
 #### `before_install`
 
@@ -408,7 +413,7 @@ steps:
     with:
       opam_file: 'folder/coq-proj.opam'
       coq_version: 'dev'
-      ocaml_version: '4.07-flambda'
+      ocaml_version: 'default'
       export: 'OPAMWITHTEST'  # space-separated list of variables
     env:
       OPAMWITHTEST: 'true'
