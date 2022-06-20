@@ -25,9 +25,10 @@ jobs:
         # To get the list of supported (coq, ocaml) versions from coqorg/coq,
         # see https://github.com/coq-community/docker-coq/wiki#supported-tags
         coq_version:
-          - 'latest'
+          - '8.16'
+          - 'latest-native'
           - 'dev'
-        ocaml_version: ['4.07-flambda']
+        ocaml_version: ['default']
       fail-fast: false  # don't stop jobs if one fails
     steps:
       ################################################################
