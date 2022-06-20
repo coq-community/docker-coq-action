@@ -195,8 +195,7 @@ The version of OCaml.
 
 Default: `"default"` (= Docker-Coq's default OCaml version for the given Coq version).
 
-Among `"minimal"` (*deprecated, to be removed after 27 June 2022 AOE*),
-`"default"`, `"4.02"`, `"4.05"`, `"4.07-flambda"`, `"4.08-flambda"`, `"4.09-flambda"`, `"4.10-flambda"`, `"4.11-flambda"`, `"4.12-flambda"`, `"4.13-flambda"`, `"4.14-flambda"`…
+Among `"default"`, `"4.02"`, `"4.05"`, `"4.07-flambda"`, `"4.08-flambda"`, `"4.09-flambda"`, `"4.10-flambda"`, `"4.11-flambda"`, `"4.12-flambda"`, `"4.13-flambda"`, `"4.14-flambda"`…
 
 **Warning!** not all OCaml versions are available with all Coq versions.
 
