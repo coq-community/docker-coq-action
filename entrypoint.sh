@@ -56,7 +56,7 @@ usage() {
 Usage:
   INPUT_OPAM_FILE=file.opam \\
   INPUT_COQ_VERSION=8.11 \\
-  INPUT_OCAML_VERSION=minimal \\
+  INPUT_OCAML_VERSION=default \\
   INPUT_CUSTOM_SCRIPT='...' \\
   INPUT_CUSTOM_IMAGE=''
   INPUT_EXPORT=''
@@ -65,7 +65,7 @@ Usage:
 Options:
 INPUT_OPAM_FILE: the path of the .opam file (or a directory), relative to the repo root
 INPUT_COQ_VERSION: the version of Coq (without patch-level)
-INPUT_OCAML_VERSION: the version of OCaml (minimal, 4.07-flambda, 4.09-flambda)
+INPUT_OCAML_VERSION: the version of OCaml (default, 4.07-flambda, 4.09-flambda)
 INPUT_CUSTOM_SCRIPT: the main script run in the container
 INPUT_CUSTOM_IMAGE: the name of the Docker image to pull
 INPUT_EXPORT: the space-separated list of env variables to export
@@ -139,34 +139,12 @@ EOF
         # HERE, "ocaml_version" is nonempty
 
         if [ "$INPUT_OCAML_VERSION" = 'minimal' ]; then
-        # TODO: uncomment this when the 'minimal' deprecation phase ends.
-        #     echo "ERROR: ocaml_version: 'minimal' is not supported anymore."
-        #     exit 1
-        # TODO: remove the following when the 'minimal' deprecation phase ends.
-
         # Rely on line 'echo "::add-matcher::$HOME/coq.json"' above.
             cat <<EOF
 File "./.github/workflows", line 1, characters 0-1:
-Warning: Setting ocaml_version to "minimal" is DEPRECATED (to be removed on 2022-06-27 AOE): please use "default", or a specific ocaml_version in https://github.com/${GITHUB_REPOSITORY}/actions/runs/${GITHUB_RUN_ID}/workflow (see https://github.com/coq-community/docker-coq-action#ocaml_version for details).
+Error: Setting ocaml_version to "minimal" is NOT SUPPORTED ANYMORE: please use "default", or a specific ocaml_version in https://github.com/${GITHUB_REPOSITORY}/actions/runs/${GITHUB_RUN_ID}/workflow (see https://github.com/coq-community/docker-coq-action#ocaml_version for details).
 EOF
-            case "$INPUT_COQ_VERSION" in
-                8.4 | 8.5 | 8.6)
-                    OCAML_VERSION='4.02';;
-                8.4.* | 8.5.* | 8.6.*)
-                    OCAML_VERSION='4.02.3';;
-                8.7 | 8.8 | 8.9 | 8.10 | 8.11 | 8.12 | 8.13 | 8.14 | 8.15 | latest)
-                    OCAML_VERSION='4.05';;
-                8.7.* | 8.8.* | 8.9.* | 8.10.* | 8.11.* | 8.12.* | 8.13.* | 8.14.* | 8.15.*)
-                    OCAML_VERSION='4.05.0';;
-                dev | 8.16)
-                    OCAML_VERSION='4.09-flambda';;
-                8.16*)
-                    OCAML_VERSION='4.09.0-flambda';;
-                *)
-                    echo "ERROR: ocaml_version: 'minimal' unrecognized for this coq_version."
-                    exit 1
-            esac
-            COQ_IMAGE="coqorg/coq:${INPUT_COQ_VERSION}-ocaml-${OCAML_VERSION}"
+            exit 1
         else
             COQ_IMAGE="coqorg/coq:${INPUT_COQ_VERSION}-ocaml-${INPUT_OCAML_VERSION}"
         fi

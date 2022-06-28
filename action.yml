@@ -12,7 +12,7 @@ inputs:
     description: '"8.X", "latest", "dev", "8.X-native", "latest-native", or "dev-native"'
     default: 'latest'
   ocaml_version:
-    description: '"minimal" (deprecated), "default", "4.02", "4.05", or "4.XX-flambda", see https://github.com/coq-community/docker-coq/wiki#ocaml-versions-policy'
+    description: '"default", "4.02", "4.05", or "4.XX-flambda", see https://github.com/coq-community/docker-coq/wiki#ocaml-versions-policy'
     default: 'default'
   before_install:
     description: 'Customizable script run before "install".'
