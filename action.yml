@@ -50,7 +50,7 @@ inputs:
     description: 'Customizable script run to uninstall the opam package(s).'
     default: |
       startGroup "Uninstallation test"
-        opam remove $PACKAGE
+        opam remove -y $PACKAGE
       endGroup
   custom_script:
     description: 'The main script run in the container; may be overridden.'
