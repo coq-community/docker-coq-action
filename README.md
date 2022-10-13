@@ -80,7 +80,7 @@ opam install --confirm-level=unsafe-yes -j 2 coq-proj --deps-only
 opam list
 opam install -y -v -j 2 coq-proj
 opam list
-opam remove coq-proj
+opam remove -y coq-proj
 ```
 
 The `apt-get` command and the `--confirm-level=unsafe-yes` opam option
@@ -304,7 +304,7 @@ Default:
 
 ```bash
 startGroup "Uninstallation test"
-  opam remove $PACKAGE
+  opam remove -y $PACKAGE
 endGroup
 ```
 
@@ -335,7 +335,7 @@ that is evaluated within the workflow container after replacing the
 "mustache" placeholders with the value of their variable counterpart.
 For example, `{{uninstall}}` will be replaced with the value of the
 [`uninstall`](#uninstall) variable (the default value of which being
-the string `opam remove $PACKAGE`).
+the string `opam remove -y $PACKAGE`).
 
 *Note-2:* this option is named `custom_script` rather than `run` or so
 to **discourage changing its recommended, default value** for building
