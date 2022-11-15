@@ -104,7 +104,7 @@ strategy:
     ocaml_version: ['default']
   fail-fast: false  # don't stop jobs if one fails
 steps:
-  - uses: actions/checkout@v2
+  - uses: actions/checkout@v3
   - uses: coq-community/docker-coq-action@v1
     with:
       opam_file: 'folder/coq-proj.opam'
@@ -378,7 +378,7 @@ strategy:
       - mathcomp/mathcomp-dev:coq-dev
   fail-fast: false  # don't stop jobs if one fails
 steps:
-  - uses: actions/checkout@v2
+  - uses: actions/checkout@v3
   - uses: coq-community/docker-coq-action@v1
     with:
       opam_file: 'folder/coq-proj.opam'
@@ -407,7 +407,7 @@ Here is a minimal working example of this feature:
 ```yaml
 runs-on: ubuntu-latest
 steps:
-  - uses: actions/checkout@v2
+  - uses: actions/checkout@v3
   - uses: coq-community/docker-coq-action@v1
     with:
       opam_file: 'folder/coq-proj.opam'
@@ -550,7 +550,7 @@ strategy:
       - 'coqorg/coq:dev'
   fail-fast: false  # don't stop jobs if one fails
 steps:
-  - uses: actions/checkout@v2
+  - uses: actions/checkout@v3
   - uses: coq-community/docker-coq-action@v1
     with:
       opam_file: 'folder/coq-proj.opam'
@@ -663,7 +663,7 @@ strategy:
       - 'coqorg/coq:dev'
   fail-fast: false  # don't stop jobs if one fails
 steps:
-  - uses: actions/checkout@v2
+  - uses: actions/checkout@v3
   - uses: coq-community/docker-coq-action@v1
     with:
       opam_file: 'folder/coq-proj.opam'
