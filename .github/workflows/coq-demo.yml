@@ -34,11 +34,11 @@ jobs:
       ################################################################
       # Begin GHA_TEST_ENV # You should remove this GHA_TEST_ENV block
       #                    # if you copy this demo workflow elsewhere!
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
         with:
           repository: 'erikmd/docker-coq-github-action-demo'
           ref: 'master'
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
         with:
           path: 'docker-coq-action'
       - uses: './docker-coq-action'
@@ -66,17 +66,17 @@ jobs:
       ################################################################
       # Begin GHA_TEST_ENV # You should remove this GHA_TEST_ENV block
       #                    # if you copy this demo workflow elsewhere!
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
         with:
           repository: 'erikmd/docker-coq-github-action-demo'
           ref: 'master'
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
         with:
           path: 'docker-coq-action'
       - uses: './docker-coq-action'
         # End GHA_TEST_ENV
         ##################
-        # - uses: actions/checkout@v2
+        # - uses: actions/checkout@v3
         # - uses: coq-community/docker-coq-action@v1
         with:
           opam_file: 'coq-demo.opam'
@@ -99,17 +99,17 @@ jobs:
       ################################################################
       # Begin GHA_TEST_ENV # You should remove this GHA_TEST_ENV block
       #                    # if you copy this demo workflow elsewhere!
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
         with:
           repository: 'erikmd/docker-coq-github-action-demo'
           ref: 'master'
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
         with:
           path: 'docker-coq-action'
       - uses: './docker-coq-action'
         # End GHA_TEST_ENV
         ##################
-        # - uses: actions/checkout@v2
+        # - uses: actions/checkout@v3
         # - uses: coq-community/docker-coq-action@v1
         with:
           # As the install/script/uninstall fields are overridden,
@@ -156,17 +156,17 @@ jobs:
       ################################################################
       # Begin GHA_TEST_ENV # You should remove this GHA_TEST_ENV block
       #                    # if you copy this demo workflow elsewhere!
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
         with:
           repository: 'erikmd/docker-coq-github-action-demo'
           ref: 'master'
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
         with:
           path: 'docker-coq-action'
       - uses: './docker-coq-action'
         # End GHA_TEST_ENV
         ##################
-        # - uses: actions/checkout@v2
+        # - uses: actions/checkout@v3
         # - uses: coq-community/docker-coq-action@v1
         with:
           custom_image: ${{ matrix.image }}
@@ -213,17 +213,17 @@ jobs:
       ################################################################
       # Begin GHA_TEST_ENV # You should remove this GHA_TEST_ENV block
       #                    # if you copy this demo workflow elsewhere!
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
         with:
           repository: 'erikmd/docker-coq-github-action-demo'
           ref: 'master'
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
         with:
           path: 'docker-coq-action'
       - uses: './docker-coq-action'
         # End GHA_TEST_ENV
         ##################
-        # - uses: actions/checkout@v2
+        # - uses: actions/checkout@v3
         # - uses: coq-community/docker-coq-action@v1
         with:
           opam_file: 'coq-demo.opam'
@@ -252,17 +252,17 @@ jobs:
       ################################################################
       # Begin GHA_TEST_ENV # You should remove this GHA_TEST_ENV block
       #                    # if you copy this demo workflow elsewhere!
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
         with:
           repository: 'erikmd/docker-coq-github-action-demo'
           ref: 'master'
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
         with:
           path: 'docker-coq-action'
       - uses: './docker-coq-action'
         # End GHA_TEST_ENV
         ##################
-        # - uses: actions/checkout@v2
+        # - uses: actions/checkout@v3
         # - uses: coq-community/docker-coq-action@v1
         with:
           opam_file: 'coq-depexts-test.opam'
@@ -285,17 +285,17 @@ jobs:
       ################################################################
       # Begin GHA_TEST_ENV # You should remove this GHA_TEST_ENV block
       #                    # if you copy this demo workflow elsewhere!
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
         with:
           repository: 'erikmd/docker-coq-github-action-demo'
           ref: 'master'
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
         with:
           path: 'docker-coq-action'
       - uses: './docker-coq-action'
         # End GHA_TEST_ENV
         ##################
-        # - uses: actions/checkout@v2
+        # - uses: actions/checkout@v3
         # - uses: coq-community/docker-coq-action@v1
         with:
           opam_file: 'coq-demo.opam'
@@ -329,17 +329,17 @@ jobs:
       ################################################################
       # Begin GHA_TEST_ENV # You should remove this GHA_TEST_ENV block
       #                    # if you copy this demo workflow elsewhere!
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
         with:
           repository: 'erikmd/docker-coq-github-action-demo'
           ref: 'master'
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
         with:
           path: 'docker-coq-action'
       - uses: './docker-coq-action'
         # End GHA_TEST_ENV
         ##################
-        # - uses: actions/checkout@v2
+        # - uses: actions/checkout@v3
         # - uses: coq-community/docker-coq-action@v1
         with:
           opam_file: 'coq-demo.opam'
