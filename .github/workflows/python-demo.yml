@@ -54,3 +54,34 @@ jobs:
             endGroup
         # in case there is a permission mismatch issue at GHA cleanup time,
         # see https://github.com/coq-community/docker-coq-action#permissions
+
+  # ######################################################################
+  # This job illustrates how to run a docker command before the entrypoint
+  # ######################################################################
+  entrypoint-demo:
+    name: entrypoint / custom_image / python:3
+    runs-on: ubuntu-latest
+    env:
+      REGISTRY: docker.io
+      IMAGE_NAME: python
+      IMAGE_TAG: 3
+    steps:
+      ################################################################
+      # Begin GHA_TEST_ENV # You should remove this GHA_TEST_ENV block
+      #                    # if you copy this demo workflow elsewhere!
+      - uses: actions/checkout@v2
+        with:
+          path: 'docker-coq-action'
+      - uses: './docker-coq-action'
+        # End GHA_TEST_ENV
+        ##################
+        # - uses: actions/checkout@v2
+        # - uses: coq-community/docker-coq-action@v1
+        with:
+          entrypoint: /bin/sh
+          # see also https://github.com/coq-community/docker-coq-action/issues/80#issuecomment-1321272915
+          # args: -c "/bin/echo \"${{ secrets.GITHUB_TOKEN }}\" | docker login ${{ env.REGISTRY }} -u ${{ github.actor }} --password-stdin && exec /app/entrypoint.sh \"$@\"" sh
+          args: -c "docker pull ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ env.IMAGE_TAG }} && exec /app/entrypoint.sh \"$@\"" sh
+          custom_image: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ env.IMAGE_TAG }}
+          custom_script: |
+            python --version

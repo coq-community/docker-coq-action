@@ -9,7 +9,10 @@ on:
       - "**"  # forall submitted Pull Requests
 jobs:
 
+  # The following job tests the use of single quotes in before_script.
+
   issue-40:
+    name: test / script with quotes / custom_image / opam
     # interpolated scripts couldn't contain single-quotes
     runs-on: ubuntu-latest
     steps:
@@ -30,3 +33,39 @@ jobs:
             opam repo list
             opam repo add --all-switches --set-default coq-extra-dev 'https://coq.inria.fr/opam/extra-dev'
             opam repo list
+
+  # The following job illustrates the use of two successive docker-coq-action calls.
+  issue-80:
+    name: test / multi-call / custom_image / custom_script
+    runs-on: ubuntu-latest
+    steps:
+      ################################################################
+      # Begin GHA_TEST_ENV # You should remove this GHA_TEST_ENV block
+      #                    # if you copy this demo workflow elsewhere!
+      - uses: actions/checkout@v3
+        with:
+          path: 'docker-coq-action'
+      - uses: './docker-coq-action'
+        # End GHA_TEST_ENV
+        ##################
+        # - uses: actions/checkout@v3
+        # - uses: coq-community/docker-coq-action@v1
+        name: Run docker-coq-action, SHOULD FAIL
+        continue-on-error: true
+        with:
+          custom_image: mock-image # non-existing image
+          custom_script: |
+            cat /etc/os-release
+      - name: Pull mock image
+        run: |
+          docker pull ubuntu:latest
+          docker tag ubuntu:latest mock-image
+      - uses: './docker-coq-action'
+        ##################
+        # - uses: actions/checkout@v3
+        # - uses: coq-community/docker-coq-action@v1
+        name: Run docker-coq-action, SHOULD SUCCEED
+        with:
+          custom_image: mock-image # non-existing image
+          custom_script: |
+            cat /etc/os-release
