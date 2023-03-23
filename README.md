@@ -613,7 +613,7 @@ strategy:
         with:
           opam_file: 'folder/coq-proj.opam'
           custom_image: ${{ matrix.image }}
-          before_script: |
+          before_install: |
             startGroup "Workaround permission issue"
               sudo chown -R coq:coq .
             endGroup
