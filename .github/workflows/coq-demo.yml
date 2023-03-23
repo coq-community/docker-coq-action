@@ -115,13 +115,13 @@ jobs:
           # As the install/script/uninstall fields are overridden,
           # the "opam_file" field is unneeded in this example job.
           custom_image: ${{ matrix.image }}
+          before_install: |
+            startGroup "Workaround permission issue"
+              sudo chown -R coq:coq .
+            endGroup
           install: |
             startGroup "Install dependencies"
               opam install -y -j 2 coq-mathcomp-ssreflect
-            endGroup
-          before_script: |
-            startGroup "Workaround permission issue"
-              sudo chown -R coq:coq .
             endGroup
           script: |
             startGroup "Build project"
