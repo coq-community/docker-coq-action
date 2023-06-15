@@ -58,7 +58,7 @@ jobs:
       matrix:
         image:
           - 'mathcomp/mathcomp-dev:coq-dev'
-          - 'mathcomp/mathcomp:latest-coq-8.15'
+          - 'mathcomp/mathcomp:latest-coq-8.17'
           # - 'mathcomp/mathcomp:latest-coq-dev'  # not always available,
           # see https://hub.docker.com/r/mathcomp/mathcomp#supported-tags
       fail-fast: false  # don't stop jobs if one fails
