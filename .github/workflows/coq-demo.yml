@@ -25,7 +25,7 @@ jobs:
         # To get the list of supported (coq, ocaml) versions from coqorg/coq,
         # see https://github.com/coq-community/docker-coq/wiki#supported-tags
         coq_version:
-          - '8.16'
+          - '8.18'
           - 'latest-native'
           - 'dev'
         ocaml_version: ['default']
@@ -58,7 +58,7 @@ jobs:
       matrix:
         image:
           - 'mathcomp/mathcomp-dev:coq-dev'
-          - 'mathcomp/mathcomp:latest-coq-8.17'
+          - 'mathcomp/mathcomp:latest-coq-8.19'
           # - 'mathcomp/mathcomp:latest-coq-dev'  # not always available,
           # see https://hub.docker.com/r/mathcomp/mathcomp#supported-tags
       fail-fast: false  # don't stop jobs if one fails
