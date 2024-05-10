@@ -235,6 +235,8 @@ jobs:
               find "$(dirname "$(dirname "$GITHUB_STEP_SUMMARY")")"
               ls -la "$(dirname "$(dirname "$GITHUB_STEP_SUMMARY")")"
               ls -la "$(dirname "$GITHUB_STEP_SUMMARY")"
+              sudo chmod -R a+rw "$(dirname "$GITHUB_STEP_SUMMARY")"
+              ls -la "$(dirname "$GITHUB_STEP_SUMMARY")"
               ls -la $GITHUB_STEP_SUMMARY
               echo "ex_var=$ex_var" | tee -a $GITHUB_STEP_SUMMARY
               [ "$ex_var" = "ex_value" ]
