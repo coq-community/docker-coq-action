@@ -31,7 +31,7 @@ echo "RUNNER_WORKSPACE=$RUNNER_WORKSPACE"
 # so $(dirname "$GITHUB_ENV") is typically /home/runner/work/_temp/_runner_file_commands on the host.
 # We also notice that $RUNNER_WORKSPACE is typically /home/runner/work/${GITHUB_REPOSITORY#*/} (e.g. /home/runner/work/docker-coq-action).
 # Hence this hardcoded yet as-general-as-possible path:
-DIR_GITHUB_RUNNER_FILE_COMMANDS="${RUNNER_WORKSPACE%*/}/_temp/_runner_file_commands"
+DIR_GITHUB_RUNNER_FILE_COMMANDS="${RUNNER_WORKSPACE%/*}/_temp/_runner_file_commands"
 echo "DIR_GITHUB_RUNNER_FILE_COMMANDS=$DIR_GITHUB_RUNNER_FILE_COMMANDS"
 
 # Assuming you used https://github.com/actions/checkout,
