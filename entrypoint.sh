@@ -199,6 +199,8 @@ docker image inspect "$COQ_IMAGE" --format="Reusing existing local image." || do
 
 endGroup
 
+export COQ_IMAGE
+
 ## Note to docker-coq-action maintainers: Run ./helper.sh gen & Copy min.sh
 # shellcheck disable=SC2046,SC2086
 docker run --pull=never -i --init --rm --name=COQ $( [ -n "$INPUT_EXPORT" ] && printf -- "-e %s " $INPUT_EXPORT ) -e WORKDIR="$WORKDIR" -e PACKAGE="$PACKAGE" \
