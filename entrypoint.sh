@@ -195,8 +195,12 @@ if test -z "$INPUT_CUSTOM_SCRIPT_EXPANDED"; then
     exit 1
 fi
 
-# set permissions for GitHub Actions runner command files
+startGroup "set permissions for GitHub Actions runner command files in $DIR_GITHUB_RUNNER_FILE_COMMANDS"
+
 chmod -R a+rw "$DIR_GITHUB_RUNNER_FILE_COMMANDS"
+ls -la "$DIR_GITHUB_RUNNER_FILE_COMMANDS"
+
+endGroup
 
 startGroup "Pull docker image"
 
