@@ -198,7 +198,9 @@ fi
 startGroup "set permissions for GitHub Actions runner command files in $DIR_GITHUB_RUNNER_FILE_COMMANDS"
 
 chmod -R a+rw "$DIR_GITHUB_RUNNER_FILE_COMMANDS"
-ls -la "$DIR_GITHUB_RUNNER_FILE_COMMANDS"
+chmod a+rwx "$DIR_GITHUB_RUNNER_FILE_COMMANDS/.." || true
+echorun ls -la "$DIR_GITHUB_RUNNER_FILE_COMMANDS"
+echorun ls -la "$DIR_GITHUB_RUNNER_FILE_COMMANDS/.." || true
 
 endGroup
 
