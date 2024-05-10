@@ -25,9 +25,15 @@ echo "GITHUB_REPOSITORY=$GITHUB_REPOSITORY"
 echo "RUNNER_OS=$RUNNER_OS"
 echo "RUNNER_TEMP=$RUNNER_TEMP"
 echo "RUNNER_WORKSPACE=$RUNNER_WORKSPACE"
-# GITHUB_ENV is somewhat arbitrary, all of the file variables should be similar, might be something like /home/runner/work/_temp/_runner_file_commands/set_env_87406d6e-4979-4d42-98e1-3dab1f48b13a or /github/file_commands/set_env_3b186eb5-242d-4edf-b107-b13e98e56988
-DIR_GITHUB_RUNNER_FILE_COMMANDS="$(dirname "$GITHUB_ENV")"
+
+# We want to bind-mount the dirname of $GITHUB_ENV.
+# $GITHUB_ENV is typically /home/runner/work/_temp/_runner_file_commands/set_env_87406d6e-4979-4d42-98e1-3dab1f48b13a
+# so $(dirname "$GITHUB_ENV") is typically /home/runner/work/_temp/_runner_file_commands on the host.
+# We also notice that $RUNNER_WORKSPACE is typically /home/runner/work/${GITHUB_REPOSITORY#*/} (e.g. /home/runner/work/docker-coq-action).
+# Hence this hardcoded yet as-general-as-possible path:
+DIR_GITHUB_RUNNER_FILE_COMMANDS="${RUNNER_WORKSPACE#*/}/_temp/_runner_file_commands"
 echo "DIR_GITHUB_RUNNER_FILE_COMMANDS=$DIR_GITHUB_RUNNER_FILE_COMMANDS"
+
 # Assuming you used https://github.com/actions/checkout,
 # the GITHUB_WORKSPACE variable corresponds to the following host dir:
 # ${RUNNER_WORKSPACE}/${GITHUB_REPOSITORY#*/}, see also
@@ -213,7 +219,7 @@ endGroup
 
 ## Note to docker-coq-action maintainers: Run ./helper.sh gen & Copy min.sh
 # shellcheck disable=SC2046,SC2086
-echorun docker run --pull=never -i --init --rm --name=COQ $( [ -n "$INPUT_EXPORT" ] && printf -- "-e %s " $INPUT_EXPORT ) -e WORKDIR="$WORKDIR" -e PACKAGE="$PACKAGE" \
+docker run --pull=never -i --init --rm --name=COQ $( [ -n "$INPUT_EXPORT" ] && printf -- "-e %s " $INPUT_EXPORT ) -e WORKDIR="$WORKDIR" -e PACKAGE="$PACKAGE" \
        -v "$HOST_WORKSPACE_REPO:$PWD" -w "$PWD" \
        -v "$DIR_GITHUB_RUNNER_FILE_COMMANDS:$DIR_GITHUB_RUNNER_FILE_COMMANDS" \
        "$COQ_IMAGE" /bin/bash --login -c "

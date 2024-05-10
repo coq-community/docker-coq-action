@@ -228,28 +228,21 @@ jobs:
         with:
           opam_file: 'coq-demo.opam'
           custom_image: ${{ matrix.image }}
-          install: |
-            # don't wait CI time installing
-          before_script: |
+          custom_script: |
             startGroup "Toy example"
-              find "$(dirname "$(dirname "$GITHUB_STEP_SUMMARY")")"
-              ls -la "$(dirname "$(dirname "$GITHUB_STEP_SUMMARY")")"
-              ls -la "$(dirname "$GITHUB_STEP_SUMMARY")"
-              sudo chmod -R a+rw "$(dirname "$GITHUB_STEP_SUMMARY")"
-              ls -la "$(dirname "$GITHUB_STEP_SUMMARY")"
-              ls -la $GITHUB_STEP_SUMMARY || true
-              echo "ex_var=$ex_var" | tee -a $GITHUB_STEP_SUMMARY
-              echo "ex_var_global=$ex_var" | tee -a $GITHUB_ENV
               [ "$ex_var" = "ex_value" ]
+              echo "GITHUB_ENV=$GITHUB_ENV"
+              echo "ex_var_global=$ex_var.final" | tee -a $GITHUB_ENV
             endGroup
-          export: 'ex_var OPAMWITHTEST GITHUB_STEP_SUMMARY'  # space-separated list of variables
+          export: 'ex_var GITHUB_ENV'  # space-separated list of variables
+          # TODO cleanup, redo OPAMWITHTEST
         env:
           OPAMWITHTEST: 'true'
           ex_var: 'ex_value'
       - run: |
           # test persistence of ex_var_global via $GITHUB_ENV
           echo "ex_var_global=$ex_var_global"
-          [ "$ex_var_global" = "ex_value" ]
+          [ "$ex_var_global" = "ex_value.final" ]
 
   # The following two jobs illustrate the installation of system packages.
 
