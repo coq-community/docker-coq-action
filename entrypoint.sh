@@ -25,9 +25,9 @@ echo "GITHUB_REPOSITORY=$GITHUB_REPOSITORY"
 echo "RUNNER_OS=$RUNNER_OS"
 echo "RUNNER_TEMP=$RUNNER_TEMP"
 echo "RUNNER_WORKSPACE=$RUNNER_WORKSPACE"
-# GITHUB_ENV is somewhat arbitrary, might be something like /home/runner/work/_temp/_runner_file_commands/set_env_87406d6e-4979-4d42-98e1-3dab1f48b13a or /github/file_commands/set_env_3b186eb5-242d-4edf-b107-b13e98e56988
-GITHUB_RUNNER_FILE_COMMANDS_DIR="$(dirname "$GITHUB_ENV")"
-echo "GITHUB_RUNNER_FILE_COMMANDS_DIR=$GITHUB_RUNNER_FILE_COMMANDS_DIR"
+# GITHUB_ENV is somewhat arbitrary, all of the file variables should be similar, might be something like /home/runner/work/_temp/_runner_file_commands/set_env_87406d6e-4979-4d42-98e1-3dab1f48b13a or /github/file_commands/set_env_3b186eb5-242d-4edf-b107-b13e98e56988
+DIR_GITHUB_RUNNER_FILE_COMMANDS="$(dirname "$GITHUB_ENV")"
+echo "DIR_GITHUB_RUNNER_FILE_COMMANDS=$DIR_GITHUB_RUNNER_FILE_COMMANDS"
 # Assuming you used https://github.com/actions/checkout,
 # the GITHUB_WORKSPACE variable corresponds to the following host dir:
 # ${RUNNER_WORKSPACE}/${GITHUB_REPOSITORY#*/}, see also
@@ -206,7 +206,7 @@ endGroup
 # shellcheck disable=SC2046,SC2086
 docker run --pull=never -i --init --rm --name=COQ $( [ -n "$INPUT_EXPORT" ] && printf -- "-e %s " $INPUT_EXPORT ) -e WORKDIR="$WORKDIR" -e PACKAGE="$PACKAGE" \
        -v "$HOST_WORKSPACE_REPO:$PWD" -w "$PWD" \
-       -v "$GITHUB_RUNNER_FILE_COMMANDS_DIR:$GITHUB_RUNNER_FILE_COMMANDS_DIR" \
+       -v "$DIR_GITHUB_RUNNER_FILE_COMMANDS:$DIR_GITHUB_RUNNER_FILE_COMMANDS" \
        "$COQ_IMAGE" /bin/bash --login -c "
 exec 2>&1 ; endGroup () {  {  init_opts=\"\$-\"; set +x ; } 2> /dev/null; if [ -n \"\$startTime\" ]; then endTime=\$(date -u +%s); echo \"::endgroup::\"; printf \"↳ \"; date -u -d \"@\$((endTime - startTime))\" '+%-Hh %-Mm %-Ss'; echo; unset startTime; else echo 'Error: missing startGroup command.'; case \"\$init_opts\" in  *x*) set -x ;; esac; return 1; fi; case \"\$init_opts\" in  *x*) set -x ;; esac; } ; startGroup () {  {  init_opts=\"\$-\"; set +x ; } 2> /dev/null; if [ -n \"\$startTime\" ]; then endGroup; fi; if [ \$# -ge 1 ]; then groupTitle=\"\$*\"; else groupTitle=\"Unnamed group\"; fi; echo; echo \"::group::\$groupTitle\"; startTime=\$(date -u +%s); case \"\$init_opts\" in  *x*) set -x ;; esac; } # generated from helper.sh
 export PS4='+ \e[33;1m(\$0 @ line \$LINENO) \$\e[0m '; set -ex
