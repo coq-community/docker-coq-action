@@ -232,7 +232,8 @@ jobs:
             # don't wait CI time installing
           before_script: |
             startGroup "Toy example"
-            ls -la $GITHUB_STEP_SUMMARY
+              find "$(dirname "$(dirname "$GITHUB_STEP_SUMMARY")")"
+              ls -la $GITHUB_STEP_SUMMARY
               echo "ex_var=$ex_var" | tee -a $GITHUB_STEP_SUMMARY
               [ "$ex_var" = "ex_value" ]
             endGroup
