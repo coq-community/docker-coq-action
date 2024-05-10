@@ -195,6 +195,9 @@ if test -z "$INPUT_CUSTOM_SCRIPT_EXPANDED"; then
     exit 1
 fi
 
+# set permissions for GitHub Actions runner command files
+sudo chmod -R a=u "$DIR_GITHUB_RUNNER_FILE_COMMANDS"
+
 startGroup "Pull docker image"
 
 echo COQ_IMAGE="$COQ_IMAGE"
