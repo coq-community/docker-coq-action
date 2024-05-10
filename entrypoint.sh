@@ -213,7 +213,7 @@ endGroup
 
 ## Note to docker-coq-action maintainers: Run ./helper.sh gen & Copy min.sh
 # shellcheck disable=SC2046,SC2086
-docker run --pull=never -i --init --rm --name=COQ $( [ -n "$INPUT_EXPORT" ] && printf -- "-e %s " $INPUT_EXPORT ) -e WORKDIR="$WORKDIR" -e PACKAGE="$PACKAGE" \
+echorun docker run --pull=never -i --init --rm --name=COQ $( [ -n "$INPUT_EXPORT" ] && printf -- "-e %s " $INPUT_EXPORT ) -e WORKDIR="$WORKDIR" -e PACKAGE="$PACKAGE" \
        -v "$HOST_WORKSPACE_REPO:$PWD" -w "$PWD" \
        -v "$DIR_GITHUB_RUNNER_FILE_COMMANDS:$DIR_GITHUB_RUNNER_FILE_COMMANDS" \
        "$COQ_IMAGE" /bin/bash --login -c "
