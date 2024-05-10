@@ -228,6 +228,8 @@ jobs:
         with:
           opam_file: 'coq-demo.opam'
           custom_image: ${{ matrix.image }}
+          install: |
+            # don't wait CI time installing
           before_script: |
             startGroup "Toy example"
               echo "ex_var=$ex_var" | tee -a $GITHUB_STEP_SUMMARY
