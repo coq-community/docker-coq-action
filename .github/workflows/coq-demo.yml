@@ -230,10 +230,10 @@ jobs:
           custom_image: ${{ matrix.image }}
           before_script: |
             startGroup "Toy example"
-              echo "ex_var=$ex_var"
+              echo "ex_var=$ex_var" | tee -a $GITHUB_STEP_SUMMARY
               [ "$ex_var" = "ex_value" ]
             endGroup
-          export: 'ex_var OPAMWITHTEST'  # space-separated list of variables
+          export: 'ex_var OPAMWITHTEST GITHUB_STEP_SUMMARY'  # space-separated list of variables
         env:
           OPAMWITHTEST: 'true'
           ex_var: 'ex_value'
