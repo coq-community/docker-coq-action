@@ -204,14 +204,12 @@ if test -z "$INPUT_CUSTOM_SCRIPT_EXPANDED"; then
     exit 1
 fi
 
-# startGroup "set permissions for GitHub Actions runner command files in $DIR_GITHUB_RUNNER_FILE_COMMANDS"
-# 
-# chmod -Rv a+rw "$DIR_GITHUB_RUNNER_FILE_COMMANDS"
-# chmod -v a+rwx "$DIR_GITHUB_RUNNER_FILE_COMMANDS/.." || true
-# echorun ls -la "$DIR_GITHUB_RUNNER_FILE_COMMANDS"
-# echorun ls -la "$DIR_GITHUB_RUNNER_FILE_COMMANDS/.." || true
-# 
-# endGroup
+startGroup "Set permissions for GHA runner command files in $DIR_FILE_COMMANDS"
+# a.k.a. $HOST_GITHUB_RUNNER_FILE_COMMANDS on the host.
+
+chmod -R a+rw "$DIR_FILE_COMMANDS"
+
+endGroup
 
 startGroup "Pull docker image"
 
