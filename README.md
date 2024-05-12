@@ -401,6 +401,7 @@ keyword.
 
 * Only use ASCII letters, `_` and digits, i.e., matching the `[a-zA-Z_][a-zA-Z0-9_]*` regexp.
 * Avoid [reserved identifiers](https://docs.github.com/en/actions/reference/environment-variables#default-environment-variables) (namely: `HOME`, `CI`, and strings starting with `GITHUB_`, `ACTIONS_`, `RUNNER_`, or `INPUT_`).
+* The `docker-coq-action` internally sets a `COQ_IMAGE` environment variable that contains the full name of the Docker image used. Use `export: 'COQ_IMAGE'` to make this variable available within the [script](#custom_script).
 
 Here is a minimal working example of this feature:
 
