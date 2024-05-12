@@ -374,3 +374,60 @@ jobs:
           path: artifacts/
           if-no-files-found: error  # 'warn' or 'ignore' are also available, defaults to `warn`
           retention-days: 8
+
+
+  # The following job illustrates the upload of github environment files.
+
+  demo-9:
+    name: custom_image / docker-mathcomp / opam / env+GITHUB_ENV
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        image:
+          - 'mathcomp/mathcomp:latest-coq-8.19'
+      fail-fast: false  # don't stop jobs if one fails
+    steps:
+      ################################################################
+      # Begin GHA_TEST_ENV # You should remove this GHA_TEST_ENV block
+      #                    # if you copy this demo workflow elsewhere!
+      - uses: actions/checkout@v3
+        with:
+          repository: 'erikmd/docker-coq-github-action-demo'
+          ref: 'master'
+      - uses: actions/checkout@v3
+        with:
+          path: 'docker-coq-action'
+      - uses: './docker-coq-action'
+        # End GHA_TEST_ENV
+        ##################
+        # - uses: actions/checkout@v3
+        # - uses: coq-community/docker-coq-action@v1
+        id: docker-coq-action
+        env:
+          # Pass string data to docker-coq-action
+          after_ok: 'Test successful!'
+        with:
+          export: 'COQ_IMAGE after_ok'
+          custom_image: ${{ matrix.image }}
+          opam_file: 'coq-demo.opam'
+          before_script: |
+            # Pass step outputs (Docker image name) to next step
+            echo "docker_image=$COQ_IMAGE" >> "$GITHUB_OUTPUT"
+          after_script: |
+            # Pass env vars (Coq version string...) to next step
+            echo "coq_version=$(opam var coq:version)" >> "$GITHUB_ENV"
+            echo "some_variable=expected_value" >> "$GITHUB_ENV"
+            # Display Markdown summary
+            [ -n "$after_ok" ]
+            echo "### $after_ok :rocket:" >> "$GITHUB_STEP_SUMMARY"
+      - name: Next step
+        env:
+          docker_image: ${{ steps.docker-coq-action.outputs.docker_image}}
+        run: |
+          : Summary
+          echo "Previous step pulled Docker image: $docker_image"
+          [ -n "$docker_image" ]
+          echo "Previous step used: coq_version=$coq_version"
+          [ -n "$coq_version" ]
+          echo "some_variable=$some_variable"
+          [ "$some_variable" = "expected_value" ]

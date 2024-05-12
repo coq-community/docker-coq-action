@@ -25,6 +25,18 @@ echo "GITHUB_REPOSITORY=$GITHUB_REPOSITORY"
 echo "RUNNER_OS=$RUNNER_OS"
 echo "RUNNER_TEMP=$RUNNER_TEMP"
 echo "RUNNER_WORKSPACE=$RUNNER_WORKSPACE"
+
+# We want to bind-mount the dirname of $GITHUB_ENV.
+# $GITHUB_ENV is typically /home/runner/work/_temp/_runner_file_commands/set_env_87406d6e-4979-4d42-98e1-3dab1f48b13a
+# so $(dirname "$GITHUB_ENV") is typically /home/runner/work/_temp/_runner_file_commands on the host.
+# We also notice that $RUNNER_WORKSPACE is typically /home/runner/work/${GITHUB_REPOSITORY%/*} (e.g. /home/runner/work/docker-coq-action).
+# Hence this hardcoded yet as-general-as-possible path:
+HOST_GITHUB_RUNNER_FILE_COMMANDS="${RUNNER_WORKSPACE%/*}/_temp/_runner_file_commands"
+# Another hardcoded path:
+DIR_FILE_COMMANDS="/github/file_commands"
+echo "HOST_GITHUB_RUNNER_FILE_COMMANDS=$HOST_GITHUB_RUNNER_FILE_COMMANDS"
+echo "DIR_FILE_COMMANDS=$DIR_FILE_COMMANDS"
+
 # Assuming you used https://github.com/actions/checkout,
 # the GITHUB_WORKSPACE variable corresponds to the following host dir:
 # ${RUNNER_WORKSPACE}/${GITHUB_REPOSITORY#*/}, see also
@@ -192,6 +204,13 @@ if test -z "$INPUT_CUSTOM_SCRIPT_EXPANDED"; then
     exit 1
 fi
 
+startGroup "Set permissions for GHA environment files in $DIR_FILE_COMMANDS"
+# a.k.a. $HOST_GITHUB_RUNNER_FILE_COMMANDS on the host.
+
+chmod -R a+rw "$DIR_FILE_COMMANDS"
+
+endGroup
+
 startGroup "Pull docker image"
 
 echo COQ_IMAGE="$COQ_IMAGE"
@@ -203,8 +222,9 @@ export COQ_IMAGE
 
 ## Note to docker-coq-action maintainers: Run ./helper.sh gen & Copy min.sh
 # shellcheck disable=SC2046,SC2086
-docker run --pull=never -i --init --rm --name=COQ $( [ -n "$INPUT_EXPORT" ] && printf -- "-e %s " $INPUT_EXPORT ) -e WORKDIR="$WORKDIR" -e PACKAGE="$PACKAGE" \
+docker run --pull=never -i --init --rm --name=COQ $( [ -n "$INPUT_EXPORT" ] && printf -- "-e %s " $INPUT_EXPORT ) -e GITHUB_ENV -e GITHUB_OUTPUT -e GITHUB_STEP_SUMMARY -e WORKDIR="$WORKDIR" -e PACKAGE="$PACKAGE" \
        -v "$HOST_WORKSPACE_REPO:$PWD" -w "$PWD" \
+       -v "$HOST_GITHUB_RUNNER_FILE_COMMANDS:$DIR_FILE_COMMANDS" \
        "$COQ_IMAGE" /bin/bash --login -c "
 exec 2>&1 ; endGroup () {  {  init_opts=\"\$-\"; set +x ; } 2> /dev/null; if [ -n \"\$startTime\" ]; then endTime=\$(date -u +%s); echo \"::endgroup::\"; printf \"↳ \"; date -u -d \"@\$((endTime - startTime))\" '+%-Hh %-Mm %-Ss'; echo; unset startTime; else echo 'Error: missing startGroup command.'; case \"\$init_opts\" in  *x*) set -x ;; esac; return 1; fi; case \"\$init_opts\" in  *x*) set -x ;; esac; } ; startGroup () {  {  init_opts=\"\$-\"; set +x ; } 2> /dev/null; if [ -n \"\$startTime\" ]; then endGroup; fi; if [ \$# -ge 1 ]; then groupTitle=\"\$*\"; else groupTitle=\"Unnamed group\"; fi; echo; echo \"::group::\$groupTitle\"; startTime=\$(date -u +%s); case \"\$init_opts\" in  *x*) set -x ;; esac; } # generated from helper.sh
 export PS4='+ \e[33;1m(\$0 @ line \$LINENO) \$\e[0m '; set -ex
