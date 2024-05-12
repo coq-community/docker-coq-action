@@ -405,25 +405,29 @@ jobs:
         id: docker-coq-action
         env:
           # Pass string data to docker-coq-action
-          some_var: 'Test successful!'
+          after_ok: 'Test successful!'
         with:
-          export: 'COQ_IMAGE some_var'
+          export: 'COQ_IMAGE after_ok'
           custom_image: ${{ matrix.image }}
           opam_file: 'coq-demo.opam'
           before_script: |
-            # Pass Docker image tag to next step
+            # Pass step outputs (Docker image name) to next step
             echo "docker_image=$COQ_IMAGE" >> "$GITHUB_OUTPUT"
           after_script: |
-            # Pass Coq version string to next step
+            # Pass env vars (Coq version string...) to next step
             echo "coq_version=$(opam var coq:version)" >> "$GITHUB_ENV"
+            echo "some_variable=expected_value" >> "$GITHUB_ENV"
             # Display Markdown summary
-            [ -n "$some_var" ]
-            echo "### $some_var :rocket:" >> "$GITHUB_STEP_SUMMARY"
+            [ -n "$after_ok" ]
+            echo "### $after_ok :rocket:" >> "$GITHUB_STEP_SUMMARY"
       - name: Next step
         env:
           docker_image: ${{ steps.docker-coq-action.outputs.docker_image}}
         run: |
+          : Summary
           echo "Previous step pulled Docker image: $docker_image"
           [ -n "$docker_image" ]
           echo "Previous step used: coq_version=$coq_version"
           [ -n "$coq_version" ]
+          echo "some_variable=$some_variable"
+          [ "$some_variable" = "expected_value" ]
