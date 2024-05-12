@@ -653,7 +653,7 @@ Recall that `docker-coq-action` runs your CI script in a Docker container,
 the filesystem of which being isolated from the GitHub runner.
 
 Still, `docker-coq-action` bind-mounts some special paths for
-[GitHub Actions environment files](https://docs.github.com/fr/actions/using-workflows/workflow-commands-for-github-actions#environment-files),
+[GitHub Actions environment files](https://docs.github.com/en/actions/using-workflows/workflow-commands-for-github-actions#environment-files),
 so that `"$GITHUB_ENV"`, `"$GITHUB_OUTPUT"`, and `"$GITHUB_STEP_SUMMARY"` can be used
 in (parts of) the [`custom_script`](#custom_script) in order to pass environment
 variables or step outputs to the following steps, or set a Markdown summary.
