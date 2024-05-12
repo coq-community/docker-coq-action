@@ -685,7 +685,7 @@ steps:
   - name: Next step
     env:
       coq_version_var2: ${{ steps.docker-coq-action.outputs.coq_version_out }}
-    run:
+    run: |
       : Summary
       echo "Previous step used: coq_version=$coq_version_var"
       echo "Previous step used: coq_version=$coq_version_var2 (same)"
@@ -810,3 +810,7 @@ Hence the following two remarks:
    A comprehensive example of this approach is available in PR [erikmd/docker-coq-github-action-demo#12](https://github.com/erikmd/docker-coq-github-action-demo/pull/12).
 
    For completeness, note that masking inputs involved in `workflow_dispatch` may require some `jq`-based workaround, as mentioned in issue [actions/runner#643](https://github.com/actions/runner/issues/643).
+
+<!-- Local Variables: -->
+<!-- indent-tabs-mode: nil -->
+<!-- End: -->
