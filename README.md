@@ -385,6 +385,9 @@ steps:
       custom_image: ${{ matrix.image }}
 ```
 
+If ever you want to retrieve the Docker image name within the CI script, you can 
+use the [`export`](#export) keyword to expose the `COQ_IMAGE` internal variable.
+
 #### `export`
 
 *Optional*
@@ -401,6 +404,7 @@ keyword.
 
 * Only use ASCII letters, `_` and digits, i.e., matching the `[a-zA-Z_][a-zA-Z0-9_]*` regexp.
 * Avoid [reserved identifiers](https://docs.github.com/en/actions/reference/environment-variables#default-environment-variables) (namely: `HOME`, `CI`, and strings starting with `GITHUB_`, `ACTIONS_`, `RUNNER_`, or `INPUT_`).
+* The `docker-coq-action` internally sets a `COQ_IMAGE` environment variable that contains the full name of the Docker image used. Use `export: 'COQ_IMAGE'` to make this variable available within the [script](#custom_script).
 
 Here is a minimal working example of this feature:
 
@@ -642,6 +646,20 @@ strategy:
           if-no-files-found: error  # 'warn' or 'ignore' are also available, defaults to `warn`
           retention-days: 8
 ```
+
+### GitHub Actions environment files
+
+Recall that `docker-coq-action` runs your CI script in a Docker container,
+the filesystem of which being isolated from the GitHub runner.
+
+Still, `docker-coq-action` bind-mounts some special paths for
+[GitHub Actions environment files](https://docs.github.com/fr/actions/using-workflows/workflow-commands-for-github-actions#environment-files),
+so that `"$GITHUB_ENV"`, `"$GITHUB_OUTPUT"`, and `"$GITHUB_STEP_SUMMARY"` can be used
+in (parts of) the [`custom_script`](#custom_script) in order to pass environment
+variables or step outputs to the following steps, or set a Markdown summary.
+
+Conversely, the [`export`](#export) keyword can be used to pass variables
+from the previous step to `docker-coq-action`.
 
 ### Install Debian packages
 

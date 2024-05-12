@@ -204,7 +204,7 @@ if test -z "$INPUT_CUSTOM_SCRIPT_EXPANDED"; then
     exit 1
 fi
 
-startGroup "Set permissions for GHA runner command files in $DIR_FILE_COMMANDS"
+startGroup "Set permissions for GHA environment files in $DIR_FILE_COMMANDS"
 # a.k.a. $HOST_GITHUB_RUNNER_FILE_COMMANDS on the host.
 
 chmod -R a+rw "$DIR_FILE_COMMANDS"
@@ -218,9 +218,11 @@ docker image inspect "$COQ_IMAGE" --format="Reusing existing local image." || do
 
 endGroup
 
+export COQ_IMAGE
+
 ## Note to docker-coq-action maintainers: Run ./helper.sh gen & Copy min.sh
 # shellcheck disable=SC2046,SC2086
-docker run --pull=never -i --init --rm --name=COQ $( [ -n "$INPUT_EXPORT" ] && printf -- "-e %s " $INPUT_EXPORT ) -e WORKDIR="$WORKDIR" -e PACKAGE="$PACKAGE" \
+docker run --pull=never -i --init --rm --name=COQ $( [ -n "$INPUT_EXPORT" ] && printf -- "-e %s " $INPUT_EXPORT ) -e GITHUB_ENV -e GITHUB_OUTPUT -e GITHUB_STEP_SUMMARY -e WORKDIR="$WORKDIR" -e PACKAGE="$PACKAGE" \
        -v "$HOST_WORKSPACE_REPO:$PWD" -w "$PWD" \
        -v "$HOST_GITHUB_RUNNER_FILE_COMMANDS:$DIR_FILE_COMMANDS" \
        "$COQ_IMAGE" /bin/bash --login -c "
