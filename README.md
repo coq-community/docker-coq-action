@@ -519,8 +519,8 @@ Instead, you should write one of the following variants:
   script: |
     startGroup "Build project"
       make -j2
-	  make test
-	  make install
+      make test
+      make install
     endGroup
   ```
 
@@ -660,6 +660,36 @@ variables or step outputs to the following steps, or set a Markdown summary.
 
 Conversely, the [`export`](#export) keyword can be used to pass variables
 from the previous step to `docker-coq-action`.
+
+Here is an example of script that uses `GITHUB_ENV` and `GITHUB_OUTPUT`:
+
+
+```yaml
+runs-on: ubuntu-latest
+strategy:
+  matrix:
+    image:
+      - 'coqorg/coq:latest'
+  fail-fast: false  # don't stop jobs if one fails
+steps:
+  - uses: actions/checkout@v3
+  - uses: coq-community/docker-coq-action@v1
+    id: docker-coq-action  # needed to get step outputs
+    with:
+      opam_file: 'folder/coq-proj.opam'
+      custom_image: ${{ matrix.image }}
+      after_script: |
+        # Pass values to upcoming steps in two different ways
+        echo "coq_version_var=$(opam var coq:version)" >> "$GITHUB_ENV"
+        echo "coq_version_out=$(opam var coq:version)" >> "$GITHUB_OUTPUT"
+  - name: Next step
+    env:
+      coq_version_var2: ${{ steps.docker-coq-action.outputs.coq_version_out }}
+    run:
+      : Summary
+      echo "Previous step used: coq_version=$coq_version_var"
+      echo "Previous step used: coq_version=$coq_version_var2 (same)"
+```
 
 ### Install Debian packages
 

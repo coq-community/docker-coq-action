@@ -422,7 +422,7 @@ jobs:
             echo "### $after_ok :rocket:" >> "$GITHUB_STEP_SUMMARY"
       - name: Next step
         env:
-          docker_image: ${{ steps.docker-coq-action.outputs.docker_image}}
+          docker_image: ${{ steps.docker-coq-action.outputs.docker_image }}
         run: |
           : Summary
           echo "Previous step pulled Docker image: $docker_image"
