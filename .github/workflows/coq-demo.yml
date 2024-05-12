@@ -230,10 +230,12 @@ jobs:
           custom_image: ${{ matrix.image }}
           before_script: |
             startGroup "Toy example"
+              echo "COQ_IMAGE=$COQ_IMAGE"
+              [ -n "$COQ_IMAGE" ]
               echo "ex_var=$ex_var"
               [ "$ex_var" = "ex_value" ]
             endGroup
-          export: 'ex_var OPAMWITHTEST'  # space-separated list of variables
+          export: 'COQ_IMAGE ex_var OPAMWITHTEST'  # space-sep. list of vars
         env:
           OPAMWITHTEST: 'true'
           ex_var: 'ex_value'
