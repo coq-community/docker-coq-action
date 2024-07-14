@@ -17,11 +17,11 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       # BEGIN GHA_TEST_ENV
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
         with:
           repository: 'erikmd/docker-coq-github-action-demo'
           ref: 'master'
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
         with:
           path: 'docker-coq-action'
       - uses: './docker-coq-action'
@@ -42,13 +42,13 @@ jobs:
       ################################################################
       # Begin GHA_TEST_ENV # You should remove this GHA_TEST_ENV block
       #                    # if you copy this demo workflow elsewhere!
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
         with:
           path: 'docker-coq-action'
       - uses: './docker-coq-action'
         # End GHA_TEST_ENV
         ##################
-        # - uses: actions/checkout@v3
+        # - uses: actions/checkout@v4
         # - uses: coq-community/docker-coq-action@v1
         name: Run docker-coq-action, SHOULD FAIL
         continue-on-error: true
@@ -62,7 +62,7 @@ jobs:
           docker tag ubuntu:latest mock-image
       - uses: './docker-coq-action'
         ##################
-        # - uses: actions/checkout@v3
+        # - uses: actions/checkout@v4
         # - uses: coq-community/docker-coq-action@v1
         name: Run docker-coq-action, SHOULD SUCCEED
         with:
