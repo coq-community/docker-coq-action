@@ -29,17 +29,17 @@ jobs:
       ################################################################
       # Begin GHA_TEST_ENV # You should remove this GHA_TEST_ENV block
       #                    # if you copy this demo workflow elsewhere!
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
         with:
           repository: 'erikmd/poc-github-ci'
           ref: 'master'
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
         with:
           path: 'docker-coq-action'
       - uses: './docker-coq-action'
         # End GHA_TEST_ENV
         ##################
-        # - uses: actions/checkout@v2
+        # - uses: actions/checkout@v4
         # - uses: coq-community/docker-coq-action@v1
         with:
           custom_image: 'python:3'
@@ -69,13 +69,13 @@ jobs:
       ################################################################
       # Begin GHA_TEST_ENV # You should remove this GHA_TEST_ENV block
       #                    # if you copy this demo workflow elsewhere!
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
         with:
           path: 'docker-coq-action'
       - uses: './docker-coq-action'
         # End GHA_TEST_ENV
         ##################
-        # - uses: actions/checkout@v2
+        # - uses: actions/checkout@v4
         # - uses: coq-community/docker-coq-action@v1
         with:
           entrypoint: /bin/sh
