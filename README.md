@@ -378,7 +378,7 @@ strategy:
       - mathcomp/mathcomp-dev:coq-dev
   fail-fast: false  # don't stop jobs if one fails
 steps:
-  - uses: actions/checkout@v3
+  - uses: actions/checkout@v4
   - uses: coq-community/docker-coq-action@v1
     with:
       opam_file: 'folder/coq-proj.opam'
@@ -411,7 +411,7 @@ Here is a minimal working example of this feature:
 ```yaml
 runs-on: ubuntu-latest
 steps:
-  - uses: actions/checkout@v3
+  - uses: actions/checkout@v4
   - uses: coq-community/docker-coq-action@v1
     with:
       opam_file: 'folder/coq-proj.opam'
@@ -554,7 +554,7 @@ strategy:
       - 'coqorg/coq:dev'
   fail-fast: false  # don't stop jobs if one fails
 steps:
-  - uses: actions/checkout@v3
+  - uses: actions/checkout@v4
   - uses: coq-community/docker-coq-action@v1
     with:
       opam_file: 'folder/coq-proj.opam'
@@ -599,7 +599,7 @@ As a result:
 * all the files put in the GitHub workspace directory (or in a
   sub-directory) are kept;  
   so it is possible to create artifacts, then use an action such as
-  [`actions/upload-artifact@v2`](https://github.com/actions/upload-artifact)
+  [`actions/upload-artifact@v4`](https://github.com/actions/upload-artifact)
   in a subsequent step.
 
 Here is an example job for this use case, which also takes into
@@ -639,7 +639,7 @@ strategy:
         # to avoid a warning at cleanup time
         if: ${{ always() }}
         run: sudo chown -R 1001:116 .
-      - uses: actions/upload-artifact@v2
+      - uses: actions/upload-artifact@v4
         with:
           name: example-artifact
           path: artifacts/
@@ -672,7 +672,7 @@ strategy:
       - 'coqorg/coq:latest'
   fail-fast: false  # don't stop jobs if one fails
 steps:
-  - uses: actions/checkout@v3
+  - uses: actions/checkout@v4
   - uses: coq-community/docker-coq-action@v1
     id: docker-coq-action  # needed to get step outputs
     with:
@@ -711,7 +711,7 @@ strategy:
       - 'coqorg/coq:dev'
   fail-fast: false  # don't stop jobs if one fails
 steps:
-  - uses: actions/checkout@v3
+  - uses: actions/checkout@v4
   - uses: coq-community/docker-coq-action@v1
     with:
       opam_file: 'folder/coq-proj.opam'
