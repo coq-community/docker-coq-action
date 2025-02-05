@@ -92,8 +92,9 @@ jobs:
     strategy:
       matrix:
         image:
+          # TODO: Update as soon as Rocq 9.0.0 goes live
           - 'coqorg/coq:latest'
-          - 'coqorg/coq:dev'
+          - 'rocq/rocq-prover:dev'
       fail-fast: false  # don't stop jobs if one fails
     steps:
       ################################################################
@@ -150,7 +151,7 @@ jobs:
       matrix:
         image:
           - 'coqorg/coq:latest'
-          - 'coqorg/coq:dev'
+          - 'rocq/rocq-prover:dev'
       fail-fast: false  # don't stop jobs if one fails
     steps:
       ################################################################
@@ -248,7 +249,7 @@ jobs:
     strategy:
       matrix:
         image:
-          - 'coqorg/coq:dev'
+          - 'rocq/rocq-prover:dev'
       fail-fast: false  # don't stop jobs if one fails
     steps:
       ################################################################
@@ -281,7 +282,7 @@ jobs:
       matrix:
         image:
           - 'coqorg/coq:latest'
-          - 'coqorg/coq:dev'
+          - 'rocq/rocq-prover:dev'
       fail-fast: false  # don't stop jobs if one fails
     steps:
       ################################################################
