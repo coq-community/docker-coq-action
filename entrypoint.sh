@@ -126,7 +126,7 @@ if test -z "$INPUT_CUSTOM_IMAGE"; then
 
         ROCQ_PREFIX="coqorg/coq"
 
-    else
+    else # e.g. 9 or dev
 
         ROCQ_PREFIX="rocq/rocq-prover"
 
@@ -136,7 +136,7 @@ if test -z "$INPUT_CUSTOM_IMAGE"; then
 
         COQ_IMAGE="$ROCQ_PREFIX:$INPUT_COQ_VERSION"
 
-    elif printf "%s" "$INPUT_COQ_VERSION" | grep -e '.-native$' -q; then
+    elif printf "%s" "$INPUT_COQ_VERSION" | grep -e '.-native' -q; then
 
         COQ_IMAGE="$ROCQ_PREFIX:$INPUT_COQ_VERSION"
 
