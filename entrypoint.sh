@@ -117,13 +117,28 @@ if test -z "$INPUT_CUSTOM_IMAGE"; then
         exit 1
     fi
 
+    if [ "${INPUT_COQ_VERSION%%-*}" = 'latest' ]; then
+
+        # TODO: Update once 9.0.0 is released
+        ROCQ_PREFIX="coqorg/coq"
+
+    elif [ "${INPUT_COQ_VERSION%%.*}" = '8' ]; then
+
+        ROCQ_PREFIX="coqorg/coq"
+
+    else
+
+        ROCQ_PREFIX="rocq/rocq-prover"
+
+    fi
+
     if [ "$INPUT_OCAML_VERSION" = 'default' ]; then
 
-        COQ_IMAGE="coqorg/coq:$INPUT_COQ_VERSION"
+        COQ_IMAGE="$ROCQ_PREFIX:$INPUT_COQ_VERSION"
 
     elif printf "%s" "$INPUT_COQ_VERSION" | grep -e '.-native$' -q; then
 
-        COQ_IMAGE="coqorg/coq:$INPUT_COQ_VERSION"
+        COQ_IMAGE="$ROCQ_PREFIX:$INPUT_COQ_VERSION"
 
         if test -n "$INPUT_OCAML_VERSION"; then
             # HERE, "ocaml_version" is nonempty and different from 'default'
@@ -158,7 +173,7 @@ Error: Setting ocaml_version to "minimal" is NOT SUPPORTED ANYMORE: please use "
 EOF
             exit 1
         else
-            COQ_IMAGE="coqorg/coq:${INPUT_COQ_VERSION}-ocaml-${INPUT_OCAML_VERSION}"
+            COQ_IMAGE="${ROCQ_PREFIX}:${INPUT_COQ_VERSION}-ocaml-${INPUT_OCAML_VERSION}"
         fi
     fi
 else
