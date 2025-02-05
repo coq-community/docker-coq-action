@@ -122,7 +122,7 @@ jobs:
             endGroup
           before_script: |
             startGroup "Workaround permission issue"
-              sudo chown -R coq:coq .
+              sudo chown -R 1000:1000 .
             endGroup
           script: |
             startGroup "Build project"
@@ -183,7 +183,7 @@ jobs:
               opam list
             endGroup
             startGroup "Workaround permission issue"
-              sudo chown -R coq:coq .
+              sudo chown -R 1000:1000 .
             endGroup
             startGroup "Build project"
               coq_makefile -f _CoqProject -o Makefile
@@ -349,7 +349,7 @@ jobs:
           custom_image: ${{ matrix.image }}
           before_script: |
             startGroup "Workaround permission issue"
-              sudo chown -R coq:coq .
+              sudo chown -R 1000:1000 .
             endGroup
           script: |
             startGroup "Build project"

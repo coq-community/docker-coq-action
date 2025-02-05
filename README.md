@@ -561,7 +561,7 @@ steps:
       custom_image: ${{ matrix.image }}
       before_script: |
         startGroup "Workaround permission issue"
-          sudo chown -R coq:coq .  # <--
+          sudo chown -R 1000:1000 .  # <--
         endGroup
       script: |
         startGroup "Build project"
