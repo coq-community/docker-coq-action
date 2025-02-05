@@ -35,16 +35,19 @@
 [conduct-link]: https://github.com/coq-community/manifesto/blob/master/CODE_OF_CONDUCT.md
 
 This is a GitHub Action that uses (by default)
-[coqorg/coq](https://hub.docker.com/r/coqorg/coq/) Docker images,
-which in turn is based on [coqorg/base](https://hub.docker.com/r/coqorg/base/),
+[rocq/rocq-prover](https://hub.docker.com/r/rocq/rocq-prover/) Docker images
+(for Rocq ≥ 9.0) and
+[coqorg/coq](https://hub.docker.com/r/coqorg/coq/) Docker images
+(for Coq ≤ 8.20.1),
+which in turn are based on [rocq/base](https://hub.docker.com/r/rocq/base/),
 a Docker image with a Debian environment.
 
-|   | GitHub repo                                                             | Type          | Docker Hub                                             |
-|---|-------------------------------------------------------------------------|---------------|--------------------------------------------------------|
-| ⊙ | [docker-coq-action](https://github.com/coq-community/docker-coq-action) | GitHub Action | N/A                                                    |
-| ↳ | [docker-coq](https://github.com/coq-community/docker-coq)               | Dockerfile    | [`coqorg/coq`](https://hub.docker.com/r/coqorg/coq/)   |
-| ↳ | [docker-base](https://github.com/coq-community/docker-base)             | Dockerfile    | [`coqorg/base`](https://hub.docker.com/r/coqorg/base/) |
-| ↳ | Debian                                                                  | Linux distro  | [`debian`](https://hub.docker.com/_/debian/)           |
+|   | GitHub repo                                                             | Type          | Docker Hub                                                       |
+|---|-------------------------------------------------------------------------|---------------|------------------------------------------------------------------|
+| ⊙ | [docker-coq-action](https://github.com/coq-community/docker-coq-action) | GitHub Action | N/A                                                              |
+| ↳ | [docker-rocq](https://github.com/coq-community/docker-rocq)             | Dockerfile    | [`rocq/rocq-prover`](https://hub.docker.com/r/rocq/rocq-prover/) |
+| ↳ | [docker-base](https://github.com/coq-community/docker-base)             | Dockerfile    | [`rocq/base`](https://hub.docker.com/r/rocq/base/)               |
+| ↳ | Debian                                                                  | Linux distro  | [`debian`](https://hub.docker.com/_/debian/)                     |
 
 For more details about these images, see the
 [docker-coq wiki](https://github.com/coq-community/docker-coq/wiki).
@@ -359,7 +362,7 @@ If this variable is unset, its value is computed from the values of
 keywords `coq_version` and `ocaml_version`.
 
 If you use the standard
-[`docker-coq`](https://github.com/coq-community/docker-coq) images, we
+[`docker-rocq`](https://github.com/coq-community/docker-rocq) images, we
 recommend to directly use keywords `coq_version` and `ocaml_version`.
 
 If you use another registry such as that of
@@ -536,7 +539,7 @@ Instead, you should write one of the following variants:
 ### Permissions
 
 If you use the
-[`docker-coq`](https://github.com/coq-community/docker-coq) images,
+[`docker-rocq`](https://github.com/coq-community/docker-rocq) images,
 the container user has UID=GID=1000 while the GitHub Actions workdir
 has (UID=1001, GID=116).
 This is not an issue when relying on `opam` to build the Coq project.
@@ -551,7 +554,7 @@ runs-on: ubuntu-latest
 strategy:
   matrix:
     image:
-      - 'coqorg/coq:dev'
+      - 'rocq/rocq-prover:dev'
   fail-fast: false  # don't stop jobs if one fails
 steps:
   - uses: actions/checkout@v4
@@ -561,7 +564,7 @@ steps:
       custom_image: ${{ matrix.image }}
       before_script: |
         startGroup "Workaround permission issue"
-          sudo chown -R coq:coq .  # <--
+          sudo chown -R 1000:1000 .  # <--
         endGroup
       script: |
         startGroup "Build project"
@@ -610,7 +613,7 @@ runs-on: ubuntu-latest
 strategy:
   matrix:
     image:
-      - 'coqorg/coq:dev'
+      - 'rocq/rocq-prover:dev'
   fail-fast: false  # don't stop jobs if one fails
     steps:
       - uses: coq-community/docker-coq-action@v1
@@ -669,7 +672,7 @@ runs-on: ubuntu-latest
 strategy:
   matrix:
     image:
-      - 'coqorg/coq:latest'
+      - 'rocq/rocq-prover:9.0'
   fail-fast: false  # don't stop jobs if one fails
 steps:
   - uses: actions/checkout@v4
@@ -694,7 +697,7 @@ steps:
 ### Install Debian packages
 
 If you use `docker-coq-action` with a
-[Docker-Coq](https://github.com/coq-community/docker-coq) image (the
+[docker-rocq](https://github.com/coq-community/docker-rocq) image (the
 default when the [`custom_image`](#custom_image) field is omitted),
 the image is based on Debian stable and the container user
 (UID=GID=1000) has `sudo` rights, so you can rely on `apt-get` to
@@ -708,7 +711,7 @@ runs-on: ubuntu-latest
 strategy:
   matrix:
     image:
-      - 'coqorg/coq:dev'
+      - 'rocq/rocq-prover:dev'
   fail-fast: false  # don't stop jobs if one fails
 steps:
   - uses: actions/checkout@v4

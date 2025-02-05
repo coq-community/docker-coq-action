@@ -25,7 +25,7 @@ jobs:
         # To get the list of supported (coq, ocaml) versions from coqorg/coq,
         # see https://github.com/coq-community/docker-coq/wiki#supported-tags
         coq_version:
-          - '8.18'
+          - '8.20'
           - 'latest-native'
           - 'dev'
         ocaml_version: ['default']
@@ -58,7 +58,7 @@ jobs:
       matrix:
         image:
           - 'mathcomp/mathcomp-dev:coq-dev'
-          - 'mathcomp/mathcomp:latest-coq-8.19'
+          - 'mathcomp/mathcomp:latest-coq-8.20'
           # - 'mathcomp/mathcomp:latest-coq-dev'  # not always available,
           # see https://hub.docker.com/r/mathcomp/mathcomp#supported-tags
       fail-fast: false  # don't stop jobs if one fails
@@ -92,8 +92,10 @@ jobs:
     strategy:
       matrix:
         image:
+          # TODO: Update as soon as Rocq 9.0.0 goes live
           - 'coqorg/coq:latest'
-          - 'coqorg/coq:dev'
+          - 'rocq/rocq-prover:9.0'
+          - 'rocq/rocq-prover:dev'
       fail-fast: false  # don't stop jobs if one fails
     steps:
       ################################################################
@@ -121,7 +123,7 @@ jobs:
             endGroup
           before_script: |
             startGroup "Workaround permission issue"
-              sudo chown -R coq:coq .
+              sudo chown -R 1000:1000 .
             endGroup
           script: |
             startGroup "Build project"
@@ -150,7 +152,8 @@ jobs:
       matrix:
         image:
           - 'coqorg/coq:latest'
-          - 'coqorg/coq:dev'
+          - 'rocq/rocq-prover:9.0'
+          - 'rocq/rocq-prover:dev'
       fail-fast: false  # don't stop jobs if one fails
     steps:
       ################################################################
@@ -182,7 +185,7 @@ jobs:
               opam list
             endGroup
             startGroup "Workaround permission issue"
-              sudo chown -R coq:coq .
+              sudo chown -R 1000:1000 .
             endGroup
             startGroup "Build project"
               coq_makefile -f _CoqProject -o Makefile
@@ -248,7 +251,7 @@ jobs:
     strategy:
       matrix:
         image:
-          - 'coqorg/coq:dev'
+          - 'rocq/rocq-prover:dev'
       fail-fast: false  # don't stop jobs if one fails
     steps:
       ################################################################
@@ -281,7 +284,8 @@ jobs:
       matrix:
         image:
           - 'coqorg/coq:latest'
-          - 'coqorg/coq:dev'
+          - 'rocq/rocq-prover:9.0'
+          - 'rocq/rocq-prover:dev'
       fail-fast: false  # don't stop jobs if one fails
     steps:
       ################################################################
@@ -348,7 +352,7 @@ jobs:
           custom_image: ${{ matrix.image }}
           before_script: |
             startGroup "Workaround permission issue"
-              sudo chown -R coq:coq .
+              sudo chown -R 1000:1000 .
             endGroup
           script: |
             startGroup "Build project"
@@ -384,7 +388,7 @@ jobs:
     strategy:
       matrix:
         image:
-          - 'mathcomp/mathcomp:latest-coq-8.19'
+          - 'mathcomp/mathcomp:latest-coq-8.20'
       fail-fast: false  # don't stop jobs if one fails
     steps:
       ################################################################
