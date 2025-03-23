@@ -26,6 +26,7 @@ jobs:
         # see https://github.com/coq-community/docker-coq/wiki#supported-tags
         coq_version:
           - '8.20'
+          - 'latest'
           - 'latest-native'
           - 'dev'
         ocaml_version: ['default']
