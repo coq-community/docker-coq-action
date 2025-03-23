@@ -119,8 +119,7 @@ if test -z "$INPUT_CUSTOM_IMAGE"; then
 
     if [ "${INPUT_COQ_VERSION%%-*}" = 'latest' ]; then
 
-        # TODO: Update once 9.0.0 is released
-        ROCQ_PREFIX="coqorg/coq"
+        ROCQ_PREFIX="rocq/rocq-prover"
 
     elif [ "${INPUT_COQ_VERSION%%.*}" = '8' ]; then
 
